@@ -2,7 +2,7 @@ package view;
 
 import control.MyActionListener;
 import view.centercontent.CenterContentPanel;
-import view.widget.FontFactory;
+import view.factory.FontFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 
 /**
  * Created by lyd on 2017/5/10.
+ * 外层tab页
  */
 public class CenterpanelTab implements MouseListener {
     private MyActionListener myActionListener;
@@ -31,7 +32,7 @@ public class CenterpanelTab implements MouseListener {
         titleName.setText(title);
     }
     private void  init(String titlename){
-        content=new CenterContentPanel(myActionListener);
+        content=new CenterContentPanel(myActionListener,this);
         //标题
         title=new JPanel();
        /* GridLayout gl= new GridLayout(1,1,10,0);

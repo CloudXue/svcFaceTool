@@ -1,4 +1,4 @@
-package view.widget;
+package view.factory;
 
 import java.awt.*;
 
@@ -9,7 +9,7 @@ public class FontFactory {
 
 
     public static Font getTabtitleName(){
-        Font font=new Font("Default",Font.BOLD,13);
+        Font font=new Font("Default",Font.BOLD,9);
         return font;
     }
     public static Font getTabtitleXOn(){

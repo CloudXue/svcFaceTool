@@ -1,6 +1,5 @@
 package view.centercontent;
 
-import view.BaseJPanel;
 import control.MyActionListener;
 
 import javax.swing.*;
@@ -9,7 +8,9 @@ import javax.swing.*;
  * Created by lyd on 2017/5/11.
  */
 public class UcOutMaintain extends BaseJPanel {
-    public UcOutMaintain(MyActionListener myActionListener) {
+    private   CenterContentPanel centerContentPanel;
+    public UcOutMaintain(MyActionListener myActionListener,CenterContentPanel centerContentPanel) {
+        this.centerContentPanel=centerContentPanel;
         this.myActionListener= myActionListener;
         init();
     }

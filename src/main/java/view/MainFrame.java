@@ -1,5 +1,6 @@
 package view;
 
+import constant.ENWarningLevel;
 import control.MyActionListener;
 
 import javax.swing.*;
@@ -46,7 +47,7 @@ public class MainFrame extends JFrame {
 
 
         //region frame基础设置
-        setSize(800,600);
+        setSize(1000,600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -64,5 +65,9 @@ public class MainFrame extends JFrame {
         MainFrame mainFrame=new MainFrame();
         //增加一个默认窗口
         mainFrame.addTab("");
+    }
+
+    public void showMsg(String tltle, String msg, ENWarningLevel warningLevel){
+        System.out.println(tltle+":"+msg+":"+warningLevel);
     }
 }

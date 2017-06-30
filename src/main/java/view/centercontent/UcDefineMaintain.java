@@ -1,26 +1,33 @@
 package view.centercontent;
 
+import bean.HsiRight;
 import constant.EnActionEvent;
-import control.UcDefineControl;
-import view.BaseJPanel;
+import service.UcDefineService;
+import service.impl.UcDefineServiceImpl;
+import util.StringUtils;
 import control.MyActionListener;
 import view.centercontent.fcdefine.CenterTable;
-import view.widget.ColorFactory;
+import view.centercontent.fcdefine.FootPanel;
+import view.factory.ColorFactory;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lyd on 2017/5/11.
  * 功能表定义维护panel
  * 使用BorderLayout布局，上中下三部分
  */
-public class UcDefineMaintain extends BaseJPanel {
-
+public class UcDefineMaintain extends BaseJPanel  {
+    private   CenterContentPanel centerContentPanel;
+    UcDefineService ucDefineService=new UcDefineServiceImpl();
     private JButton insertBtn;    //插入按钮
     private JButton tailInsertBtn;//尾加按钮
     private JButton delBtn;       //删除按钮
@@ -33,7 +40,14 @@ public class UcDefineMaintain extends BaseJPanel {
     private BorderLayout layout;
 
     private UcDefineControl control;
-    CenterTable  centerTable;//中间table展示
+    private CenterTable  centerTable;//中间table展示
+    private FootPanel footPanel;//中间table展示
+
+    private Map<String,HsiRight> addUcMap=new HashMap<String,HsiRight>();
+    private Map<String,HsiRight> editUcMap=new HashMap<String,HsiRight>();
+    private List<String> deleUcList=new ArrayList<String>();
+
+
 
     /**
      * 获得输入框数据
@@ -50,10 +64,12 @@ public class UcDefineMaintain extends BaseJPanel {
     public void spreadAction(ActionEvent e){
         myActionListener.actionPerformed(e);
     }
-    public UcDefineMaintain(MyActionListener myActionListener) {
+    public UcDefineMaintain(MyActionListener myActionListener,CenterContentPanel centerContentPanel) {
+        this.centerContentPanel=centerContentPanel;
         this.myActionListener= myActionListener;
         control=new UcDefineControl(this);
-        centerTable=new CenterTable(myActionListener);
+        centerTable=new CenterTable(myActionListener,this);
+        footPanel=new FootPanel(myActionListener,this);
         init();
     }
 
@@ -62,6 +78,7 @@ public class UcDefineMaintain extends BaseJPanel {
         this.setLayout(layout);
         initNorth();
         this.add(centerTable,BorderLayout.CENTER);
+        this.add(footPanel,BorderLayout.SOUTH);
     }
 
     /**
@@ -137,5 +154,97 @@ public class UcDefineMaintain extends BaseJPanel {
 
     public CenterTable getCenterTable() {
         return centerTable;
+    }
+
+    public void tableSelect(int index,String functionno){
+        HsiRight hsiRight= null;
+        try {
+            if(StringUtils.isNotNullAndNotEmpty(functionno)){
+                //不为空才去查
+                hsiRight = ucDefineService.getUc(functionno);
+            }
+        } catch (Exception e) {
+            handleExceptionMsg(e);
+        }
+        if(hsiRight==null){
+            //更改title
+            centerContentPanel.setTitle("home");
+            //头部更改
+            centerContentPanel.setHeadValue("","","");
+            //底部修改
+            footPanel.setFootPanelData(null);
+        }else{
+            //更改title
+            centerContentPanel.setTitle(hsiRight.getC_functionno());
+            //头部更改
+            centerContentPanel.setHeadValue(hsiRight.getC_rightcode(),hsiRight.getC_functionno(),hsiRight.getC_rightname());
+            //底部修改
+            footPanel.setFootPanelData(hsiRight);
+        }
+
+    }
+
+    public void addAddUcMap(String ucno,HsiRight hsiRight){
+
+       addUcMap.put(ucno,hsiRight);
+    }
+
+    /**
+     * 如果在新增map里有这个uc，那么就去addmap里操作
+     * @param ucno
+     * @param hsiRight
+     */
+    public void addEditUcMap(String ucno,HsiRight hsiRight){
+        if(addUcMap.containsKey(ucno)){
+            addUcMap.put(ucno,hsiRight);
+        }else{
+            editUcMap.put(ucno,hsiRight);
+        }
+
+    }
+
+
+    //内部监听类
+     class UcDefineControl  implements ActionListener {
+        UcDefineMaintain ucDefineMaintain;
+
+        public UcDefineControl(UcDefineMaintain ucDefineMaintain) {
+            this.ucDefineMaintain = ucDefineMaintain;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.err.println(e.getActionCommand());
+            if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_QUERYCLICK.getCmd())){
+                //清空所有缓存数据
+                addUcMap.clear();;
+                editUcMap.clear();
+                deleUcList.clear();
+                //重新加载table
+                String searchTxt=ucDefineMaintain.getInputTxt();
+                centerTable.reloadUc(searchTxt);
+                //底部选择第一行
+                centerTable.cloumSelect(0);
+                //向上传播
+                ucDefineMaintain.spreadAction(e);
+            }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_INSERTCLICK.getCmd())){
+                //插入
+
+            }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_TAILINSERTCLICK.getCmd())){
+                //尾插入
+
+            }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_DELCLICK.getCmd())){
+                //删除 todo 数据中先删除
+                ucDefineMaintain.getCenterTable().removeSelect();
+            }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_SAVECLICK.getCmd())){
+                //存盘
+
+                //清空所有缓存数据
+                addUcMap.clear();;
+                editUcMap.clear();
+                deleUcList.clear();
+            }
+
+        }
     }
 }

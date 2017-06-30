@@ -4,6 +4,7 @@ import javax.swing.*;
 
 /**
  * Created by lyd on 2017/5/10.
+ * 底部连接信息
  */
 public class FootBar  extends JToolBar {
     private JLabel conninfo;

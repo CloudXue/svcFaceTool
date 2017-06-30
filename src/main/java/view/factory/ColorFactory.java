@@ -1,4 +1,4 @@
-package view.widget;
+package view.factory;
 
 import java.awt.*;
 

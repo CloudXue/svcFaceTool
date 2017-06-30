@@ -7,6 +7,7 @@ import java.awt.*;
 
 /**
  * Created by lyd on 2017/5/10.
+ * 中间最外层panel
  */
 public class CenterPanel extends JPanel  {
 

@@ -48,14 +48,41 @@ public enum EnActionEvent {
      *uc定义查询按钮点击
      */
     UCDEFINE_QUERYCLICK("queryclick"),
-
+    /**
+     *异常
+     */
+    EXCEPTION("EXCEPTION"),
+    /**
+     *提示
+     */
+    INFO("INFO"),
+    /**
+     *警告
+     */
+    WARNING("WARNING");
     ;
     private String cmd;
+    private String msg;
+
 
 
     EnActionEvent(String cmd) {
         this.cmd = cmd;
     }
+
+    EnActionEvent(String cmd, String msg) {
+        this.cmd = cmd;
+        this.msg = msg;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     public String getCmd(){
         return this.cmd;
     }

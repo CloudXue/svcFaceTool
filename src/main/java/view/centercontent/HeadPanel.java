@@ -1,7 +1,6 @@
 package view.centercontent;
 
-import view.BaseJPanel;
-import view.widget.ColorFactory;
+import view.factory.ColorFactory;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -36,6 +35,9 @@ public class HeadPanel extends BaseJPanel {
         ucCodeField.setText(ucCode);
         ucNoField.setText(ucNo);
         ucNameField.setText(ucName);
+    }
+    public String getUcNo(){
+        return ucNoField.getText();
     }
 
     private void init(){
