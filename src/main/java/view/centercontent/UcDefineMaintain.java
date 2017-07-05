@@ -158,13 +158,23 @@ public class UcDefineMaintain extends BaseJPanel  {
 
     public void tableSelect(int index,String functionno){
         HsiRight hsiRight= null;
-        try {
-            if(StringUtils.isNotNullAndNotEmpty(functionno)){
-                //不为空才去查
-                hsiRight = ucDefineService.getUc(functionno);
+        String opttype="";
+        if(addUcMap.containsKey(index+"")){
+            opttype=FootPanel.OPTTYPE_ADD;
+            hsiRight=addUcMap.get(index+"");
+        }else if(editUcMap.containsKey(index+"")){
+            opttype=FootPanel.OPTTYPE_MOD;
+            hsiRight=editUcMap.get(index+"");
+        }else{
+            opttype=FootPanel.OPTTYPE_MOD;
+            try {
+                if(StringUtils.isNotNullAndNotEmpty(functionno)){
+                    //不为空才去查
+                    hsiRight = ucDefineService.getUc(functionno);
+                }
+            } catch (Exception e) {
+                handleExceptionMsg(e);
             }
-        } catch (Exception e) {
-            handleExceptionMsg(e);
         }
         if(hsiRight==null){
             //更改title
@@ -172,14 +182,14 @@ public class UcDefineMaintain extends BaseJPanel  {
             //头部更改
             centerContentPanel.setHeadValue("","","");
             //底部修改
-            footPanel.setFootPanelData(null);
+            footPanel.setFootPanelData(null,index,"");
         }else{
             //更改title
             centerContentPanel.setTitle(hsiRight.getC_functionno());
             //头部更改
             centerContentPanel.setHeadValue(hsiRight.getC_rightcode(),hsiRight.getC_functionno(),hsiRight.getC_rightname());
             //底部修改
-            footPanel.setFootPanelData(hsiRight);
+            footPanel.setFootPanelData(hsiRight,index,opttype);
         }
 
     }
@@ -188,21 +198,18 @@ public class UcDefineMaintain extends BaseJPanel  {
 
        addUcMap.put(ucno,hsiRight);
     }
-
-    /**
-     * 如果在新增map里有这个uc，那么就去addmap里操作
-     * @param ucno
-     * @param hsiRight
-     */
-    public void addEditUcMap(String ucno,HsiRight hsiRight){
-        if(addUcMap.containsKey(ucno)){
-            addUcMap.put(ucno,hsiRight);
-        }else{
-            editUcMap.put(ucno,hsiRight);
-        }
-
+    public void removeAddUcMap(String ucno){
+        addUcMap.remove(ucno);
     }
 
+    public void addEditUcMap(String ucno,HsiRight hsiRight){
+        editUcMap.put(ucno,hsiRight);
+    }
+
+    public void removeEditUcMap(String ucno){
+        editUcMap.remove(ucno);
+
+    }
 
     //内部监听类
      class UcDefineControl  implements ActionListener {

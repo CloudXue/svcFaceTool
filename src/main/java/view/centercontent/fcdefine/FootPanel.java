@@ -18,14 +18,16 @@ import java.util.Set;
  *  * 功能表定义维护-单个uc定义  hsi_right
  */
 public class FootPanel  extends BaseJPanel{
+    public static  String OPTTYPE_MOD="mod";
+    public static  String OPTTYPE_ADD="add";
     private UcDefineMaintain ucDefineMaintain;
     //暂存当前。如果有更改依据currentUc去更改数据
     private String currentUc="";
     private HsiRight newUcData;
     private HsiRight oldUcData;
-    private String opttype="";//mod、add
-    private static  String OPTTYPE_MOD="mod";
-    private static  String OPTTYPE_ADD="add";
+    private String opttype=OPTTYPE_ADD;//mod、add
+    private String index="0";
+
     private FootPanelDocumentListener textFiledListener;
 
     private ActionListener actionListener;
@@ -83,6 +85,7 @@ public class FootPanel  extends BaseJPanel{
     public FootPanel(ActionListener actionListener,UcDefineMaintain ucDefineMaintain) {
         this.actionListener=actionListener;
         this.ucDefineMaintain=ucDefineMaintain;
+        textFiledListener=new FootPanelDocumentListener();
         init();
     }
 
@@ -134,25 +137,9 @@ public class FootPanel  extends BaseJPanel{
         layout.setVerticalGroup(vGroup);
         //endregion
 
-        rightcodetextfield.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                System.out.print("insertUpdate---");
-                System.out.println(rightcodetextfield.getText());
-            }
+        //region 监听
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                System.out.print("removeUpdate---");
-                System.out.println(rightcodetextfield.getText());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                System.out.print("changedUpdate---");
-                System.out.println(rightcodetextfield.getText());
-            }
-        });
+        //endregion
     }
     public HsiRight getFootPanelData(){
         HsiRight hsiRight= (HsiRight) oldUcData.clone();
@@ -170,7 +157,12 @@ public class FootPanel  extends BaseJPanel{
         hsiRight.setC_islimit(islimitcomboboxstr.split(":")[0]);
         return hsiRight;
     }
-    public void setFootPanelData(HsiRight hsiRight){
+    public void setFootPanelData(HsiRight hsiRight,int index,String opttype){
+        System.out.println(index+"||"+opttype+"||"+hsiRight);
+        this.opttype=opttype;
+        this.index=index+"";
+        //取消监听
+        dataChangeListener(false);
         if(hsiRight==null){
             //清除暂存
             oldUcData=null;
@@ -188,7 +180,7 @@ public class FootPanel  extends BaseJPanel{
             islimitcombobox.setSelectedIndex(0);
         }else{
             //保存暂存
-            oldUcData=hsiRight;
+            oldUcData=(HsiRight)hsiRight.clone();
             currentUc=hsiRight.getC_functionno_hid();
             newUcData=(HsiRight)hsiRight.clone();
             rightcodetextfield.setText(hsiRight.getC_rightcode());
@@ -219,7 +211,8 @@ public class FootPanel  extends BaseJPanel{
             }
             islimitcombobox.setSelectedIndex(islimit);
         }
-
+        //加上监听
+        dataChangeListener(true);
     }
 
 
@@ -229,12 +222,44 @@ public class FootPanel  extends BaseJPanel{
         if(!newUcData.equals(oldUcData)){
            //有过修改，则触发
             if(opttype.equals(OPTTYPE_ADD)){
-                ucDefineMaintain.addAddUcMap(currentUc,newUcData);
+                ucDefineMaintain.addAddUcMap(index,newUcData);
             }else if(opttype.equals(OPTTYPE_MOD)){
-                ucDefineMaintain.addEditUcMap(currentUc,newUcData);
+                ucDefineMaintain.addEditUcMap(index,newUcData);
+            }
+            System.out.println("有修改过："+oldUcData);
+        }else{
+            //有过修改，则触发
+            if(opttype.equals(OPTTYPE_ADD)){
+                ucDefineMaintain.removeAddUcMap(index);
+            }else if(opttype.equals(OPTTYPE_MOD)){
+                ucDefineMaintain.removeEditUcMap(index);
             }
         }
     }
+
+    /**
+     *
+     * @param add
+     */
+    private void dataChangeListener(boolean add){
+        if(add){
+            rightcodetextfield.getDocument().addDocumentListener(textFiledListener);
+            functionnotextfield.getDocument().addDocumentListener(textFiledListener);
+            rightnametextfield.getDocument().addDocumentListener(textFiledListener);
+            javaclasstextfield.getDocument().addDocumentListener(textFiledListener);
+            javamethodtextfield.getDocument().addDocumentListener(textFiledListener);
+            tablenametextfield.getDocument().addDocumentListener(textFiledListener);
+        }else{
+            rightcodetextfield.getDocument().removeDocumentListener(textFiledListener);
+            functionnotextfield.getDocument().removeDocumentListener(textFiledListener);
+            rightnametextfield.getDocument().removeDocumentListener(textFiledListener);
+            javaclasstextfield.getDocument().removeDocumentListener(textFiledListener);
+            javamethodtextfield.getDocument().removeDocumentListener(textFiledListener);
+            tablenametextfield.getDocument().removeDocumentListener(textFiledListener);
+        }
+    }
+
+
     class FootPanelControl implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -246,16 +271,19 @@ public class FootPanel  extends BaseJPanel{
     class FootPanelDocumentListener implements DocumentListener{
         @Override
         public void insertUpdate(DocumentEvent e) {
+            System.out.println("insertUpdate");
             ucDataChange();
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
+            System.out.println("removeUpdate");
             ucDataChange();
         }
 
         @Override
         public void changedUpdate(DocumentEvent e) {
+            System.out.println("changedUpdate");
             ucDataChange();
         }
     }

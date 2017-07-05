@@ -197,9 +197,12 @@ public class HsiRight implements Serializable,Cloneable {
 
     @Override
     public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
         HsiRight comper=(HsiRight)obj;
         if(comper.getC_class().equals(this.getC_class())
-                && comper.getC_className().equals(this.getC_className())
+                && comper.getC_tablename().equals(this.getC_tablename())
                 && comper.getC_clientprogs().equals(this.getC_clientprogs())
                 && comper.getC_functionno().equals(this.getC_functionno())
                 && comper.getC_islimit().equals(this.getC_islimit())
@@ -209,10 +212,29 @@ public class HsiRight implements Serializable,Cloneable {
                 && comper.getC_rightname().equals(this.getC_rightname())
                 && comper.getC_sysname().equals(this.getC_sysname())
                 && comper.getC_uctype().equals(this.getC_uctype())
+                && comper.getC_functionno_hid().equals(this.getC_functionno_hid())
                 ){
             return true;
         }else {
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "HsiRight{" +
+                "c_rightcode='" + c_rightcode + '\'' +
+                ", c_rightname='" + c_rightname + '\'' +
+                ", c_class='" + c_class + '\'' +
+                ", c_sysname='" + c_sysname + '\'' +
+                ", c_functionno='" + c_functionno + '\'' +
+                ", c_functionno_hid='" + c_functionno_hid + '\'' +
+                ", c_javaclass='" + c_javaclass + '\'' +
+                ", c_javamethod='" + c_javamethod + '\'' +
+                ", c_clientprogs='" + c_clientprogs + '\'' +
+                ", c_tablename='" + c_tablename + '\'' +
+                ", c_uctype='" + c_uctype + '\'' +
+                ", c_islimit='" + c_islimit + '\'' +
+                '}';
     }
 }
