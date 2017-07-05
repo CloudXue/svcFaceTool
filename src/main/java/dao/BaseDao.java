@@ -52,8 +52,14 @@ public abstract  class BaseDao <TDtoModel> {
     }
 
     protected List<Map<String,Object>> getData(String sqlWhere)throws Exception {
+        return getData("",sqlWhere);
+    }
+    protected List<Map<String,Object>> getData(String filed,String sqlWhere)throws Exception {
         List<Map<String,Object>> retMapList=new ArrayList<Map<String,Object>>();
-        String sql="select * from "+getTableName();
+        if(StringUtils.isNullOrEmpty(filed)){
+            filed="*";
+        }
+        String sql="select "+filed+"  from "+getTableName()+" t ";
         if(StringUtils.isNotNullAndNotEmpty(sqlWhere)){
             sql+=" "+sqlWhere;
         }

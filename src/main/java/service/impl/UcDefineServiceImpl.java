@@ -14,7 +14,7 @@ public class UcDefineServiceImpl implements UcDefineService {
     HsiRightDao hsiRightDao=new HsiRightDaoImpl();
     @Override
     public List<HsiRight> getAllUc() throws Exception {
-        return hsiRightDao.getAllData();
+        return hsiRightDao.getHsiRighFuzzy("");
     }
 
     @Override

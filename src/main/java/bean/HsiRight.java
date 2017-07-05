@@ -30,6 +30,7 @@ public class HsiRight implements Serializable,Cloneable {
      *UC功能号
      */
     private String c_functionno;
+    private String c_functionno_hid;
     /**
      *BO类名
      */
@@ -160,6 +161,30 @@ public class HsiRight implements Serializable,Cloneable {
         return tableName;
     }
 
+    public String getC_functionno_hid() {
+        return c_functionno_hid;
+    }
+
+    public HsiRight() {
+    }
+
+    public void setC_functionno_hid(String c_functionno_hid) {
+        this.c_functionno_hid = c_functionno_hid;
+    }
+
+    public HsiRight(String c_rightcode, String c_rightname, String c_class, String c_sysname, String c_functionno, String c_javaclass, String c_javamethod, String c_clientprogs, String c_uctype, String c_islimit) {
+        this.c_rightcode = c_rightcode;
+        this.c_rightname = c_rightname;
+        this.c_class = c_class;
+        this.c_sysname = c_sysname;
+        this.c_functionno = c_functionno;
+        this.c_javaclass = c_javaclass;
+        this.c_javamethod = c_javamethod;
+        this.c_clientprogs = c_clientprogs;
+        this.c_uctype = c_uctype;
+        this.c_islimit = c_islimit;
+    }
+
     @Override
     public Object clone()  {
         try {
@@ -168,5 +193,26 @@ public class HsiRight implements Serializable,Cloneable {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        HsiRight comper=(HsiRight)obj;
+        if(comper.getC_class().equals(this.getC_class())
+                && comper.getC_className().equals(this.getC_className())
+                && comper.getC_clientprogs().equals(this.getC_clientprogs())
+                && comper.getC_functionno().equals(this.getC_functionno())
+                && comper.getC_islimit().equals(this.getC_islimit())
+                && comper.getC_javaclass().equals(this.getC_javaclass())
+                && comper.getC_javamethod().equals(this.getC_javamethod())
+                && comper.getC_rightcode().equals(this.getC_rightcode())
+                && comper.getC_rightname().equals(this.getC_rightname())
+                && comper.getC_sysname().equals(this.getC_sysname())
+                && comper.getC_uctype().equals(this.getC_uctype())
+                ){
+            return true;
+        }else {
+            return false;
+        }
     }
 }

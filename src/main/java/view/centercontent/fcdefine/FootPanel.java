@@ -6,7 +6,12 @@ import view.centercontent.BaseJPanel;
 import view.centercontent.UcDefineMaintain;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by lyd on 2017/5/16.
@@ -17,7 +22,11 @@ public class FootPanel  extends BaseJPanel{
     //暂存当前。如果有更改依据currentUc去更改数据
     private String currentUc="";
     private HsiRight newUcData;
-
+    private HsiRight oldUcData;
+    private String opttype="";//mod、add
+    private static  String OPTTYPE_MOD="mod";
+    private static  String OPTTYPE_ADD="add";
+    private FootPanelDocumentListener textFiledListener;
 
     private ActionListener actionListener;
     /**
@@ -124,9 +133,29 @@ public class FootPanel  extends BaseJPanel{
         //设置垂直组
         layout.setVerticalGroup(vGroup);
         //endregion
+
+        rightcodetextfield.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                System.out.print("insertUpdate---");
+                System.out.println(rightcodetextfield.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                System.out.print("removeUpdate---");
+                System.out.println(rightcodetextfield.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                System.out.print("changedUpdate---");
+                System.out.println(rightcodetextfield.getText());
+            }
+        });
     }
     public HsiRight getFootPanelData(){
-        HsiRight hsiRight=new HsiRight();
+        HsiRight hsiRight= (HsiRight) oldUcData.clone();
         hsiRight.setC_rightcode(rightcodetextfield.getText());
         hsiRight.setC_rightname(rightnametextfield.getText());
         String classcomboboxstr=(String)classcombobox.getSelectedItem();
@@ -144,6 +173,7 @@ public class FootPanel  extends BaseJPanel{
     public void setFootPanelData(HsiRight hsiRight){
         if(hsiRight==null){
             //清除暂存
+            oldUcData=null;
             currentUc="";
             newUcData=null;
             //清除文本框
@@ -158,7 +188,8 @@ public class FootPanel  extends BaseJPanel{
             islimitcombobox.setSelectedIndex(0);
         }else{
             //保存暂存
-            currentUc=hsiRight.getC_functionno();
+            oldUcData=hsiRight;
+            currentUc=hsiRight.getC_functionno_hid();
             newUcData=(HsiRight)hsiRight.clone();
             rightcodetextfield.setText(hsiRight.getC_rightcode());
             rightnametextfield.setText(hsiRight.getC_rightname());
@@ -193,7 +224,39 @@ public class FootPanel  extends BaseJPanel{
 
 
     private void ucDataChange(){
-        ucDefineMaintain.addAddUcMap(currentUc,newUcData);
+        //先判是否真的修改
+        newUcData=this.getFootPanelData();
+        if(!newUcData.equals(oldUcData)){
+           //有过修改，则触发
+            if(opttype.equals(OPTTYPE_ADD)){
+                ucDefineMaintain.addAddUcMap(currentUc,newUcData);
+            }else if(opttype.equals(OPTTYPE_MOD)){
+                ucDefineMaintain.addEditUcMap(currentUc,newUcData);
+            }
+        }
+    }
+    class FootPanelControl implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+
+        }
     }
 
+    class FootPanelDocumentListener implements DocumentListener{
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            ucDataChange();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            ucDataChange();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            ucDataChange();
+        }
+    }
 }

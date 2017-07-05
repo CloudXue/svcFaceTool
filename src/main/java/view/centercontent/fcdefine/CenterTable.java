@@ -9,6 +9,8 @@ import view.centercontent.UcDefineMaintain;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,8 +44,8 @@ public class CenterTable  extends BaseJPanel {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-        };
 
+        };
         table=new JTable(tableModel);
 
         this.setLayout(new GridLayout());
@@ -101,6 +103,7 @@ public class CenterTable  extends BaseJPanel {
         title.add("分类");
         title.add("BO类名");
         title.add("BO方法");
+        title.add("UC功能号");
         return  title;
     }
 
@@ -120,6 +123,7 @@ public class CenterTable  extends BaseJPanel {
             vector.add(hsiRight.getC_className());
             vector.add(hsiRight.getC_javaclass());
             vector.add(hsiRight.getC_javamethod());
+            vector.add(hsiRight.getC_functionno_hid());
             dataVector.add(vector);
         }
 
@@ -153,12 +157,18 @@ public class CenterTable  extends BaseJPanel {
     public void cloumSelect(int index){
         String functionno= "";
         if (index<tableModel.getRowCount()) {
-            functionno = (String)tableModel.getValueAt(index,1);
+            functionno = (String)tableModel.getValueAt(index,6);
         }
         ucDefineMaintain.tableSelect(index,functionno);
     }
     public void reloadUc(String condition){
         tableModel.setDataVector(getData(condition),getTitle());
+        //region 隐藏最后一列
+        TableColumnModel tcm = table.getColumnModel();
+        //其实没有移除，仅仅隐藏而已
+        TableColumn tc = tcm.getColumn(6);
+        tcm.removeColumn(tc);
+        //endregion
     }
 
 }

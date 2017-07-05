@@ -30,7 +30,7 @@ public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
     public HsiRight getHsiRigh(String functionno) throws Exception {
         String sqlWhere=" where C_FUNCTIONNO ='"+functionno+"'";
         HsiRight hsiRight=new HsiRight();
-        List<Map<String,Object>> maplist=getData(sqlWhere);
+        List<Map<String,Object>> maplist=getData(" t.*,t.c_rightname c_rightname_hid ",sqlWhere);
         if(maplist.size()>0){
             BeanUtils.covertMapToBeanWithoutNull(hsiRight,maplist.get(0));
         }
@@ -47,7 +47,7 @@ public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
                     " or C_RIGHTCODE like '%"+condition+"%'" +
                     " or C_RIGHTNAME like '%"+condition+"%'";
         }
-        List<Map<String,Object>> maplist=getData(sqlWhere);
+        List<Map<String,Object>> maplist=getData(" t.*,t.C_FUNCTIONNO c_functionno_hid ",sqlWhere);
         for (Map<String,Object> map : maplist){
             HsiRight hsiRight=new HsiRight();
             BeanUtils.covertMapToBean(hsiRight,map);

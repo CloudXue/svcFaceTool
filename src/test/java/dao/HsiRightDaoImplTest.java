@@ -1,6 +1,7 @@
 package dao;
 
 import bean.HsiRight;
+import bean.HsiRightTest;
 import dao.impl.HsiRightDaoImpl;
 import org.junit.Before;
 import org.junit.Test;
