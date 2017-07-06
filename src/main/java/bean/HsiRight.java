@@ -7,13 +7,24 @@ import java.io.Serializable;
 /**
  * Created by lyd on 2017-06-28.
  */
-public class HsiRight implements Serializable,Cloneable {
+public class HsiRight extends BaseBean implements Serializable,Cloneable {
+
+    @Override
+    public String getKeyStr() {
+        return "c_functionno";
+    }
+
+    @Override
+    public String getKeyValueStr() {
+        return "c_functionno_hid";
+    }
 
     private static String tableName="HSI_RIGHT";
     /**
      *功能编码
      */
     private String c_rightcode;
+    private String c_rightcode_hid;
     /**
      *UC功能号
      */
@@ -157,6 +168,14 @@ public class HsiRight implements Serializable,Cloneable {
         this.c_islimit = c_islimit;
     }
 
+    public String getC_rightcode_hid() {
+        return c_rightcode_hid;
+    }
+
+    public void setC_rightcode_hid(String c_rightcode_hid) {
+        this.c_rightcode_hid = c_rightcode_hid;
+    }
+
     public static String getTableName(){
         return tableName;
     }
@@ -213,6 +232,7 @@ public class HsiRight implements Serializable,Cloneable {
                 && comper.getC_sysname().equals(this.getC_sysname())
                 && comper.getC_uctype().equals(this.getC_uctype())
                 && comper.getC_functionno_hid().equals(this.getC_functionno_hid())
+                && comper.getC_rightcode_hid().equals(this.getC_rightcode_hid())
                 ){
             return true;
         }else {

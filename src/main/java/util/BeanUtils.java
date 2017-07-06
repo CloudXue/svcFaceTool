@@ -1,13 +1,11 @@
 package util;
 
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lyd on 2016/7/15.
@@ -91,15 +89,32 @@ public class BeanUtils {
     }
     /**
      * 获得所有参数，包含父类的
-     * @param bena
+     * @param bean
      * @return
      */
-    public static List<Field> getAllField(Object bena){
-        if(bena instanceof  Class){
-            return getAllField(bena);
+    public static List<Field> getAllField(Object bean){
+        if(bean instanceof  Class){
+            return getAllField(bean);
         }else{
-            return getAllField(bena.getClass());
+            return getAllField(bean.getClass());
         }
+    }
+    public static Map<String, Object> getProperties(Object bean){
+        Map<String, Object> retMap=new HashMap<String, Object>();
+        List<String> filename=getAllFieldName(bean);
+        for (String name:filename){
+            Object value=null;
+            try {
+                value=getProperty(bean,name);
+            } catch (Exception e) {
+                e.printStackTrace();
+                value=null;
+            }
+            retMap.put(name,value);
+
+        }
+
+        return retMap;
     }
     /**
      * 获得所有参数，包含父类的
@@ -160,4 +175,6 @@ public class BeanUtils {
     public static String getSetMethodName(String fieldName){
         return "set"+StringUtils.firstUpperCase(fieldName);
     }
+
+
 }

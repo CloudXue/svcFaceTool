@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -422,5 +423,38 @@ public class StringUtils {
     public static String firstUpperCase(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
+    public static boolean isEmpty(String str) {
+        return str == null || str.length() == 0;
+    }
+    public static boolean isNull(String s) {
+        return StringUtils.isBlank(s);
+    }
+    public static String UUID() {
+        String uuid = UUID.randomUUID().toString();
+        return StringUtils.replaceStringCaseInsensitive(uuid, "-", "");
+    }
+    public static String replaceStringCaseInsensitive(String source, String regex, String replacement) {
+        StringBuffer result = new StringBuffer();
+        Pattern p = Pattern.compile(regex, 2);
+        Matcher m = p.matcher(source);
 
+        while(m.find()) {
+            m.appendReplacement(result, replacement);
+        }
+
+        m.appendTail(result);
+        return result.toString();
+    }
+    public static boolean isBlank(String str) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if ((Character.isWhitespace(str.charAt(i)) == false)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

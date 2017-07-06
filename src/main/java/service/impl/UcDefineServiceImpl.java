@@ -26,4 +26,24 @@ public class UcDefineServiceImpl implements UcDefineService {
     public List<HsiRight> getAllUc(String condition) throws Exception {
         return hsiRightDao.getHsiRighFuzzy(condition);
     }
+
+
+    @Override
+    public void save(List<String> delList, List<HsiRight> addUcList, List<HsiRight> editUcList) throws Exception {
+        //开启事务
+        hsiRightDao.openTransaction();
+
+        try {
+            hsiRightDao.delete(delList);
+            hsiRightDao.edit(editUcList);
+            hsiRightDao.add(addUcList);
+        } catch (Exception e) {
+            //回滚事务
+            hsiRightDao.rollbackTransaction();
+           throw e;
+        }
+        //提交事务
+        hsiRightDao.commitTransaction();
+
+    }
 }

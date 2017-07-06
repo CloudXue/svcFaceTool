@@ -1,6 +1,7 @@
 package view.centercontent.fcdefine;
 
 import bean.HsiRight;
+import constant.EnActionEvent;
 import util.StringUtils;
 import view.centercontent.BaseJPanel;
 import view.centercontent.UcDefineMaintain;
@@ -28,7 +29,10 @@ public class FootPanel  extends BaseJPanel{
     private String opttype=OPTTYPE_ADD;//mod、add
     private String index="0";
 
+    //监听文本框变动
     private FootPanelDocumentListener textFiledListener;
+    //监听普通事件
+    private FootPanelControl footPanelControl;
 
     private ActionListener actionListener;
     /**
@@ -86,6 +90,10 @@ public class FootPanel  extends BaseJPanel{
         this.actionListener=actionListener;
         this.ucDefineMaintain=ucDefineMaintain;
         textFiledListener=new FootPanelDocumentListener();
+        footPanelControl=new FootPanelControl();
+        classcombobox.setActionCommand(EnActionEvent.UCDEFINE_CLASSSELECT.getCmd());
+        uctypecombobox.setActionCommand(EnActionEvent.UCDEFINE_UCTYPESELECT.getCmd());
+        islimitcombobox.setActionCommand(EnActionEvent.UCDEFINE_ISLIMITSELECT.getCmd());
         init();
     }
 
@@ -136,10 +144,6 @@ public class FootPanel  extends BaseJPanel{
         //设置垂直组
         layout.setVerticalGroup(vGroup);
         //endregion
-
-        //region 监听
-
-        //endregion
     }
     public HsiRight getFootPanelData(){
         HsiRight hsiRight= (HsiRight) oldUcData.clone();
@@ -158,7 +162,7 @@ public class FootPanel  extends BaseJPanel{
         return hsiRight;
     }
     public void setFootPanelData(HsiRight hsiRight,int index,String opttype){
-        System.out.println(index+"||"+opttype+"||"+hsiRight);
+        System.out.println("setFootPanelData"+index+"||"+opttype+"||"+hsiRight);
         this.opttype=opttype;
         this.index=index+"";
         //取消监听
@@ -226,13 +230,13 @@ public class FootPanel  extends BaseJPanel{
             }else if(opttype.equals(OPTTYPE_MOD)){
                 ucDefineMaintain.addEditUcMap(index,newUcData);
             }
-            System.out.println("有修改过："+oldUcData);
+            System.out.println("ucDataChange:"+"有修改过："+oldUcData);
         }else{
-            //有过修改，则触发
+            //没有有过修改，则触发删除
             if(opttype.equals(OPTTYPE_ADD)){
-                ucDefineMaintain.removeAddUcMap(index);
+                ucDefineMaintain.removeAddUcMap(index,newUcData);
             }else if(opttype.equals(OPTTYPE_MOD)){
-                ucDefineMaintain.removeEditUcMap(index);
+                ucDefineMaintain.removeEditUcMap(index,newUcData);
             }
         }
     }
@@ -249,6 +253,9 @@ public class FootPanel  extends BaseJPanel{
             javaclasstextfield.getDocument().addDocumentListener(textFiledListener);
             javamethodtextfield.getDocument().addDocumentListener(textFiledListener);
             tablenametextfield.getDocument().addDocumentListener(textFiledListener);
+            classcombobox.addActionListener(footPanelControl);
+            uctypecombobox.addActionListener(footPanelControl);
+            islimitcombobox.addActionListener(footPanelControl);
         }else{
             rightcodetextfield.getDocument().removeDocumentListener(textFiledListener);
             functionnotextfield.getDocument().removeDocumentListener(textFiledListener);
@@ -256,6 +263,10 @@ public class FootPanel  extends BaseJPanel{
             javaclasstextfield.getDocument().removeDocumentListener(textFiledListener);
             javamethodtextfield.getDocument().removeDocumentListener(textFiledListener);
             tablenametextfield.getDocument().removeDocumentListener(textFiledListener);
+
+            classcombobox.removeActionListener(footPanelControl);
+            uctypecombobox.removeActionListener(footPanelControl);
+            islimitcombobox.removeActionListener(footPanelControl);
         }
     }
 
@@ -263,7 +274,12 @@ public class FootPanel  extends BaseJPanel{
     class FootPanelControl implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            //下拉框事件
+            if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_CLASSSELECT.getCmd())||
+                    e.getActionCommand().equals(EnActionEvent.UCDEFINE_UCTYPESELECT.getCmd())||
+                    e.getActionCommand().equals(EnActionEvent.UCDEFINE_ISLIMITSELECT.getCmd()) ){
+                ucDataChange();
+            }
 
         }
     }

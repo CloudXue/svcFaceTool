@@ -17,5 +17,6 @@ public abstract class BaseJPanel extends JPanel {
     protected void handleExceptionMsg(Exception e){
         ActionEvent action=MyActionListener.getActionEvent(EnActionEvent.EXCEPTION,e.getMessage());
         myActionListener.actionPerformed(action);
+        e.printStackTrace();
     }
 }

@@ -4,6 +4,7 @@ import bean.HsiRight;
 import constant.EnActionEvent;
 import service.UcDefineService;
 import service.impl.UcDefineServiceImpl;
+import util.CommonUtil;
 import util.StringUtils;
 import control.MyActionListener;
 import view.centercontent.fcdefine.CenterTable;
@@ -194,21 +195,32 @@ public class UcDefineMaintain extends BaseJPanel  {
 
     }
 
-    public void addAddUcMap(String ucno,HsiRight hsiRight){
+    public void addAddUcMap(String index,HsiRight hsiRight){
 
-       addUcMap.put(ucno,hsiRight);
+       addUcMap.put(index,hsiRight);
+       //联动更改列表数据
+       centerTable.setColumnData(Integer.parseInt(index),hsiRight);
     }
-    public void removeAddUcMap(String ucno){
-        addUcMap.remove(ucno);
+    public void removeAddUcMap(String index,HsiRight hsiRight){
+        if(addUcMap.containsKey(index)){
+            addUcMap.remove(index);
+            //联动更改列表数据
+            centerTable.setColumnData(Integer.parseInt(index),hsiRight);
+        }
     }
 
-    public void addEditUcMap(String ucno,HsiRight hsiRight){
-        editUcMap.put(ucno,hsiRight);
+    public void addEditUcMap(String index,HsiRight hsiRight){
+        editUcMap.put(index,hsiRight);
+        //联动更改列表数据
+        centerTable.setColumnData(Integer.parseInt(index),hsiRight);
     }
 
-    public void removeEditUcMap(String ucno){
-        editUcMap.remove(ucno);
-
+    public void removeEditUcMap(String index,HsiRight hsiRight){
+        if(editUcMap.containsKey(index)) {
+            editUcMap.remove(index);
+            //联动更改列表数据
+            centerTable.setColumnData(Integer.parseInt(index),hsiRight);
+        }
     }
 
     //内部监听类
@@ -241,15 +253,41 @@ public class UcDefineMaintain extends BaseJPanel  {
                 //尾插入
 
             }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_DELCLICK.getCmd())){
-                //删除 todo 数据中先删除
-                ucDefineMaintain.getCenterTable().removeSelect();
+                //删除,先保存删除的uc
+                Map<String,List<String>> delMap = ucDefineMaintain.getCenterTable().removeSelect();
+                List<String> ucList=delMap.get("uc");
+                List<String> indexList=delMap.get("index");
+                deleUcList.addAll(ucList);
+                //如果在编辑map中，则清除
+                for (String index : indexList) {
+                    if(addUcMap.containsKey(index)){
+                        addUcMap.remove(index);
+                    }
+                    if(editUcMap.containsKey(index)){
+                        editUcMap.remove(index);
+                    }
+                }
             }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_SAVECLICK.getCmd())){
                 //存盘
-
+                List addUcList= CommonUtil.mapvalueToList(addUcMap);
+                List editUcList= CommonUtil.mapvalueToList(editUcMap);
+                try {
+                    ucDefineService.save(deleUcList,addUcList,editUcList);
+                } catch (Exception e1) {
+                    handleExceptionMsg(e1);
+                }
                 //清空所有缓存数据
                 addUcMap.clear();;
                 editUcMap.clear();
                 deleUcList.clear();
+                //刷新数据
+                //重新加载table
+                String searchTxt=ucDefineMaintain.getInputTxt();
+                centerTable.reloadUc(searchTxt);
+                //底部选择第一行
+                centerTable.cloumSelect(0);
+                //向上传播
+                ucDefineMaintain.spreadAction(e);
             }
 
         }

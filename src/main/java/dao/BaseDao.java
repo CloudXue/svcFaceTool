@@ -1,19 +1,60 @@
 package dao;
 
+import bean.BaseBean;
+import util.BeanUtils;
 import util.StringUtils;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Date;
+import java.util.*;
 
 /**
  * Created by lyd on 2017-06-29.
  */
-public abstract  class BaseDao <TDtoModel> {
+public abstract  class BaseDao <TDtoModel extends BaseBean> {
     protected abstract  String getTableName();
 
+    /**
+     * 获取可以更新的字段名称列表
+     * 需与对应的实体类的字段的名称一致
+     * 全部小写
+     * 不包含字段：urid,rowversion
+     *
+     * @return
+     */
+    protected abstract String[] createUpdateFieldNames();
+
+    /**
+     * 获取添加操作时的字段
+     * 区分大小写，需与对应的实体类的字段的名称一致
+     *
+     * @return
+     */
+    protected abstract String[] createInsertFieldNames();
+    /**
+     * 开启事务
+     */
+    public void openTransaction() throws Exception {
+        getConn();
+        connection.setAutoCommit(false);
+
+    }
+    /**
+     * 回滚事务
+     */
+    public void rollbackTransaction() throws Exception {
+        getConn();
+        connection.rollback();
+        connection.setAutoCommit(true);
+    }
+    /**
+     * 提交事务
+     */
+    public void commitTransaction() throws Exception {
+        getConn();
+        connection.commit();
+        connection.setAutoCommit(true);
+    }
     //所有界面共用一个连接，没啥问题
     private   static Connection connection;
     protected Connection getConn() throws Exception {
@@ -34,16 +75,150 @@ public abstract  class BaseDao <TDtoModel> {
         PreparedStatement pstmt=connection.prepareStatement(sql);
         return pstmt;
     }
-    public int insert(TDtoModel dtoModel){
+    public Statement getStatement() throws Exception {
+        connection=getConn();
+        Statement pstmt=connection.createStatement();
+        return pstmt;
+    }
+    public boolean insert(TDtoModel dtoModel) throws Exception {
+        //获取model的map<属性名称，属性值>
+        Map<String, Object> mapFields = BeanUtils.getProperties(dtoModel);
+        //可更新的字段的名称的列表
+        String[] insertFieldNames = this.createInsertFieldNames();
+        //SQL语句（参数化）
+        StringBuilder stringSqlBuilder = new StringBuilder();
+        //SQL语句所对应的参数
+        List<Object> objectSqlParams = new ArrayList<Object>();
+        //SQL语句字段部分
+        StringBuilder stringSqlFields = new StringBuilder();
+        //SQL语句字段值部分
+        StringBuilder stringSqlValues = new StringBuilder();
+        //是否为第一次循环，用于遍历时ＳＱＬ组装
+        boolean isFirst = true;
+        //执行ＳＱＬ语句的返回结果
+        int tmpCount;
 
+        Object objFieldValue = null;
+        for (String filedName : insertFieldNames) {
+            if (!isFirst) {
+                stringSqlFields.append(",");
+                stringSqlValues.append(",");
+            }
+            objFieldValue = mapFields.get(filedName);
+            if (objFieldValue instanceof java.util.Date) {
+                objectSqlParams.add(new java.sql.Timestamp(((java.util.Date) objFieldValue).getTime()));
+            } else {
+                objectSqlParams.add(objFieldValue);
+            }
+            stringSqlFields.append(String.format(" %s ", filedName));
+            stringSqlValues.append("?");
+            isFirst = false;
+        }
+        stringSqlBuilder.append(String.format("insert into %s (%s) values(%s) ", getTableName(), stringSqlFields.toString(), stringSqlValues.toString()));
 
-        return 0;
+        tmpCount = this.executeSQL(stringSqlBuilder.toString(), objectSqlParams.toArray());
+        if (1 == tmpCount) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public int update(TDtoModel dtoModel){
+    public boolean update(TDtoModel dtoModel) throws Exception {
+        return update(dtoModel, null);
+    }
 
+    public boolean update(TDtoModel dtoModel, String[] fieldNames) throws Exception {
 
-        return 0;
+        //获取model的map<属性名称，属性值>
+        Map<String, Object> mapFields = BeanUtils.getProperties(dtoModel);
+        //可更新的字段的名称的列表
+        String[] updateFieldNames = this.createUpdateFieldNames();
+        //SQL语句（参数化）
+        StringBuilder stringSqlBuilder = new StringBuilder();
+        //SQL语句所对应的参数
+        List<Object> objectSqlParams = new ArrayList<Object>();
+        //是否为自定义的字段更新
+        boolean isUpdateField;
+        if (null != fieldNames && fieldNames.length > 0) {
+            isUpdateField = true;
+        } else {
+            isUpdateField = false;
+        }
+
+        stringSqlBuilder.append(String.format("UPDATE %s SET  ", this.getTableName()));
+
+        Object objFieldValue;
+        boolean isfirst=true;
+        for (String filedName : updateFieldNames) {
+
+            if (isUpdateField) {
+                if (!this.checkChild(fieldNames, filedName)) {
+                    //如果字段不在需要更新的字段中，则跳过
+                    continue;
+                }
+            }
+            objFieldValue = mapFields.get(filedName.toLowerCase());
+            if (objFieldValue instanceof java.util.Date) {
+                objectSqlParams.add(new java.sql.Timestamp(((java.util.Date) objFieldValue).getTime()));
+            }else {
+                objectSqlParams.add(objFieldValue);
+            }
+            if (isfirst) {
+                stringSqlBuilder.append(String.format("%s=?", filedName));
+                isfirst=false;
+            } else {
+                stringSqlBuilder.append(String.format(",%s=?", filedName));
+            }
+        }
+
+        stringSqlBuilder.append(" WHERE "+dtoModel.getKeyStr()+"=?  ");
+        objectSqlParams.add(mapFields.get(dtoModel.getKeyValueStr().toLowerCase()));
+
+        int tmpCount = this.executeSQL(stringSqlBuilder.toString(), objectSqlParams.toArray());
+        if (1 == tmpCount) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    /**
+     * 检查字符串数组中是否包含有一个字符串
+     *
+     * @param parentsList 数组
+     * @param checkValue  字符串
+     * @return 包含：true；不包含：false
+     */
+    protected boolean checkChild(String[] parentsList, String checkValue) {
+        if (parentsList != null && parentsList.length > 0) {
+            for (String childValue : parentsList) {
+                if (childValue.equals(checkValue)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private int executeSQL(String sql, Object[] params) throws Exception {
+        PreparedStatement pstmt = getPreStmt(sql);
+        int result = 0;
+        fillStatement(pstmt, params);
+        result = pstmt.executeUpdate();
+        return result;
+    }
+    private static void fillStatement(PreparedStatement pstmt, Object... params) throws SQLException {
+        if(params != null) {
+            int i = 0;
+
+            for(int n = params.length; i < n; ++i) {
+                if(params[i] != null) {
+                    pstmt.setObject(i + 1, params[i]);
+                } else {
+                    pstmt.setNull(i + 1, 12);
+                }
+            }
+
+        }
     }
 
     protected List<Map<String,Object>> getAll() throws Exception {
@@ -76,6 +251,11 @@ public abstract  class BaseDao <TDtoModel> {
             retMapList.add(map);
         }
         return retMapList;
+    }
+
+    protected int executeSql(String sql) throws Exception {
+        Statement statement=getStatement();
+        return statement.executeUpdate(sql);
     }
 
     private Jdbcinfo getConninfo(){

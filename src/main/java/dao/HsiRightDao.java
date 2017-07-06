@@ -8,7 +8,7 @@ import java.util.List;
  * Created by lyd on 2017-06-28.
  * 表：HSI_RIGHT。uc定义
  */
-public interface HsiRightDao {
+public interface HsiRightDao extends IBaseDao {
     public List<HsiRight> getAllData() throws Exception;
     public HsiRight getHsiRigh(String functionno) throws Exception;
 
@@ -19,4 +19,8 @@ public interface HsiRightDao {
      * @throws Exception
      */
     public List<HsiRight> getHsiRighFuzzy(String condition) throws Exception;
+
+    public void delete(List<String> ucList) throws Exception;
+    public void add(List<HsiRight> ucList) throws Exception;
+    public void edit(List<HsiRight> ucList) throws Exception;
 }

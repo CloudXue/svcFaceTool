@@ -59,7 +59,21 @@ public enum EnActionEvent {
     /**
      *警告
      */
-    WARNING("WARNING");
+    WARNING("WARNING"),
+    /**
+     * uc定义中权限类别选中事件
+     */
+    UCDEFINE_CLASSSELECT("UCDEFINECLASSSELECT"),
+    /**
+     *uc定义中功能类型选中事件
+     */
+    UCDEFINE_UCTYPESELECT("UCDEFINEUCTYPESELECT"),
+    /**
+     *uc定义中日终处理时停用选中事件
+     */
+    UCDEFINE_ISLIMITSELECT("UCDEFINEISLIMITSELECT")
+
+
     ;
     private String cmd;
     private String msg;

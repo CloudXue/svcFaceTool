@@ -4,6 +4,7 @@ import bean.HsiRight;
 import control.MyActionListener;
 import service.UcDefineService;
 import service.impl.UcDefineServiceImpl;
+import util.StringUtils;
 import view.centercontent.BaseJPanel;
 import view.centercontent.UcDefineMaintain;
 
@@ -14,9 +15,8 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by lyd on 2017/5/18.
@@ -83,12 +83,30 @@ public class CenterTable  extends BaseJPanel {
         }
 
     }
-    public void removeSelect(){
+
+    /**
+     *
+     * @return 返回的map <li>key:uc  value:删除的uc</li>
+     *            <li> key:index  value:删除的下表</li>
+     */
+    public Map<String,List<String>> removeSelect(){
+        Map<String,List<String>> retMap=new HashMap<String,List<String>>();
+        List<String> ucList=new ArrayList<>();
+        List<String> index=new ArrayList<>();
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
         int[] rows=table.getSelectedRows();
         for (int i = 0; i < rows.length; i++) {
-            tableModel.removeRow(rows[i]);
+            String function = (String)tableModel.getValueAt(rows[i]-i,6);
+            if(StringUtils.isNotNullAndNotEmpty(function)){
+                ucList.add(function);
+            }
+
+            index.add(rows[i]+"");
+            tableModel.removeRow(rows[i]-i);
         }
+        retMap.put("uc",ucList);
+        retMap.put("index",index);
+        return retMap;
 
     }
     public void tailInsert(){
@@ -104,6 +122,7 @@ public class CenterTable  extends BaseJPanel {
         title.add("BO类名");
         title.add("BO方法");
         title.add("UC功能号");
+        title.add("权限代码");
         return  title;
     }
 
@@ -124,6 +143,7 @@ public class CenterTable  extends BaseJPanel {
             vector.add(hsiRight.getC_javaclass());
             vector.add(hsiRight.getC_javamethod());
             vector.add(hsiRight.getC_functionno_hid());
+            vector.add(hsiRight.getC_rightcode_hid());
             dataVector.add(vector);
         }
 
@@ -167,8 +187,21 @@ public class CenterTable  extends BaseJPanel {
         TableColumnModel tcm = table.getColumnModel();
         //其实没有移除，仅仅隐藏而已
         TableColumn tc = tcm.getColumn(6);
-        tcm.removeColumn(tc);
+       //todo 方便测试，先不隐藏
+        // tcm.removeColumn(tc);
         //endregion
+    }
+
+    public void setColumnData(int index ,HsiRight hsiRight){
+        System.out.println("setColumnData:"+index+"||"+hsiRight);
+        tableModel.setValueAt(hsiRight.getC_rightcode(),index,0);
+        tableModel.setValueAt(hsiRight.getC_functionno(),index,1);
+        tableModel.setValueAt(hsiRight.getC_rightname(),index,2);
+        tableModel.setValueAt(hsiRight.getC_className(),index,3);
+        tableModel.setValueAt(hsiRight.getC_javaclass(),index,4);
+        tableModel.setValueAt(hsiRight.getC_javamethod(),index,5);
+        tableModel.setValueAt(hsiRight.getC_functionno_hid(),index,6);
+        tableModel.setValueAt(hsiRight.getC_rightcode_hid(),index,7);
     }
 
 }
