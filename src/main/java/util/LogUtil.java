@@ -23,7 +23,6 @@ public class LogUtil {
         }else{
             fileLogPath+= File.separator+"log"+File.separator;
         }
-        System.out.println(fileLogPath);
         System.setProperty("log.base",fileLogPath);
         PropertyConfigurator.configure(LogUtil.class.getResourceAsStream("/log4j.properties") );
         logger  =  Logger.getLogger(LogUtil.class );

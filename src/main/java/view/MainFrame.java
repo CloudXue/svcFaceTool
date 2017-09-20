@@ -77,14 +77,12 @@ public class MainFrame extends JFrame {
     }
 
     public void showMsg(String tltle, String msg, ENWarningLevel warningLevel){
-        LogUtil.info(tltle+":"+msg+":"+warningLevel);
-        msg=System.getProperties().getProperty("log.base");
         msgLabel.setText(msg);
         msgDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         msgDialog.setLocationRelativeTo(null);
         msgDialog.setTitle(tltle);
         msgDialog.setSize(300,200);
         msgDialog.setVisible(true);
-        LogUtil.info(tltle+":"+msg+":"+warningLevel);
+
     }
 }

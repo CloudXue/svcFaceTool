@@ -4,6 +4,7 @@ import bean.HsiRight;
 import dao.HsiRightDao;
 import dao.impl.HsiRightDaoImpl;
 import service.UcDefineService;
+import util.LogUtil;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class UcDefineServiceImpl implements UcDefineService {
         } catch (Exception e) {
             //回滚事务
             hsiRightDao.rollbackTransaction();
+            LogUtil.error("保存uc定义异常",e);
            throw e;
         }
         //提交事务
