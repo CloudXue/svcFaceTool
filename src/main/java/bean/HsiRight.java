@@ -1,8 +1,10 @@
 package bean;
 
 import util.StringUtils;
+import util.SvcUtil;
 
 import java.io.Serializable;
+import java.util.Vector;
 
 /**
  * Created by lyd on 2017-06-28.
@@ -23,12 +25,12 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
     /**
      *功能编码
      */
-    private String c_rightcode;
-    private String c_rightcode_hid;
+    private String c_rightcode="";
+    private String c_rightcode_hid="";
     /**
      *UC功能号
      */
-    private String c_rightname;
+    private String c_rightname="";
     /**
      *权限类别
      */
@@ -36,20 +38,20 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
     /**
      *系统名称
      */
-    private String c_sysname;
+    private String c_sysname= SvcUtil.getSysName();
     /**
      *UC功能号
      */
-    private String c_functionno;
-    private String c_functionno_hid;
+    private String c_functionno="";
+    private String c_functionno_hid="";
     /**
      *BO类名
      */
-    private String c_javaclass;
+    private String c_javaclass="";
     /**
      *BO方法
      */
-    private String c_javamethod;
+    private String c_javamethod="";
     /**
      *客户过程
      */
@@ -61,11 +63,11 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
     /**
      *功能类型
      */
-    private String c_uctype;
+    private String c_uctype="";
     /**
      *日终处理时停用
      */
-    private String c_islimit;
+    private String c_islimit="";
 
     public String getC_rightcode() {
         return c_rightcode;
@@ -256,5 +258,33 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
                 ", c_uctype='" + c_uctype + '\'' +
                 ", c_islimit='" + c_islimit + '\'' +
                 '}';
+    }
+
+    /**
+     * 生成默认uc
+     * @return
+     */
+    public static HsiRight generateDefault(){
+        HsiRight hsiRight=new HsiRight();
+        hsiRight.setC_javaclass("com.hundsun.fund.crm.app.pub.bo.CommonQueryBO");
+        hsiRight.setC_javamethod("execute");
+        return hsiRight;
+    }
+
+    /**
+     * 转换成Vector，
+     * @return
+     */
+    public  Vector<String> toVector(){
+        Vector<String> vector=new Vector<>();
+        vector.add(this.getC_rightcode());
+        vector.add(this.getC_functionno());
+        vector.add(this.getC_rightname());
+        vector.add(this.getC_className());
+        vector.add(this.getC_javaclass());
+        vector.add(this.getC_javamethod());
+        vector.add(this.getC_functionno_hid());
+        vector.add(this.getC_rightcode_hid());
+        return vector;
     }
 }

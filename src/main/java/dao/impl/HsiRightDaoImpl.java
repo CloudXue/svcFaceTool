@@ -18,12 +18,14 @@ import java.util.Map;
 public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
     @Override
     protected String[] createUpdateFieldNames() {
-        return new String[]{"C_RIGHTCODE","C_RIGHTNAME","C_CLASS","C_SYSNAME","C_FUNCTIONNO","C_JAVACLASS","C_JAVAMETHOD","C_CLIENTPROGS","C_TABLENAME","C_UCTYPE","C_ISLIMIT"};
+        return new String[]{"c_rightcode","c_rightname","c_class","c_sysname",
+                "c_functionno","c_javaclass","c_javamethod","c_clientprogs","c_tablename","c_uctype","c_islimit"};
     }
 
     @Override
     protected String[] createInsertFieldNames() {
-        return new String[]{"C_RIGHTCODE","C_RIGHTNAME","C_CLASS","C_SYSNAME","C_FUNCTIONNO","C_JAVACLASS","C_JAVAMETHOD","C_CLIENTPROGS","C_TABLENAME","C_UCTYPE","C_ISLIMIT"};
+        return new String[]{"c_rightcode","c_rightname","c_class",
+                "c_sysname","c_functionno","c_javaclass","c_javamethod","c_clientprogs","c_tablename","c_uctype","c_islimit"};
     }
 
     @Override

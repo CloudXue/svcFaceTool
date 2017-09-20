@@ -5,6 +5,7 @@ import constant.EnActionEvent;
 import util.StringUtils;
 import view.centercontent.BaseJPanel;
 import view.centercontent.UcDefineMaintain;
+import view.factory.FontFactory;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -98,7 +99,12 @@ public class FootPanel  extends BaseJPanel{
     }
 
     private void init(){
-
+        rightcodetextfield.setFont(FontFactory.getUcDefineFootFont());
+        rightnametextfield.setFont(FontFactory.getUcDefineFootFont());
+        functionnotextfield.setFont(FontFactory.getUcDefineFootFont());
+        javaclasstextfield.setFont(FontFactory.getUcDefineFootFont());
+        javamethodtextfield.setFont(FontFactory.getUcDefineFootFont());
+        tablenametextfield.setFont(FontFactory.getUcDefineFootFont());
         //region 布局管理
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
@@ -162,7 +168,7 @@ public class FootPanel  extends BaseJPanel{
         return hsiRight;
     }
     public void setFootPanelData(HsiRight hsiRight,int index,String opttype){
-        System.out.println("setFootPanelData"+index+"||"+opttype+"||"+hsiRight);
+        //System.out.println("setFootPanelData"+index+"||"+opttype+"||"+hsiRight);
         this.opttype=opttype;
         this.index=index+"";
         //取消监听

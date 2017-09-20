@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Class-Path: lib\ojdbc6.jar
+Class-Path: lib/log4j-1.2.17.jar lib/ojdbc6.jar
 Main-Class: view.MainFrame
 

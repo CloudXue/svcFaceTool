@@ -235,6 +235,7 @@ public class UcDefineMaintain extends BaseJPanel  {
         public void actionPerformed(ActionEvent e) {
             System.err.println(e.getActionCommand());
             if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_QUERYCLICK.getCmd())){
+                //region 查询
                 //清空所有缓存数据
                 addUcMap.clear();;
                 editUcMap.clear();
@@ -244,15 +245,21 @@ public class UcDefineMaintain extends BaseJPanel  {
                 centerTable.reloadUc(searchTxt);
                 //底部选择第一行
                 centerTable.cloumSelect(0);
-                //向上传播
-                ucDefineMaintain.spreadAction(e);
+                //endregion
             }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_INSERTCLICK.getCmd())){
                 //插入
 
             }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_TAILINSERTCLICK.getCmd())){
                 //尾插入
-
+                //region 尾插
+                HsiRight hsiRight=centerTable.tailInsert();
+                int index=(centerTable.getRowCount()-1);
+                addUcMap.put(index+"",hsiRight);
+                centerTable.cloumSelect(index);
+                System.out.println("尾加："+index);
+                //endregion
             }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_DELCLICK.getCmd())){
+                //region 删除
                 //删除,先保存删除的uc
                 Map<String,List<String>> delMap = ucDefineMaintain.getCenterTable().removeSelect();
                 List<String> ucList=delMap.get("uc");
@@ -267,29 +274,36 @@ public class UcDefineMaintain extends BaseJPanel  {
                         editUcMap.remove(index);
                     }
                 }
+                //endregion
             }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_SAVECLICK.getCmd())){
-                //存盘
+                //region 存盘
                 List addUcList= CommonUtil.mapvalueToList(addUcMap);
                 List editUcList= CommonUtil.mapvalueToList(editUcMap);
+                boolean suc=true;
                 try {
                     ucDefineService.save(deleUcList,addUcList,editUcList);
                 } catch (Exception e1) {
                     handleExceptionMsg(e1);
+                    suc=false;
                 }
-                //清空所有缓存数据
-                addUcMap.clear();;
-                editUcMap.clear();
-                deleUcList.clear();
-                //刷新数据
-                //重新加载table
-                String searchTxt=ucDefineMaintain.getInputTxt();
-                centerTable.reloadUc(searchTxt);
-                //底部选择第一行
-                centerTable.cloumSelect(0);
-                //向上传播
-                ucDefineMaintain.spreadAction(e);
-            }
+                if(suc){
+                    //清空所有缓存数据
+                    addUcMap.clear();;
+                    editUcMap.clear();
+                    deleUcList.clear();
+                    //刷新数据
+                    //重新加载table
+                    String searchTxt=ucDefineMaintain.getInputTxt();
+                    centerTable.reloadUc(searchTxt);
+                    //底部选择第一行
+                    centerTable.cloumSelect(0);
+                }
 
+                //endregion
+            }
+            //向上传播
+            ucDefineMaintain.spreadAction(e);
         }
+
     }
 }

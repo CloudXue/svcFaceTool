@@ -260,9 +260,9 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> {
 
     private Jdbcinfo getConninfo(){
         Jdbcinfo  jdbcinfo=new Jdbcinfo();
-        jdbcinfo.setUrl("jdbc:oracle:thin:@127.0.0.1:1521:mcs100");
+        jdbcinfo.setUrl("jdbc:oracle:thin:@127.0.0.1:1521:project");
         jdbcinfo.setPaswword("test1");
-        jdbcinfo.setUsername("jats221");
+        jdbcinfo.setUsername("jats101");
         jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
         return jdbcinfo;
     }

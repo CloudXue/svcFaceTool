@@ -2,6 +2,7 @@ package view;
 
 import constant.ENWarningLevel;
 import control.MyActionListener;
+import util.LogUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,8 @@ public class MainFrame extends JFrame {
     private FootBar footBar;
     private CenterPanel centerPanel;
     private MyActionListener myActionListener;
+    JDialog msgDialog=new JDialog(this);
+    private JLabel msgLabel=new JLabel();
 
 
     public MainFrame() throws HeadlessException {
@@ -52,6 +55,8 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         //endregion
+
+        msgDialog.add(msgLabel);
     }
     public void addTab(String titleName){
         centerPanel.addTab(titleName);
@@ -62,12 +67,24 @@ public class MainFrame extends JFrame {
         centerPanel.addTab("");
     }
     public static void main(String[] args) {
+        if(args!=null && args.length>1){
+            String logFilePaht=args[0];
+            LogUtil.setFileLogPath(logFilePaht);
+        }
         MainFrame mainFrame=new MainFrame();
         //增加一个默认窗口
         mainFrame.addTab("");
     }
 
     public void showMsg(String tltle, String msg, ENWarningLevel warningLevel){
-        System.out.println(tltle+":"+msg+":"+warningLevel);
+        LogUtil.info(tltle+":"+msg+":"+warningLevel);
+        msg=System.getProperties().getProperty("log.base");
+        msgLabel.setText(msg);
+        msgDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        msgDialog.setLocationRelativeTo(null);
+        msgDialog.setTitle(tltle);
+        msgDialog.setSize(300,200);
+        msgDialog.setVisible(true);
+        LogUtil.info(tltle+":"+msg+":"+warningLevel);
     }
 }

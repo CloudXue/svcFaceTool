@@ -7,6 +7,7 @@ import service.impl.UcDefineServiceImpl;
 import util.StringUtils;
 import view.centercontent.BaseJPanel;
 import view.centercontent.UcDefineMaintain;
+import view.factory.FontFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +30,7 @@ public class CenterTable  extends BaseJPanel {
     private JTable table;
     private String[] title=new String[]{"权限代码","UC功能号","权限名称","分类","BO类名","BO方法"};
     DefaultTableModel tableModel =null;
-
+    DefaultListSelectionModel model ;
 
 
     public CenterTable(MyActionListener myActionListener,UcDefineMaintain ucDefineMaintain) {
@@ -47,13 +48,14 @@ public class CenterTable  extends BaseJPanel {
 
         };
         table=new JTable(tableModel);
-
+        table.setFont(FontFactory.getJTableFont());
+        model=(DefaultListSelectionModel)table.getSelectionModel();
         this.setLayout(new GridLayout());
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane);
         table.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 int sr;
                 if ((sr = table.getSelectedRow()) == -1) {
                     return;
@@ -109,10 +111,18 @@ public class CenterTable  extends BaseJPanel {
         return retMap;
 
     }
-    public void tailInsert(){
 
+    /**
+     * 尾加
+     */
+    public HsiRight tailInsert(){
+        HsiRight hsiRight=HsiRight.generateDefault();
+        tableModel.addRow(hsiRight.toVector());
+        return hsiRight;
     }
-
+    public int getRowCount(){
+        return tableModel.getRowCount();
+    }
     private Vector<String> getTitle(){
         Vector<String> title=new Vector<String>();
         title.add("权限代码");
@@ -135,16 +145,7 @@ public class CenterTable  extends BaseJPanel {
         }
         Vector<Vector<String>> dataVector=new Vector<Vector<String>>();
         for(HsiRight hsiRight : hsiRightList){
-            Vector<String> vector=new Vector<>();
-            vector.add(hsiRight.getC_rightcode());
-            vector.add(hsiRight.getC_functionno());
-            vector.add(hsiRight.getC_rightname());
-            vector.add(hsiRight.getC_className());
-            vector.add(hsiRight.getC_javaclass());
-            vector.add(hsiRight.getC_javamethod());
-            vector.add(hsiRight.getC_functionno_hid());
-            vector.add(hsiRight.getC_rightcode_hid());
-            dataVector.add(vector);
+            dataVector.add(hsiRight.toVector());
         }
 
         return dataVector;
@@ -174,7 +175,16 @@ public class CenterTable  extends BaseJPanel {
         return -1;
     }
 
+    /**
+     * 选中某一行
+     * @param index
+     */
     public void cloumSelect(int index){
+        //选中这一行
+        model.setSelectionInterval(index, index);
+        //滚动到这一行
+        Rectangle rect = table.getCellRect(index, 0, true);
+        table.scrollRectToVisible(rect);
         String functionno= "";
         if (index<tableModel.getRowCount()) {
             functionno = (String)tableModel.getValueAt(index,6);
@@ -185,13 +195,18 @@ public class CenterTable  extends BaseJPanel {
         tableModel.setDataVector(getData(condition),getTitle());
         //region 隐藏最后一列
         TableColumnModel tcm = table.getColumnModel();
-        //其实没有移除，仅仅隐藏而已
+        //其实没有移除，仅仅隐藏显示而已
         TableColumn tc = tcm.getColumn(6);
        //todo 方便测试，先不隐藏
         // tcm.removeColumn(tc);
         //endregion
     }
 
+    /**
+     * 设置列表每一行的值.最后隐藏列用于判断是否修改过
+     * @param index
+     * @param hsiRight
+     */
     public void setColumnData(int index ,HsiRight hsiRight){
         System.out.println("setColumnData:"+index+"||"+hsiRight);
         tableModel.setValueAt(hsiRight.getC_rightcode(),index,0);
