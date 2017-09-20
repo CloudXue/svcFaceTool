@@ -43,7 +43,7 @@ public class CenterpanelTab implements MouseListener {
         titleName.setHorizontalAlignment(JLabel.LEFT);
         //关闭label的显示
         titleX=new JLabel("x");
-        titleX.setFont(FontFactory.getTabtitleXOn());
+        titleX.setFont(FontFactory.getTabtitleX());
         titleX.setHorizontalAlignment(JLabel.RIGHT);
         //titlePanel添加名字和x
         title.add(titleName);
@@ -58,12 +58,12 @@ public class CenterpanelTab implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        jTabbedPane.remove(jTabbedPane.indexOfComponent(content));
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("mousePressed");
+        jTabbedPane.remove(jTabbedPane.indexOfComponent(content));
     }
 
     @Override

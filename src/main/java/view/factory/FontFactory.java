@@ -21,6 +21,14 @@ public class FontFactory {
      * 新窗口，上面home旁边 x 大小
      * @return
      */
+    public static Font getTabtitleX(){
+        Font font=new Font("Default",Font.TYPE1_FONT,15);
+        return font;
+    }
+    /**
+     * 新窗口，上面home旁边 x 大小
+     * @return
+     */
     public static Font getTabtitleXOn(){
         Font font=new Font("Default",Font.TYPE1_FONT,15);
         return font;
