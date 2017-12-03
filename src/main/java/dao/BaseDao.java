@@ -245,7 +245,7 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> {
         while (rs.next()){
             Map<String,Object> map=new HashMap<String,Object>();
             for (int i = 1; i <=col ; i++) {
-                String columnName=rsm.getColumnName(i);
+                String columnName=rsm.getColumnLabel(i);
                 map.put(columnName,rs.getString(columnName));
             }
             retMapList.add(map);
@@ -260,10 +260,17 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> {
 
     private Jdbcinfo getConninfo(){
         Jdbcinfo  jdbcinfo=new Jdbcinfo();
-        jdbcinfo.setUrl("jdbc:oracle:thin:@127.0.0.1:1521:project");
-        jdbcinfo.setPaswword("test1");
-        jdbcinfo.setUsername("jats101");
-        jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
+//        jdbcinfo.setUrl("jdbc:oracle:thin:@192.168.31.189:1521:jnsb02");
+//        jdbcinfo.setPaswword("test1");
+//        jdbcinfo.setUsername("jats101");
+//        jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
+
+        jdbcinfo.setUrl( "jdbc:mysql://localhost:3306/crm?"+
+                "useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+
+        jdbcinfo.setPaswword("root");
+        jdbcinfo.setUsername("root");
+        jdbcinfo.setDriver("com.mysql.cj.jdbc.Driver");
         return jdbcinfo;
     }
 
