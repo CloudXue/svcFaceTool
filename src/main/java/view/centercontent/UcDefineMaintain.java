@@ -10,6 +10,7 @@ import control.MyActionListener;
 import view.centercontent.fcdefine.CenterTable;
 import view.centercontent.fcdefine.FootPanel;
 import view.factory.ColorFactory;
+import view.factory.FontFactory;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -91,6 +92,7 @@ public class UcDefineMaintain extends BaseJPanel  {
         delBtn=new JButton("删除");
         saveBtn=new JButton("存盘");
         queryInput=new JTextField(20);
+        queryInput.setFont(FontFactory.getTxtInputFootFont());
         queryBtn=new JButton("查询");
 
         //region 监听命令添加
@@ -128,7 +130,7 @@ public class UcDefineMaintain extends BaseJPanel  {
         JPanel queryJpanel=new JPanel();
         queryJpanel.setLayout(flowLayout);
         //queryInput.setSize(50,10);
-        queryInput.setBounds(10,10,30,170);
+        //queryInput.setBounds(10,10,50,170);
         queryJpanel.add(new JLabel("权限/UC"));
         queryJpanel.add(queryInput);
         queryJpanel.add(queryBtn);

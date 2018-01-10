@@ -63,5 +63,20 @@ public class FontFactory {
         Font font=new Font("Default",Font.PLAIN,15);
         return font;
     }
-
+    /**
+     * 普通输入框字体
+     * @return
+     */
+    public static Font getTxtInputFootFont(){
+        Font font=new Font("Default",Font.PLAIN,16);
+        return font;
+    }
+    /**
+     * sql定义输入框字体
+     * @return
+     */
+    public static Font getSqlInputFootFont(){
+        Font font=new Font("Default",Font.PLAIN,18);
+        return font;
+    }
 }

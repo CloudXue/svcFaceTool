@@ -19,4 +19,16 @@ public abstract class BaseJPanel extends JPanel {
         myActionListener.actionPerformed(action);
         e.printStackTrace();
     }
+    /**
+     * 控件被选中，tab页时重写即可
+     */
+    public boolean canLoseFcous(){
+        return true;
+    }
+    /**
+     * 控件被选中，tab页时重写即可
+     */
+    public void onFocus(boolean refresh){
+
+    }
 }

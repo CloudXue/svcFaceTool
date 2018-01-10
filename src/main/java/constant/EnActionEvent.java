@@ -71,7 +71,31 @@ public enum EnActionEvent {
     /**
      *uc定义中日终处理时停用选中事件
      */
-    UCDEFINE_ISLIMITSELECT("UCDEFINEISLIMITSELECT")
+    UCDEFINE_ISLIMITSELECT("UCDEFINEISLIMITSELECT"),
+    /**
+     * SQL维护删除
+     */
+    SQLMAINTAIN_DEL("SQLMAINTAIN_DEL"),
+    /**
+     *SQL维护存盘
+     */
+    SQLMAINTAIN_SAVE("SQLMAINTAIN_SAVE"),
+    /**
+     *SQL维护刷新
+     */
+    SQLMAINTAIN_REFRESH("SQLMAINTAIN_REFRESH"),
+    /**
+     *SQL维护sql写法帮助
+     */
+    SQLMAINTAIN_HELP("SQLMAINTAIN_HELP"),
+    /**
+     *SQL维护sql语句测试
+     */
+    SQLMAINTAIN_SQLTEST("SQLMAINTAIN_SQLTEST"),
+    /**
+     *SQL维护分页组合sql测试
+     */
+    SQLMAINTAIN_SQLPAGING("SQLMAINTAIN_SQLPAGING")
 
 
     ;

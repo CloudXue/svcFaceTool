@@ -4,13 +4,15 @@ import control.MyActionListener;
 import view.CenterpanelTab;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
  * Created by lyd on 2017/5/11.
  * 内层panel,包含多个tab页
  */
-public class CenterContentPanel extends BaseJPanel{
+public class CenterContentPanel extends BaseJPanel implements ChangeListener {
     private CenterpanelTab centerpanelTab;
     private HeadPanel headPanel;
     private JTabbedPane contentTab;
@@ -32,6 +34,7 @@ public class CenterContentPanel extends BaseJPanel{
         contentTab.addTab("功能输入输出定义",new UcInMaintain(myActionListener,this));
         contentTab.addTab("数据源→查询显示配置",new UcOutMaintain(myActionListener,this));
         contentTab.addTab("生成SQL语言",new GenerateSql(myActionListener,this));
+        contentTab.addChangeListener(this);
         this.add(headPanel,BorderLayout.NORTH);
         this.add(contentTab,BorderLayout.CENTER);
     }
@@ -43,5 +46,9 @@ public class CenterContentPanel extends BaseJPanel{
     }
     public void setTitle(String title){
         centerpanelTab.setTitle(title);
+    }
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        ((BaseJPanel)contentTab.getSelectedComponent()).onFocus(true);
     }
 }
