@@ -76,7 +76,7 @@ public class FontFactory {
      * @return
      */
     public static Font getSqlInputFootFont(){
-        Font font=new Font("Times New Roman",Font.PLAIN,18);
+        Font font=new Font("宋体",Font.PLAIN,18);
         return font;
     }
 }

@@ -95,8 +95,19 @@ public enum EnActionEvent {
     /**
      *SQL维护分页组合sql测试
      */
-    SQLMAINTAIN_SQLPAGING("SQLMAINTAIN_SQLPAGING")
-
+    SQLMAINTAIN_SQLPAGING("SQLMAINTAIN_SQLPAGING"),
+    /**
+     *生成sql,生成
+     */
+    GENERATESQL_GEN("GENERATESQL_GEN"),
+    /**
+     *生成sql,打开文件
+     */
+    GENERATESQL_OPENFILESEL("GENERATESQL_OPENFILESEL"),
+    /**
+     *生成sql,保存
+     */
+    GENERATESQL_SAVE("GENERATESQL_SAVE"),
 
     ;
     private String cmd;

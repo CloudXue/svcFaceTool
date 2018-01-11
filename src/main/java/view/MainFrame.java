@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
     JDialog msgDialog=new JDialog(this);
     private JLabel msgLabel=new JLabel();
 
+    private static MainFrame mainFrame;
 
     public MainFrame() throws HeadlessException {
         super("Demo");
@@ -71,7 +72,7 @@ public class MainFrame extends JFrame {
             String logFilePaht=args[0];
             LogUtil.setFileLogPath(logFilePaht);
         }
-        MainFrame mainFrame=new MainFrame();
+        mainFrame=new MainFrame();
         //增加一个默认窗口
         mainFrame.addTab("");
     }
@@ -84,5 +85,14 @@ public class MainFrame extends JFrame {
         msgDialog.setSize(300,200);
         msgDialog.setVisible(true);
 
+    }
+    public static String openFileSelect(){
+        FileDialog fileDialog  = new FileDialog(mainFrame, "Open File", FileDialog.LOAD);
+        fileDialog.setVisible(true);
+        String  filePahtName=null;
+        if(fileDialog.getDirectory()!=null && fileDialog.getFile()!=null){
+             filePahtName=fileDialog.getDirectory() + fileDialog.getFile();
+        }
+        return filePahtName;
     }
 }
