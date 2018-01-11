@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Created by lyd on 2017-06-29.
  */
-public abstract  class BaseDao <TDtoModel extends BaseBean> {
+public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<TDtoModel> {
     protected abstract  String getTableName();
 
     /**
@@ -79,6 +79,10 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> {
         connection=getConn();
         Statement pstmt=connection.createStatement();
         return pstmt;
+    }
+    public int del(TDtoModel dtoModel) throws Exception {
+        String sql="delete "+getTableName()+" where "+dtoModel.getKeyStr()+"='"+dtoModel.getKeyValue()+"'";
+        return executeSql(sql);
     }
     public boolean insert(TDtoModel dtoModel) throws Exception {
         //获取model的map<属性名称，属性值>
@@ -260,17 +264,17 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> {
 
     private Jdbcinfo getConninfo(){
         Jdbcinfo  jdbcinfo=new Jdbcinfo();
-//        jdbcinfo.setUrl("jdbc:oracle:thin:@192.168.31.189:1521:jnsb02");
-//        jdbcinfo.setPaswword("test1");
-//        jdbcinfo.setUsername("jats101");
-//        jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
+        jdbcinfo.setUrl("jdbc:oracle:thin:@127.0.0.1:1521:mcs100");
+        jdbcinfo.setPaswword("test1");
+        jdbcinfo.setUsername("jats002");
+        jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
 
-        jdbcinfo.setUrl( "jdbc:mysql://localhost:3306/crm?"+
+        /*jdbcinfo.setUrl( "jdbc:mysql://localhost:3306/crm?"+
                 "useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
 
         jdbcinfo.setPaswword("root");
         jdbcinfo.setUsername("root");
-        jdbcinfo.setDriver("com.mysql.cj.jdbc.Driver");
+        jdbcinfo.setDriver("com.mysql.cj.jdbc.Driver");*/
         return jdbcinfo;
     }
 

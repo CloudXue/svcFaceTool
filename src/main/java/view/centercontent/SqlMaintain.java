@@ -3,6 +3,9 @@ package view.centercontent;
 import bean.TsvcSql;
 import constant.EnActionEvent;
 import control.MyActionListener;
+import service.TsvcSqlService;
+import service.impl.TsvcSqlServiceImpl;
+import util.StringUtils;
 import view.component.ComboBox;
 import view.component.SButton;
 import view.factory.ColorFactory;
@@ -21,6 +24,8 @@ import java.util.Map;
  * Created by lyd on 2017/5/11.
  */
 public class SqlMaintain  extends BaseJPanel {
+    TsvcSqlService tsvcSqlService=new TsvcSqlServiceImpl();
+    private boolean enableTestSql=false;
     /**
      * 数据，原始
      */
@@ -138,26 +143,28 @@ public class SqlMaintain  extends BaseJPanel {
         centerPanel.add(sqlTextScrollPane,BorderLayout.CENTER);
 
 
-        //底部测区域
-        JPanel testPanel=new JPanel();
-        //底部测试区域按钮
-        JPanel testPanelHead=new JPanel();
-        testPanelHead.setLayout(new FlowLayout(FlowLayout.LEFT));
-        sqlTestBtn.setActionCommand(EnActionEvent.SQLMAINTAIN_SQLTEST.getCmd());
-        sqlPagingBtn.setActionCommand(EnActionEvent.SQLMAINTAIN_SQLPAGING.getCmd());
-        sqlTestBtn.addActionListener(control);
-        sqlPagingBtn.addActionListener(control);
-        testPanelHead.add(sqlTestBtn);
-        testPanelHead.add(sqlPagingBtn);
-        sqlTestResultTable.setPreferredScrollableViewportSize(new Dimension(100,100));
-        sqlTestResultTable.setFont(FontFactory.getJTableFont());
-        JScrollPane scrollPane = new JScrollPane(sqlTestResultTable);
-        testPanel.setLayout(new BorderLayout());
-        testPanel.add(testPanelHead,BorderLayout.NORTH);
-        testPanel.add(scrollPane,BorderLayout.CENTER);
+        if(enableTestSql){
+            //底部测区域
+            JPanel testPanel=new JPanel();
+            //底部测试区域按钮
+            JPanel testPanelHead=new JPanel();
+            testPanelHead.setLayout(new FlowLayout(FlowLayout.LEFT));
+            sqlTestBtn.setActionCommand(EnActionEvent.SQLMAINTAIN_SQLTEST.getCmd());
+            sqlPagingBtn.setActionCommand(EnActionEvent.SQLMAINTAIN_SQLPAGING.getCmd());
+            sqlTestBtn.addActionListener(control);
+            sqlPagingBtn.addActionListener(control);
+            testPanelHead.add(sqlTestBtn);
+            testPanelHead.add(sqlPagingBtn);
+            sqlTestResultTable.setPreferredScrollableViewportSize(new Dimension(100,100));
+            sqlTestResultTable.setFont(FontFactory.getJTableFont());
+            JScrollPane scrollPane = new JScrollPane(sqlTestResultTable);
+            testPanel.setLayout(new BorderLayout());
+            testPanel.add(testPanelHead,BorderLayout.NORTH);
+            testPanel.add(scrollPane,BorderLayout.CENTER);
+            this.add(testPanel,BorderLayout.SOUTH);
+        }
         this.add(northPanel, BorderLayout.NORTH);
         this.add(centerPanel,BorderLayout.CENTER);
-        this.add(testPanel,BorderLayout.SOUTH);
     }
 
     class SqlMaintainControl implements ActionListener {
@@ -165,16 +172,11 @@ public class SqlMaintain  extends BaseJPanel {
         public void actionPerformed(ActionEvent e) {
             System.out.println("SQL维护："+e.getActionCommand());
             if(e.getActionCommand().equals(EnActionEvent.SQLMAINTAIN_DEL.getCmd())){
-                tsvcSql_new=null;
-                isDataChange=true;
-                sqlText.setText("");
-                orderField.setText("");
+                clean();
             }else if(e.getActionCommand().equals(EnActionEvent.SQLMAINTAIN_SAVE.getCmd())){
-
-            }else if(e.getActionCommand().equals(EnActionEvent.SQLMAINTAIN_DEL.getCmd())){
-
+                save();
             }else if(e.getActionCommand().equals(EnActionEvent.SQLMAINTAIN_REFRESH.getCmd())){
-
+                reSetSqlMaintainData();
             }else if(e.getActionCommand().equals(EnActionEvent.SQLMAINTAIN_HELP.getCmd())){
 
             }else if(e.getActionCommand().equals(EnActionEvent.SQLMAINTAIN_SQLTEST.getCmd())){
@@ -187,16 +189,91 @@ public class SqlMaintain  extends BaseJPanel {
         }
     }
 
-    public boolean isDataChange() {
-        return isDataChange;
+    /**
+     * 清空显示
+     */
+    private void clean(){
+        tsvcSql_new=null;
+        sqlText.setText("");
+        orderField.setText("");
+    }
+    /**
+     * 保存数据
+     */
+    private void save(){
+        if (tsvcSql_old != null) {
+            try {
+                tsvcSql_new = (TsvcSql) tsvcSql_old.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            tsvcSql_new = new TsvcSql();
+            tsvcSql_new.setC_functionno(centerContentPanel.getUcNo());
+        }
+        tsvcSql_new.setC_orderby(orderField.getText());
+        tsvcSql_new.setC_sqlstatement(sqlText.getText());
+        tsvcSql_new.setC_sqltype(sqlType.getSelectItemValue());
+        if (!tsvcSql_new.equals(tsvcSql_old)) {
+            tsvcSqlService.operate(tsvcSql_new);
+        }
+        //保存完后，刷新一遍
+        reSetSqlMaintainData();
+        tsvcSql_new=null;
+    }
+    /**
+     * 重新设置界面显示
+     */
+    private void reSetSqlMaintainData(){
+        clean();
+        isDataChange=false;
+        tsvcSql_old=null;
+        String ucNo=centerContentPanel.getUcNo();
+        if(StringUtils.isNotNullAndNotEmpty(ucNo)){
+            TsvcSql tsvcSql=tsvcSqlService.getTsvcSql(ucNo);
+            tsvcSql_old=tsvcSql;
+            tsvcSql_new=tsvcSql;
+            if(tsvcSql!=null){
+                sqlText.setText(tsvcSql.getC_sqlstatement());
+                orderField.setText(tsvcSql.getC_orderby());
+                sqlType.setSelectedItem(tsvcSql.getC_sqltype());
+            }
+        }
     }
 
-    public void setIsDataChange(boolean change) {
-        isDataChange = change;
+    /**
+     * 检测是否变动
+     * @return
+     */
+    public boolean isDataChange() {
+        String sql=sqlText.getText();
+        String order=orderField.getText();
+        String type=sqlType.getSelectItemValue();
+        if(tsvcSql_old==null){
+            if(StringUtils.isNotNullAndNotEmpty(sql) ||StringUtils.isNotNullAndNotEmpty(order)
+                    ||StringUtils.isNotNullAndNotEmpty(type)){
+                return true;
+            }
+        }else{
+            if(!sql.equals(tsvcSql_old.getC_sqlstatement()) || !order.equals(tsvcSql_old.getC_orderby())
+                    || !type.equals(tsvcSql_old.getC_sqltype())){
+                return true;
+            }
+        }
+        return false;
     }
+
 
     @Override
     public void onFocus(boolean refresh) {
-        System.out.println("SQL定义被选中");
+       if(refresh){
+           String ucNo=centerContentPanel.getUcNo();
+           if(  tsvcSql_old!=null && tsvcSql_old.getC_functionno().equals(ucNo)){
+               System.out.println("不更新sql");
+           }else{
+               reSetSqlMaintainData();
+           }
+
+       }
     }
 }

@@ -10,6 +10,10 @@ import java.util.Vector;
  * Created by lyd on 2017-06-28.
  */
 public class HsiRight extends BaseBean implements Serializable,Cloneable {
+    @Override
+    public String getKeyValue() {
+        return this.c_functionno;
+    }
 
     @Override
     public String getKeyStr() {

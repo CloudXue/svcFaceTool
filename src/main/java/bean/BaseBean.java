@@ -9,10 +9,14 @@ public abstract class BaseBean  {
      * @return
      */
     public abstract String getKeyStr();
-
+    /**
+     * 主键
+     * @return
+     */
+    public abstract String getKeyValue();
     /**
      *
      * @return
      */
-    public abstract String getKeyValueStr();
+    public abstract  String getKeyValueStr();
 }

@@ -1,6 +1,7 @@
 package bean;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * 功能说明: <br>
@@ -9,7 +10,13 @@ import java.io.Serializable;
  * 开发时间: 2018-01-10<br>
  * <br>
  */
-public class TsvcSql extends   BaseBean implements Serializable,Cloneable {
+public class TsvcSql extends  BaseBean implements Serializable,Cloneable {
+    @Override
+    public String getKeyValue() {
+        return this.c_functionno;
+    }
+
+    private static String tableName="TSVCSQL";
     /**
      * 函数编号
      */
@@ -80,5 +87,38 @@ public class TsvcSql extends   BaseBean implements Serializable,Cloneable {
 
     public void setC_datasource(String c_datasource) {
         this.c_datasource = c_datasource;
+    }
+
+    public static String getTableName() {
+        return tableName;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TsvcSql tsvcSql = (TsvcSql) o;
+        return Objects.equals(c_functionno, tsvcSql.c_functionno) &&
+                Objects.equals(c_sqlstatement, tsvcSql.c_sqlstatement) &&
+                Objects.equals(c_orderby, tsvcSql.c_orderby) &&
+                Objects.equals(c_sqltype, tsvcSql.c_sqltype) &&
+                Objects.equals(c_datasource, tsvcSql.c_datasource);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(c_functionno, c_sqlstatement, c_orderby, c_sqltype, c_datasource);
     }
 }

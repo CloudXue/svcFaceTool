@@ -13,7 +13,7 @@ public class FontFactory {
      * @return
      */
     public static Font getTabtitleName(){
-        Font font=new Font("Default",Font.BOLD,10);
+        Font font=new Font("宋体",Font.BOLD,10);
         return font;
     }
 
@@ -22,7 +22,7 @@ public class FontFactory {
      * @return
      */
     public static Font getTabtitleX(){
-        Font font=new Font("Default",Font.TYPE1_FONT,15);
+        Font font=new Font("宋体",Font.TYPE1_FONT,15);
         return font;
     }
     /**
@@ -30,7 +30,7 @@ public class FontFactory {
      * @return
      */
     public static Font getTabtitleXOn(){
-        Font font=new Font("Default",Font.TYPE1_FONT,15);
+        Font font=new Font("宋体",Font.TYPE1_FONT,15);
         return font;
     }
     /**
@@ -38,11 +38,11 @@ public class FontFactory {
      * @return
      */
     public static Font getTabtitleXOut(){
-        Font font=new Font("Default",Font.BOLD,15);
+        Font font=new Font("宋体",Font.BOLD,15);
         return font;
     }
     public static Font getContentTabTitle(){
-        Font font=new Font("Default",Font.BOLD,13);
+        Font font=new Font("宋体",Font.BOLD,13);
         return font;
     }
 
@@ -51,7 +51,7 @@ public class FontFactory {
      * @return
      */
     public static Font getJTableFont(){
-        Font font=new Font("Default",Font.PLAIN,15);
+        Font font=new Font("宋体",Font.PLAIN,15);
         return font;
     }
 
@@ -60,7 +60,7 @@ public class FontFactory {
      * @return
      */
     public static Font getUcDefineFootFont(){
-        Font font=new Font("Default",Font.PLAIN,15);
+        Font font=new Font("宋体",Font.PLAIN,15);
         return font;
     }
     /**
@@ -68,7 +68,7 @@ public class FontFactory {
      * @return
      */
     public static Font getTxtInputFootFont(){
-        Font font=new Font("Default",Font.PLAIN,16);
+        Font font=new Font("宋体",Font.PLAIN,16);
         return font;
     }
     /**
@@ -76,7 +76,7 @@ public class FontFactory {
      * @return
      */
     public static Font getSqlInputFootFont(){
-        Font font=new Font("Default",Font.PLAIN,18);
+        Font font=new Font("Times New Roman",Font.PLAIN,18);
         return font;
     }
 }

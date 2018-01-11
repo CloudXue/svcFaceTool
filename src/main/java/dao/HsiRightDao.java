@@ -8,7 +8,7 @@ import java.util.List;
  * Created by lyd on 2017-06-28.
  * 表：HSI_RIGHT。uc定义
  */
-public interface HsiRightDao extends IBaseDao {
+public interface HsiRightDao extends IBaseDao<HsiRight> {
     public List<HsiRight> getAllData() throws Exception;
     public HsiRight getHsiRigh(String functionno) throws Exception;
 
