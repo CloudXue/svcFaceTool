@@ -18,7 +18,7 @@ import java.util.Map;
 public class TsvcSqlDaoImpl extends BaseDao<TsvcSql> implements TsvcSqlDao {
     @Override
     protected String getTableName() {
-        return TsvcSql.getTableName();
+        return TsvcSql.tableName;
     }
 
     @Override

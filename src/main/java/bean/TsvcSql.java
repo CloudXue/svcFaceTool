@@ -1,5 +1,7 @@
 package bean;
 
+import util.StringUtils;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,12 +13,25 @@ import java.util.Objects;
  * <br>
  */
 public class TsvcSql extends  BaseBean implements Serializable,Cloneable {
+    private final static String tsvcsql="INSERT INTO TSVCSQL(C_FUNCTIONNO,C_SQLSTATEMENT,C_ORDERBY,C_SQLTYPE,C_DATASOURCE)" +
+            " VALUES ('%s','%s','%s','%s',NULL);";
+    @Override
+    public String generateInsertSql() {
+        return String.format(tsvcsql,getC_functionno(),getC_sqlstatement().replaceAll("'","''"),
+                StringUtils.valueOf(getC_orderby()),getC_sqltype());
+    }
+    public static String generateHead() {
+        return "--****************************************************\n" +
+                "--**  英文表名：TSVCSQL\n" +
+                "--****************************************************\n";
+    }
+
     @Override
     public String getKeyValue() {
         return this.c_functionno;
     }
 
-    private static String tableName="TSVCSQL";
+    public static String tableName="TSVCSQL";
     /**
      * 函数编号
      */
@@ -89,7 +104,7 @@ public class TsvcSql extends  BaseBean implements Serializable,Cloneable {
         this.c_datasource = c_datasource;
     }
 
-    public static String getTableName() {
+    public  String getTableName() {
         return tableName;
     }
 

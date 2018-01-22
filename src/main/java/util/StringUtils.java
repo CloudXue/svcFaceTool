@@ -457,4 +457,14 @@ public class StringUtils {
         }
         return true;
     }
+    /**
+     * 获取对象的字符串值，若对象为空则返回“”
+     *
+     * @param obj
+     * @return
+     */
+    public static String valueOf(Object obj) {
+        if (obj == null) return "";
+        return obj.toString();
+    }
 }

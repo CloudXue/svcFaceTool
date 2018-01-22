@@ -10,6 +10,25 @@ import java.util.Vector;
  * Created by lyd on 2017-06-28.
  */
 public class HsiRight extends BaseBean implements Serializable,Cloneable {
+    private final static String hsiRightSql="INSERT INTO HSI_RIGHT" +
+            "(C_RIGHTCODE,C_RIGHTNAME,C_CLASS,C_SYSNAME,C_FUNCTIONNO," +
+            "C_JAVACLASS,C_JAVAMETHOD,C_CLIENTPROGS,C_TABLENAME,C_UCTYPE,C_ISLIMIT) VALUES" +
+            " ('%s','%s','%s','FUNDCRM','%s','%s','%s',NULL,NULL,'%s','%s');";
+
+    public static String generateHead() {
+        return "--****************************************************\n" +
+                "--**  英文表名：HSI_RIGHT\n" +
+                "--****************************************************\n";
+    }
+
+    @Override
+    public String generateInsertSql() {
+        return String.format(hsiRightSql, StringUtils.valueOf(getC_rightcode()),StringUtils.valueOf(getC_rightname()),
+                StringUtils.valueOf(getC_class()),StringUtils.valueOf(getC_functionno()),
+                StringUtils.valueOf(getC_javaclass()),StringUtils.valueOf(getC_javamethod()),
+                StringUtils.valueOf(getC_uctype()),StringUtils.valueOf(getC_islimit()));
+    }
+
     @Override
     public String getKeyValue() {
         return this.c_functionno;
@@ -25,7 +44,7 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
         return "c_functionno_hid";
     }
 
-    private static String tableName="HSI_RIGHT";
+    public static String tableName="HSI_RIGHT";
     /**
      *功能编码
      */
@@ -43,10 +62,7 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
      *系统名称
      */
     private String c_sysname= SvcUtil.getSysName();
-    /**
-     *UC功能号
-     */
-    private String c_functionno="";
+
     private String c_functionno_hid="";
     /**
      *BO类名
@@ -182,7 +198,7 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
         this.c_rightcode_hid = c_rightcode_hid;
     }
 
-    public static String getTableName(){
+    public  String getTableName(){
         return tableName;
     }
 

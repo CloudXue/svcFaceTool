@@ -1,9 +1,20 @@
 package bean;
 
+import view.centercontent.GenerateSql;
+
 /**
  * Created by lyd on 2017-07-06.
  */
 public abstract class BaseBean  {
+    private final static String sqlDelete="DELETE FROM %1$s where C_FUNCTIONNO = '%2$s';";
+
+    public String generateDelSql(){
+        return String.format(sqlDelete, getTableName(),getC_functionno());
+    }
+    public static String generateDelSql(String tableName,String uc){
+        return String.format(sqlDelete, tableName,uc);
+    }
+    public abstract String generateInsertSql();
     /**
      * 主键
      * @return
@@ -19,4 +30,18 @@ public abstract class BaseBean  {
      * @return
      */
     public abstract  String getKeyValueStr();
+
+    /**
+     *UC功能号
+     */
+    protected String c_functionno="";
+
+    public String getC_functionno() {
+        return c_functionno;
+    }
+
+    public void setC_functionno(String c_functionno) {
+        this.c_functionno = c_functionno;
+    }
+    public abstract  String getTableName();
 }

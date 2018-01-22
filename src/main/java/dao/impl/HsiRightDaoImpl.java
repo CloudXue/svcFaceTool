@@ -154,7 +154,7 @@ public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
 
     @Override
     protected String getTableName() {
-        return HsiRight.getTableName();
+        return HsiRight.tableName;
     }
 
 

@@ -8,5 +8,5 @@ package service;
  * <br>
  */
 public interface SvcService {
-    public String generateSql(String uc);
+    public String generateSql(String uc) ;
 }
