@@ -2,13 +2,18 @@ package service.impl;
 
 import bean.BaseBean;
 import bean.HsiRight;
+import bean.TsvcInterface;
 import bean.TsvcSql;
 import dao.HsiRightDao;
+import dao.TsvcInterfaceDao;
 import dao.TsvcSqlDao;
 import dao.impl.HsiRightDaoImpl;
+import dao.impl.TsvcInterfaceDaoImpl;
 import dao.impl.TsvcSqlDaoImpl;
 import service.SvcService;
 import util.DateUtil;
+
+import java.util.List;
 
 
 /**
@@ -21,6 +26,7 @@ import util.DateUtil;
 public class SvcServiceImpl implements SvcService {
     HsiRightDao hsiRightDao=new HsiRightDaoImpl();
     TsvcSqlDao tsvcSqlDao=new TsvcSqlDaoImpl();
+    TsvcInterfaceDao tsvcInterfaceDao=new TsvcInterfaceDaoImpl();
     private final static String sqlHead="--*********************************************************\n" +
             "--FUNDCRM系统初始化脚本\n" +
             "--创建日期：%1$s\n" +
@@ -51,6 +57,15 @@ public class SvcServiceImpl implements SvcService {
             sb.append(tsvcSql.generateInsertSql());
             sb.append("\n");
             sb.append("\n");
+            sb.append(TsvcInterface.generateHead());
+            sb.append(BaseBean.generateDelSql(TsvcInterface.tableName,uc));
+            sb.append("\n");
+            List<TsvcInterface> tsvcInterfaceList=tsvcInterfaceDao.getTsvcInterfaceList(uc);
+            for(TsvcInterface tsvcInterface : tsvcInterfaceList){
+                sb.append(tsvcInterface.generateInsertSql());
+            }
+            sb.append("\n");
+
 
 
 
