@@ -1,15 +1,14 @@
 package service.impl;
 
-import bean.BaseBean;
-import bean.HsiRight;
-import bean.TsvcInterface;
-import bean.TsvcSql;
+import bean.*;
 import dao.HsiRightDao;
 import dao.TsvcInterfaceDao;
 import dao.TsvcSqlDao;
+import dao.TsvcViewconfigDao;
 import dao.impl.HsiRightDaoImpl;
 import dao.impl.TsvcInterfaceDaoImpl;
 import dao.impl.TsvcSqlDaoImpl;
+import dao.impl.TsvcViewconfigDaoImpl;
 import service.SvcService;
 import util.DateUtil;
 
@@ -26,6 +25,7 @@ import java.util.List;
 public class SvcServiceImpl implements SvcService {
     HsiRightDao hsiRightDao=new HsiRightDaoImpl();
     TsvcSqlDao tsvcSqlDao=new TsvcSqlDaoImpl();
+    TsvcViewconfigDao tsvcViewconfigDao=new TsvcViewconfigDaoImpl();
     TsvcInterfaceDao tsvcInterfaceDao=new TsvcInterfaceDaoImpl();
     private final static String sqlHead="--*********************************************************\n" +
             "--FUNDCRM系统初始化脚本\n" +
@@ -54,7 +54,9 @@ public class SvcServiceImpl implements SvcService {
             TsvcSql tsvcSql=tsvcSqlDao.getTsvcSql(uc);
             sb.append(BaseBean.generateDelSql(TsvcSql.tableName,uc));
             sb.append("\n");
-            sb.append(tsvcSql.generateInsertSql());
+            if(tsvcSql!=null){
+                sb.append(tsvcSql.generateInsertSql());
+            }
             sb.append("\n");
             sb.append("\n");
             sb.append(TsvcInterface.generateHead());
@@ -65,7 +67,16 @@ public class SvcServiceImpl implements SvcService {
                 sb.append(tsvcInterface.generateInsertSql());
             }
             sb.append("\n");
-
+            sb.append("\n");
+            sb.append(TsvcViewconfig.generateHead());
+            sb.append(BaseBean.generateDelSql(TsvcViewconfig.tableName,uc));
+            sb.append("\n");
+            List<TsvcViewconfig> tsvcViewconfigsList=tsvcViewconfigDao.getTsvcViewconfig(uc);
+            for(TsvcViewconfig tsvcViewconfig : tsvcViewconfigsList){
+                sb.append(tsvcViewconfig.generateInsertSql());
+            }
+            sb.append("\n");
+            sb.append("commit;");
 
 
 
