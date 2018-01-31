@@ -232,8 +232,12 @@ public class DateUtil {
     /**
      * 得到当前的日期 默认格式为 yyyy-MM-dd
      */
-    public static String getCurrentDateString(String pattern) throws ParseException {
-        return convertDateToString(getCurrentDateTime(), pattern);
+    public static String getCurrentDateString(String pattern)  {
+        try {
+            return convertDateToString(getCurrentDateTime(), pattern);
+        } catch (ParseException e) {
+            return "";
+        }
     }
   /**
      * 得到当前的日期 默认格式为 yyyy-MM-dd
@@ -390,8 +394,8 @@ public class DateUtil {
     /**
      * 获得两个日期之前相差的天数<br>
      * 
-     * @param start
-     * @param e
+     * @param fromDate
+     * @param toDate
      * @return
      */
     public static long differ(Date fromDate, Date toDate) {
@@ -595,8 +599,8 @@ public class DateUtil {
     /**
      * 统计两个时间差，返回的是天数(即24小时算一天，少于24小时就为0，用这个的时候最好把小时、分钟等去掉)
      * 
-     * @param begin 开始时间
-     * @param end
+     * @param beginStr 开始时间
+     * @param endStr
      * @return
      */
     public static int countDays(String beginStr, String endStr, String Foramt) {
@@ -707,7 +711,7 @@ public class DateUtil {
     /**
      * 当月的最后一天
      * 
-     * @param sDate1
+     * @param sDate
      * @return
      */
     @SuppressWarnings("deprecation")

@@ -39,7 +39,9 @@ public class HeadPanel extends BaseJPanel {
     public String getUcNo(){
         return ucNoField.getText();
     }
-
+    public String getUcCodeField(){
+        return ucCodeField.getText();
+    }
     private void init(){
         ucCodeLabel=new JLabel("UC功能编号：");
         ucNoLabel=new JLabel("UC功能号：");

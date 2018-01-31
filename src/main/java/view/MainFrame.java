@@ -6,6 +6,7 @@ import util.LogUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 /**
  * Created by lyd on 2017/1/4.
@@ -87,12 +88,20 @@ public class MainFrame extends JFrame {
 
     }
     public static String openFileSelect(){
-        FileDialog fileDialog  = new FileDialog(mainFrame, "Open File", FileDialog.LOAD);
-        fileDialog.setVisible(true);
         String  filePahtName=null;
+
+       /* FileDialog fileDialog  = new FileDialog(mainFrame, "Open File", FileDialog.LOAD);
+        fileDialog.setVisible(true);
+
         if(fileDialog.getDirectory()!=null && fileDialog.getFile()!=null){
              filePahtName=fileDialog.getDirectory() + fileDialog.getFile();
-        }
+        }*/
+
+        JFileChooser jfc=new JFileChooser();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY  );
+        jfc.showDialog(new JLabel(), "选择");
+        File file=jfc.getSelectedFile();
+        filePahtName=file.getAbsolutePath();
         return filePahtName;
     }
 }

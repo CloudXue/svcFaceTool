@@ -44,6 +44,9 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
     public String getUcNo(){
         return headPanel.getUcNo();
     }
+    public String getUcCodeField(){
+        return headPanel.getUcCodeField();
+    }
     public void setTitle(String title){
         centerpanelTab.setTitle(title);
     }
