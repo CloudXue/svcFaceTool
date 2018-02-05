@@ -28,12 +28,18 @@ public class CenterTable  extends BaseJPanel {
 
     private UcDefineMaintain ucDefineMaintain;
     private JTable table;
-    private String[] title=new String[]{"权限代码","UC功能号","权限名称","分类","BO类名","BO方法"};
+    //private String[] title=new String[]{"权限代码","UC功能号","权限名称","分类","BO类名","BO方法"};
     DefaultTableModel tableModel =null;
     DefaultListSelectionModel model ;
 
+    @Override
+    public void close() {
+        tableModel=null;
+        model=null;
+        table=null;
+    }
 
-    public CenterTable(MyActionListener myActionListener,UcDefineMaintain ucDefineMaintain) {
+    public CenterTable(MyActionListener myActionListener, UcDefineMaintain ucDefineMaintain) {
         this.myActionListener=myActionListener;
         this.ucDefineMaintain=ucDefineMaintain;
         init();

@@ -31,4 +31,5 @@ public abstract class BaseJPanel extends JPanel {
     public void onFocus(boolean refresh){
 
     }
+    public abstract void close();
 }

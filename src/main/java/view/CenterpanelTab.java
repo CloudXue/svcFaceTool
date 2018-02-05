@@ -63,7 +63,10 @@ public class CenterpanelTab implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        content.close();
         jTabbedPane.remove(jTabbedPane.indexOfComponent(content));
+        content=null;
+        System.gc();
     }
 
     @Override

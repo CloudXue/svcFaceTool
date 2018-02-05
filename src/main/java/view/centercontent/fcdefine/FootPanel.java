@@ -85,9 +85,12 @@ public class FootPanel  extends BaseJPanel{
     private JComboBox islimitcombobox=new JComboBox(new String[]{"0:否","1:是"});
 
 
+    @Override
+    public void close() {
+        footPanelControl=null;
+    }
 
-
-    public FootPanel(ActionListener actionListener,UcDefineMaintain ucDefineMaintain) {
+    public FootPanel(ActionListener actionListener, UcDefineMaintain ucDefineMaintain) {
         this.actionListener=actionListener;
         this.ucDefineMaintain=ucDefineMaintain;
         textFiledListener=new FootPanelDocumentListener();

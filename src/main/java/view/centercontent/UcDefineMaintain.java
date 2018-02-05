@@ -50,6 +50,16 @@ public class UcDefineMaintain extends BaseJPanel  {
     private List<String> deleUcList=new ArrayList<String>();
 
 
+    @Override
+    public void close() {
+        centerTable.close();
+        footPanel.close();
+        ucDefineService=null;
+        addUcMap=null;
+        editUcMap=null;
+        deleUcList=null;
+
+    }
 
     /**
      * 获得输入框数据

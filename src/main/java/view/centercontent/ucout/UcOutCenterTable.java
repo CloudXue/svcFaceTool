@@ -35,6 +35,16 @@ public class UcOutCenterTable extends BaseJPanel {
     DefaultTableModel tableModel = null;
     DefaultListSelectionModel model;
 
+    @Override
+    public void close() {
+        svcService=null;
+        //ucOutMaintain=null;
+        tableModel=null;
+        model=null;
+        table=null;
+
+    }
+
     public UcOutCenterTable(MyActionListener myActionListener, UcOutMaintain ucOutMaintain, CenterContentPanel centerContentPanel) {
         this.myActionListener = myActionListener;
         this.ucOutMaintain = ucOutMaintain;

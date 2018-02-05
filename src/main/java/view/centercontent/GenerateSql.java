@@ -46,7 +46,12 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
      */
     private JTextArea sqlText=new JTextArea();
 
-    public GenerateSql(MyActionListener myActionListener,CenterContentPanel centerContentPanel) {
+    @Override
+    public void close() {
+
+    }
+
+    public GenerateSql(MyActionListener myActionListener, CenterContentPanel centerContentPanel) {
         this.centerContentPanel=centerContentPanel;
         this.myActionListener= myActionListener;
         init();

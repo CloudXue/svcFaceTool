@@ -87,8 +87,12 @@ public class SqlMaintain  extends BaseJPanel {
 
     private JTable sqlTestResultTable=new JTable();//测试结果table
 
+    @Override
+    public void close() {
+        tsvcSqlService=null;
+    }
 
-    public SqlMaintain(MyActionListener myActionListener,CenterContentPanel centerContentPanel) {
+    public SqlMaintain(MyActionListener myActionListener, CenterContentPanel centerContentPanel) {
         control=new SqlMaintainControl();
         sqlTypeMap=new LinkedHashMap<String,String>();
         sqlTypeMap.put("0:普通SQL语句","0");

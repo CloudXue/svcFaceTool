@@ -21,6 +21,11 @@ public class HeadPanel extends BaseJPanel {
     private JLabel ucNameLabel;
     private JTextField ucNameField;
 
+    @Override
+    public void close() {
+
+    }
+
     public HeadPanel() {
         init();
     }

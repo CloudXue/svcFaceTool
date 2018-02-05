@@ -39,6 +39,10 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
     //中间table展示
     private UcOutCenterTable centerTable;
 
+    @Override
+    public void close() {
+        centerTable=null;
+    }
 
 
     public UcOutMaintain(MyActionListener myActionListener,CenterContentPanel centerContentPanel) {
@@ -127,4 +131,6 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         System.err.println(e.getActionCommand());
     }
+
+
 }

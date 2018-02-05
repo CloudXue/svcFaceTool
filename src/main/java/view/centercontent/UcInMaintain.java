@@ -41,9 +41,12 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
     //中间table展示
     private UcInCenterTable centerTable;
 
+    @Override
+    public void close() {
+        centerTable=null;
+    }
 
-
-    public UcInMaintain(MyActionListener myActionListener,CenterContentPanel centerContentPanel) {
+    public UcInMaintain(MyActionListener myActionListener, CenterContentPanel centerContentPanel) {
         this.centerContentPanel=centerContentPanel;
         this.myActionListener= myActionListener;
         centerTable=new UcInCenterTable(myActionListener,this,centerContentPanel);

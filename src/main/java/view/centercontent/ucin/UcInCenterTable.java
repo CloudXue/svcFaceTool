@@ -38,6 +38,12 @@ public class UcInCenterTable extends BaseJPanel {
         init();
     }
 
+    @Override
+    public void close() {
+        svcService=null;
+        table=null;
+    }
+
     private void init() {
         tableModel = new DefaultTableModel(null, getTitle());
         table = new JTable(tableModel);
