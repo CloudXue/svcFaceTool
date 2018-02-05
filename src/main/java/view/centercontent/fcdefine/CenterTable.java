@@ -48,6 +48,7 @@ public class CenterTable  extends BaseJPanel {
 
         };
         table=new JTable(tableModel);
+        table.setRowHeight(25);
         table.setFont(FontFactory.getJTableFont());
         model=(DefaultListSelectionModel)table.getSelectionModel();
         this.setLayout(new GridLayout());

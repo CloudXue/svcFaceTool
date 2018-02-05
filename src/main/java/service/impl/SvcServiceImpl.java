@@ -11,8 +11,10 @@ import dao.impl.TsvcSqlDaoImpl;
 import dao.impl.TsvcViewconfigDaoImpl;
 import service.SvcService;
 import util.DateUtil;
+import util.StringUtils;
 
 import java.util.List;
+import java.util.Vector;
 
 
 /**
@@ -93,5 +95,73 @@ public class SvcServiceImpl implements SvcService {
         return sb.toString();
     }
 
+    @Override
+    public Vector<Vector<String>> getUcIn(String uc) throws Exception {
+        Vector<Vector<String>> retVector=new Vector<Vector<String>>();
+        List<TsvcInterface> tsvcInterfaceList=tsvcInterfaceDao.getTsvcInterfaceListHasOrder(uc);
+        if(tsvcInterfaceList!=null){
+            for(TsvcInterface tsvcInterface : tsvcInterfaceList){
+                Vector<String> vector=new Vector<String>();
+                vector.add(valueOf(tsvcInterface.getC_flag()));
+                vector.add(valueOf(tsvcInterface.getC_packflag()));
+                vector.add(valueOf(tsvcInterface.getC_fieldname()));
+                vector.add(valueOf(tsvcInterface.getC_explain()));
+                vector.add(valueOf(tsvcInterface.getC_property()));
+                vector.add(valueOf(tsvcInterface.getL_len()));
+                vector.add(valueOf(tsvcInterface.getL_declen()));
+                vector.add(valueOf(tsvcInterface.getC_fieldtype()));
+                vector.add(valueOf(tsvcInterface.getC_notnull()));
+                vector.add(valueOf(tsvcInterface.getC_fieldflag()));
+                vector.add(valueOf(tsvcInterface.getC_condition()));
+                vector.add(valueOf(tsvcInterface.getL_no()));
+                vector.add(valueOf(tsvcInterface.getC_viewlevel()));
+                vector.add(valueOf(tsvcInterface.getC_viewtype()));
+                vector.add(valueOf(tsvcInterface.getC_dicname()));
+                vector.add(valueOf(tsvcInterface.getC_midsearchname()));
+                vector.add(valueOf(tsvcInterface.getC_isdefault()));
+                vector.add(valueOf(tsvcInterface.getC_value()));
 
+                vector.add(valueOf(tsvcInterface.getC_existvalue()));
+                vector.add(valueOf(tsvcInterface.getRowid()));
+                retVector.add(vector);
+            }
+        }
+        return retVector;
+    }
+
+    @Override
+    public Vector<Vector<String>> getUcOut(String uc) throws Exception {
+        Vector<Vector<String>> retVector=new Vector<Vector<String>>();
+        List<TsvcViewconfig> tsvcViewconfigList=tsvcViewconfigDao.getTsvcViewconfigHasOrder(uc);
+        if(tsvcViewconfigList!=null){
+            for(TsvcViewconfig tsvcViewconfig : tsvcViewconfigList){
+                Vector<String> vector=new Vector<String>();
+                vector.add(valueOf(tsvcViewconfig.getC_businflag()));
+                vector.add(valueOf(tsvcViewconfig.getC_property()));
+                vector.add(valueOf(tsvcViewconfig.getC_viewlevel()));
+                vector.add(valueOf(tsvcViewconfig.getC_viewtype()));
+                vector.add(valueOf(tsvcViewconfig.getC_dicname()));
+                vector.add(valueOf(tsvcViewconfig.getC_viewname()));
+                vector.add(valueOf(tsvcViewconfig.getL_no()));
+                vector.add(valueOf(tsvcViewconfig.getC_hyperlink()));
+                vector.add(valueOf(tsvcViewconfig.getC_frametype()));
+                vector.add(valueOf(tsvcViewconfig.getC_len()));
+                vector.add(valueOf(tsvcViewconfig.getC_pattern()));
+                vector.add(valueOf(tsvcViewconfig.getC_hiddenelem()));
+                vector.add(valueOf(tsvcViewconfig.getC_edittype()));
+                vector.add(valueOf(tsvcViewconfig.getC_defaultvalue()));
+                vector.add(valueOf(tsvcViewconfig.getC_limit()));
+                vector.add(valueOf(tsvcViewconfig.getC_midsearchname()));
+                vector.add(valueOf(tsvcViewconfig.getC_event()));
+                vector.add(valueOf(tsvcViewconfig.getC_inputtype()));
+                vector.add(valueOf(tsvcViewconfig.getRowid()));
+                retVector.add(vector);
+            }
+        }
+        return retVector;
+    }
+
+    private String valueOf(String str){
+        return StringUtils.valueOf(str);
+    }
 }

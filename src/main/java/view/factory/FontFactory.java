@@ -79,4 +79,12 @@ public class FontFactory {
         Font font=new Font("宋体",Font.PLAIN,18);
         return font;
     }
+    /**
+     * sql定义输入框字体
+     * @return
+     */
+    public static Font getBtnFont(){
+        Font font=new Font("宋体",Font.PLAIN,12);
+        return font;
+    }
 }

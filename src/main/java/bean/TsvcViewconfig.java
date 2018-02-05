@@ -54,6 +54,7 @@ public class TsvcViewconfig  extends BaseBean {
     private String c_searchlink;
     private String c_len;
     private String c_pattern;
+    private String rowid;
 
 
     public static String generateHead() {
@@ -258,5 +259,13 @@ public class TsvcViewconfig  extends BaseBean {
 
     public void setC_pattern(String c_pattern) {
         this.c_pattern = c_pattern;
+    }
+
+    public String getRowid() {
+        return rowid;
+    }
+
+    public void setRowid(String rowid) {
+        this.rowid = rowid;
     }
 }

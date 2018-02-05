@@ -37,6 +37,7 @@ public class TsvcInterface extends BaseBean {
     private String c_midsearchname;
     private String l_no;
     private String c_notshowallitem;
+    private String rowid;
 
     @Override
     public String generateInsertSql() {
@@ -245,5 +246,13 @@ public class TsvcInterface extends BaseBean {
 
     public void setC_notshowallitem(String c_notshowallitem) {
         this.c_notshowallitem = c_notshowallitem;
+    }
+
+    public String getRowid() {
+        return rowid;
+    }
+
+    public void setRowid(String rowid) {
+        this.rowid = rowid;
     }
 }

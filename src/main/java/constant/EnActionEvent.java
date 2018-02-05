@@ -108,6 +108,80 @@ public enum EnActionEvent {
      *生成sql,保存
      */
     GENERATESQL_SAVE("GENERATESQL_SAVE"),
+    COMBOBOXDATACHANGE("COMBOBOXDATACHANGE"),
+    /**
+     * UC输入定义-初始化输入输出
+     */
+    UCIN_INIT("UCIN_INIT"),
+    /**
+     * UC输入定义-拷贝自
+     */
+    UCIN_COPY("UCIN_COPY"),
+    /**
+     * UC输入定义-插入
+     */
+    UCIN_INSERT("UCIN_INSERT"),
+    /**
+     * UC输入定义-尾加
+     */
+    UCIN_TAILINSERT("UCIN_TAILINSERT"),
+    /**
+     *UC输入定义-删除
+     */
+    UCIN_DEL("UCIN_DEL"),
+    /**
+     * UC输入定义-存盘
+     */
+    UCIN_SAVE("UCIN_SAVE"),
+    /**
+     * UC输入定义-初刷新
+     */
+    UCIN_REFRESH("UCIN_REFRESH"),
+    /**
+     * UC输入定义-上移
+     */
+    UCIN_UP("UCIN_UP"),
+    /**
+     * UC输入定义-下移
+     */
+    UCIN_DOWN("UCIN_DOWN"),
+    /**
+     * UC输出定义-初始化输出输出
+     */
+    UCOUT_INIT("UCOUT_INIT"),
+    /**
+     * UC输出定义-拷贝自
+     */
+    UCOUT_COPY("UCOUT_COPY"),
+    /**
+     * UC输出定义-插入
+     */
+    UCOUT_INSERT("UCOUT_INSERT"),
+    /**
+     * UC输出定义-尾加
+     */
+    UCOUT_TAILINSERT("UCOUT_TAILINSERT"),
+    /**
+     *UC输出定义-删除
+     */
+    UCOUT_DEL("UCOUT_DEL"),
+    /**
+     * UC输出定义-存盘
+     */
+    UCOUT_SAVE("UCOUT_SAVE"),
+    /**
+     * UC输出定义-初刷新
+     */
+    UCOUT_REFRESH("UCOUT_REFRESH"),
+    /**
+     * UC输出定义-上移
+     */
+    UCOUT_UP("UCOUT_UP"),
+    /**
+     * UC输出定义-下移
+     */
+    UCOUT_DOWN("UCOUT_DOWN"),
+
 
     ;
     private String cmd;

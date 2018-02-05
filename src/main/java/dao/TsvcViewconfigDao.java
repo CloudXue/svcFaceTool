@@ -13,4 +13,5 @@ import java.util.List;
  */
 public interface TsvcViewconfigDao  extends IBaseDao<TsvcViewconfig> {
     public List<TsvcViewconfig> getTsvcViewconfig(String uc) throws Exception;
+    public List<TsvcViewconfig> getTsvcViewconfigHasOrder(String uc) throws Exception;
 }
