@@ -1,6 +1,10 @@
 package util;
 
+import service.SvcService;
+import service.impl.SvcServiceImpl;
+
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +15,14 @@ import java.util.Map;
  * <br>
  */
 public class SvcUtil {
+    private static SvcService svcService=new SvcServiceImpl();
+    private static List<String> DICTIONARIES;
 
+    public static void init(){
+        //初始化字字典
+        DICTIONARIES=svcService.getDictionies();
+
+    }
     public static String getSysName(){
         return "FUNDCRM";
     }
@@ -37,5 +48,9 @@ public class SvcUtil {
         map.put("FM:百万","FM");
         map.put("FY:亿","FY");
         return map;
+    }
+
+    public static List<String> getDiction(){
+        return DICTIONARIES;
     }
 }

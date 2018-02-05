@@ -256,8 +256,23 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
         }
         return retMapList;
     }
-
-    protected int executeSql(String sql) throws Exception {
+    public  List<Map<String,Object>> queryForList(String sql)throws Exception {
+        List<Map<String,Object>> retMapList=new ArrayList<Map<String,Object>>();
+        PreparedStatement pstmt=getPreStmt(sql);
+        ResultSet rs=pstmt.executeQuery();
+        ResultSetMetaData rsm =rs.getMetaData(); //获得列集
+        int col = rsm.getColumnCount();
+        while (rs.next()){
+            Map<String,Object> map=new HashMap<String,Object>();
+            for (int i = 1; i <=col ; i++) {
+                String columnName=rsm.getColumnLabel(i);
+                map.put(columnName,rs.getString(columnName));
+            }
+            retMapList.add(map);
+        }
+        return retMapList;
+    }
+    public int executeSql(String sql) throws Exception {
         Statement statement=getStatement();
         return statement.executeUpdate(sql);
     }

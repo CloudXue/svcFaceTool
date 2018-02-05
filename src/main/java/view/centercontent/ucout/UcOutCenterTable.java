@@ -49,12 +49,7 @@ public class UcOutCenterTable extends BaseJPanel {
         table.setFont(FontFactory.getJTableFont());
         //表头不可拖动
         table.getTableHeader().setReorderingAllowed(false);
-        ComboBoxMapModel mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewType());
 
-        JComboBox comboBox=new JComboBox(mapModel);
-        SvcTableCellEditor cellEditor=new SvcTableCellEditor(comboBox);
-        TableColumnModel columnModel=table.getColumnModel();
-        columnModel.getColumn(2).setCellEditor( cellEditor );
 
         //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         model = (DefaultListSelectionModel) table.getSelectionModel();
@@ -103,9 +98,13 @@ public class UcOutCenterTable extends BaseJPanel {
     }
 
     public void reloadUc(String uc) {
+        TableColumnModel tcm = table.getColumnModel();
         try {
             removeAll();
             tableModel.setDataVector(svcService.getUcOut(uc), getTitle());
+            //其实没有移除，仅仅隐藏显示而已,
+            tcm.removeColumn(tcm.getColumn(18));
+            tcm.removeColumn(tcm.getColumn(0));
             for (int i = 0; i < table.getColumnCount(); i++) {
                 if (i ==0 || i == 3 || i == 4) {
                     table.getColumnModel().getColumn(i).setPreferredWidth(120);
@@ -116,15 +115,17 @@ public class UcOutCenterTable extends BaseJPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        TableColumnModel tcm = table.getColumnModel();
-        //其实没有移除，仅仅隐藏显示而已,
-         tcm.removeColumn(tcm.getColumn(18));
-         tcm.removeColumn(tcm.getColumn(0));
 
+        //显示类型
         ComboBoxMapModel mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewType());
-        MapComboBox comboBox=new MapComboBox(mapModel);
+        JComboBox comboBox=new MapComboBox(mapModel);
         SvcTableCellEditor cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(2).setCellEditor( cellEditor );
+        //字典
+        mapModel=new ComboBoxMapModel(SvcUtil.getDiction());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(3).setCellEditor( cellEditor );
 
     }
     public void removeAll() {

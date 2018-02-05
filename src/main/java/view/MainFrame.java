@@ -2,6 +2,8 @@ package view;
 
 import constant.ENWarningLevel;
 import control.MyActionListener;
+import service.SvcService;
+import service.impl.SvcServiceImpl;
 import util.LogUtil;
 
 import javax.swing.*;
@@ -12,6 +14,7 @@ import java.io.File;
  * Created by lyd on 2017/1/4.
  */
 public class MainFrame extends JFrame {
+    static SvcService svcService=new SvcServiceImpl();
     private MenuBar menuBar;
     private ToolBar toolBar;
     private FootBar footBar;
@@ -69,6 +72,12 @@ public class MainFrame extends JFrame {
         centerPanel.addTab("");
     }
     public static void main(String[] args) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                svcService.initSystem();
+            }
+        }).start();
         if(args!=null && args.length>1){
             String logFilePaht=args[0];
             LogUtil.setFileLogPath(logFilePaht);

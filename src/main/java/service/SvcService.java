@@ -1,5 +1,6 @@
 package service;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -10,6 +11,7 @@ import java.util.Vector;
  * <br>
  */
 public interface SvcService {
+    public void initSystem();
     /**
      * 生成sql语句
      * @param uc
@@ -19,4 +21,10 @@ public interface SvcService {
 
     public Vector<Vector<String>> getUcIn(String uc) throws Exception;
     public Vector<Vector<String>> getUcOut(String uc) throws Exception;
+
+    /**
+     * 获得字典和字典缓存
+     * @return
+     */
+    public List<String> getDictionies();
 }

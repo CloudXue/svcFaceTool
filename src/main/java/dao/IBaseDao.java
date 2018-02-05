@@ -2,6 +2,9 @@ package dao;
 
 import bean.BaseBean;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by lyd on 2017-07-06.
  */
@@ -23,4 +26,6 @@ public interface IBaseDao<TDtoModel extends BaseBean>  {
     public int del(TDtoModel bean)throws Exception;
     public boolean update(TDtoModel bean)throws Exception;
     public boolean insert(TDtoModel bean)throws Exception;
+    public int executeSql(String sql) throws Exception;
+    public List<Map<String,Object>> queryForList(String sql)throws Exception;
 }

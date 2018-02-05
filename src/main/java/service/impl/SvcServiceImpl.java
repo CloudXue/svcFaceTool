@@ -12,8 +12,11 @@ import dao.impl.TsvcViewconfigDaoImpl;
 import service.SvcService;
 import util.DateUtil;
 import util.StringUtils;
+import util.SvcUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 
@@ -25,61 +28,62 @@ import java.util.Vector;
  * <br>
  */
 public class SvcServiceImpl implements SvcService {
-    HsiRightDao hsiRightDao=new HsiRightDaoImpl();
-    TsvcSqlDao tsvcSqlDao=new TsvcSqlDaoImpl();
-    TsvcViewconfigDao tsvcViewconfigDao=new TsvcViewconfigDaoImpl();
-    TsvcInterfaceDao tsvcInterfaceDao=new TsvcInterfaceDaoImpl();
-    private final static String sqlHead="--*********************************************************\n" +
+    HsiRightDao hsiRightDao = new HsiRightDaoImpl();
+    TsvcSqlDao tsvcSqlDao = new TsvcSqlDaoImpl();
+    TsvcViewconfigDao tsvcViewconfigDao = new TsvcViewconfigDaoImpl();
+    TsvcInterfaceDao tsvcInterfaceDao = new TsvcInterfaceDaoImpl();
+    private final static String sqlHead = "--*********************************************************\n" +
             "--FUNDCRM系统初始化脚本\n" +
             "--创建日期：%1$s\n" +
             "--数据库  ：fundcrm/fundcrm@localdb\n" +
             "--*********************************************************";
 
-
+    public void initSystem() {
+        SvcUtil.init();
+    }
 
     @Override
-    public String generateSql(String uc)  {
-        StringBuilder sb= null;
+    public String generateSql(String uc) {
+        StringBuilder sb = null;
         try {
             sb = new StringBuilder();
             sb.append(String.format(sqlHead, DateUtil.getCurrentDateTimeString()));
             sb.append("\n");
             sb.append("\n");
             sb.append(HsiRight.generateHead());
-            sb.append(BaseBean.generateDelSql(HsiRight.tableName,uc));
+            sb.append(BaseBean.generateDelSql(HsiRight.tableName, uc));
             sb.append("\n");
-            HsiRight hsiRight=hsiRightDao.getHsiRigh(uc);
+            HsiRight hsiRight = hsiRightDao.getHsiRigh(uc);
             sb.append(hsiRight.generateInsertSql());
             sb.append("\n");
             sb.append("\n");
             sb.append(TsvcSql.generateHead());
-            TsvcSql tsvcSql=tsvcSqlDao.getTsvcSql(uc);
-            sb.append(BaseBean.generateDelSql(TsvcSql.tableName,uc));
+            TsvcSql tsvcSql = tsvcSqlDao.getTsvcSql(uc);
+            sb.append(BaseBean.generateDelSql(TsvcSql.tableName, uc));
             sb.append("\n");
-            if(tsvcSql!=null){
+            if (tsvcSql != null) {
                 sb.append(tsvcSql.generateInsertSql());
             }
             sb.append("\n");
             sb.append("\n");
             sb.append(TsvcInterface.generateHead());
-            sb.append(BaseBean.generateDelSql(TsvcInterface.tableName,uc));
+            sb.append(BaseBean.generateDelSql(TsvcInterface.tableName, uc));
             sb.append("\n");
-            List<TsvcInterface> tsvcInterfaceList=tsvcInterfaceDao.getTsvcInterfaceList(uc);
-            for(TsvcInterface tsvcInterface : tsvcInterfaceList){
+            List<TsvcInterface> tsvcInterfaceList = tsvcInterfaceDao.getTsvcInterfaceList(uc);
+            for (TsvcInterface tsvcInterface : tsvcInterfaceList) {
                 sb.append(tsvcInterface.generateInsertSql());
             }
             sb.append("\n");
             sb.append("\n");
             sb.append(TsvcViewconfig.generateHead());
-            sb.append(BaseBean.generateDelSql(TsvcViewconfig.tableName,uc));
+            sb.append(BaseBean.generateDelSql(TsvcViewconfig.tableName, uc));
             sb.append("\n");
-            List<TsvcViewconfig> tsvcViewconfigsList=tsvcViewconfigDao.getTsvcViewconfig(uc);
-            for(TsvcViewconfig tsvcViewconfig : tsvcViewconfigsList){
+            List<TsvcViewconfig> tsvcViewconfigsList = tsvcViewconfigDao.getTsvcViewconfig(uc);
+            for (TsvcViewconfig tsvcViewconfig : tsvcViewconfigsList) {
                 sb.append(tsvcViewconfig.generateInsertSql());
             }
             sb.append("\n");
             sb.append("commit;");
-
 
 
         } catch (Exception e) {
@@ -97,11 +101,11 @@ public class SvcServiceImpl implements SvcService {
 
     @Override
     public Vector<Vector<String>> getUcIn(String uc) throws Exception {
-        Vector<Vector<String>> retVector=new Vector<Vector<String>>();
-        List<TsvcInterface> tsvcInterfaceList=tsvcInterfaceDao.getTsvcInterfaceListHasOrder(uc);
-        if(tsvcInterfaceList!=null){
-            for(TsvcInterface tsvcInterface : tsvcInterfaceList){
-                Vector<String> vector=new Vector<String>();
+        Vector<Vector<String>> retVector = new Vector<Vector<String>>();
+        List<TsvcInterface> tsvcInterfaceList = tsvcInterfaceDao.getTsvcInterfaceListHasOrder(uc);
+        if (tsvcInterfaceList != null) {
+            for (TsvcInterface tsvcInterface : tsvcInterfaceList) {
+                Vector<String> vector = new Vector<String>();
                 vector.add(valueOf(tsvcInterface.getC_flag()));
                 vector.add(valueOf(tsvcInterface.getC_packflag()));
                 vector.add(valueOf(tsvcInterface.getC_fieldname()));
@@ -131,11 +135,11 @@ public class SvcServiceImpl implements SvcService {
 
     @Override
     public Vector<Vector<String>> getUcOut(String uc) throws Exception {
-        Vector<Vector<String>> retVector=new Vector<Vector<String>>();
-        List<TsvcViewconfig> tsvcViewconfigList=tsvcViewconfigDao.getTsvcViewconfigHasOrder(uc);
-        if(tsvcViewconfigList!=null){
-            for(TsvcViewconfig tsvcViewconfig : tsvcViewconfigList){
-                Vector<String> vector=new Vector<String>();
+        Vector<Vector<String>> retVector = new Vector<Vector<String>>();
+        List<TsvcViewconfig> tsvcViewconfigList = tsvcViewconfigDao.getTsvcViewconfigHasOrder(uc);
+        if (tsvcViewconfigList != null) {
+            for (TsvcViewconfig tsvcViewconfig : tsvcViewconfigList) {
+                Vector<String> vector = new Vector<String>();
                 vector.add(valueOf(tsvcViewconfig.getC_businflag()));
                 vector.add(valueOf(tsvcViewconfig.getC_property()));
                 vector.add(valueOf(tsvcViewconfig.getC_viewlevel()));
@@ -161,7 +165,27 @@ public class SvcServiceImpl implements SvcService {
         return retVector;
     }
 
-    private String valueOf(String str){
+    @Override
+    public List<String> getDictionies() {
+        List<String> retList = new ArrayList<String>();
+        String sql = "select * from (select t.c_caption caption from tdictionarycache t where  t.c_keyvalue='#' " +
+                " union all " +
+                " select  t.c_caption caption from tdictionary t where t.c_keyvalue='#' )" +
+                " order by caption";
+        try {
+            List<Map<String, Object>> retMapList = hsiRightDao.queryForList(sql);
+            for (Map<String, Object> map : retMapList) {
+                retList.add(valueOf(map.get("CAPTION")));
+            }
+        } catch (Exception e) {
+            retList.clear();
+            e.printStackTrace();
+        }
+        return retList;
+    }
+
+
+    private String valueOf(Object str) {
         return StringUtils.valueOf(str);
     }
 }

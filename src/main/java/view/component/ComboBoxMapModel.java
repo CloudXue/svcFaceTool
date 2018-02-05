@@ -3,6 +3,7 @@ package view.component;
 import javax.swing.*;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -28,6 +29,15 @@ public class ComboBoxMapModel  extends AbstractListModel<String> implements Comb
         }
         if ( getSize() > 0 ) {
             selectedObject = objects.get(getElementAt( 0 ));
+        }
+    }
+
+    public ComboBoxMapModel(List<String> list) {
+        objects = new LinkedHashMap<String,String>();
+        key=new Vector<String>();
+        for(String str :list){
+            objects.put(str,str);
+            key.add(str);
         }
     }
 
