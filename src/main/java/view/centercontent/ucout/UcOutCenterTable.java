@@ -3,10 +3,13 @@ package view.centercontent.ucout;
 import control.MyActionListener;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
+import util.SvcUtil;
 import view.centercontent.BaseJPanel;
 import view.centercontent.CenterContentPanel;
-import view.centercontent.UcInMaintain;
 import view.centercontent.UcOutMaintain;
+import view.component.ComboBoxMapModel;
+import view.component.MapComboBox;
+import view.component.SvcTableCellEditor;
 import view.factory.FontFactory;
 
 import javax.swing.*;
@@ -46,6 +49,13 @@ public class UcOutCenterTable extends BaseJPanel {
         table.setFont(FontFactory.getJTableFont());
         //表头不可拖动
         table.getTableHeader().setReorderingAllowed(false);
+        ComboBoxMapModel mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewType());
+
+        JComboBox comboBox=new JComboBox(mapModel);
+        SvcTableCellEditor cellEditor=new SvcTableCellEditor(comboBox);
+        TableColumnModel columnModel=table.getColumnModel();
+        columnModel.getColumn(2).setCellEditor( cellEditor );
+
         //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         model = (DefaultListSelectionModel) table.getSelectionModel();
         this.setLayout(new GridLayout());
@@ -110,6 +120,11 @@ public class UcOutCenterTable extends BaseJPanel {
         //其实没有移除，仅仅隐藏显示而已,
          tcm.removeColumn(tcm.getColumn(18));
          tcm.removeColumn(tcm.getColumn(0));
+
+        ComboBoxMapModel mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewType());
+        MapComboBox comboBox=new MapComboBox(mapModel);
+        SvcTableCellEditor cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(2).setCellEditor( cellEditor );
 
     }
     public void removeAll() {
