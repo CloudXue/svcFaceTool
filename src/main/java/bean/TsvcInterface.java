@@ -2,6 +2,8 @@ package bean;
 
 import util.StringUtils;
 
+import java.util.Vector;
+
 /**
  * 功能说明: <br>
  * 系统版本: 1.0.0 <br>
@@ -38,6 +40,83 @@ public class TsvcInterface extends BaseBean {
     private String l_no;
     private String c_notshowallitem;
     private String rowid;
+
+    public TsvcInterface() {
+    }
+    public static  TsvcInterface generateDefault(){
+        TsvcInterface tsvcInterface=new TsvcInterface(
+                "",
+                "0", "0", "", "", "", "32", "0",
+                "S", "0", "0", "", "", "", "",
+                "", "", "", "", "");
+        return tsvcInterface;
+    }
+    public Vector<String> toVector(){
+        Vector<String> vector = new Vector<String>();
+        vector.add(StringUtils.valueOf(this.getC_flag()));
+        vector.add(StringUtils.valueOf(this.getC_packflag()));
+        vector.add(StringUtils.valueOf(this.getC_fieldname()));
+        vector.add(StringUtils.valueOf(this.getC_explain()));
+        vector.add(StringUtils.valueOf(this.getC_property()));
+        vector.add(StringUtils.valueOf(this.getL_len()));
+        vector.add(StringUtils.valueOf(this.getL_declen()));
+        vector.add(StringUtils.valueOf(this.getC_fieldtype()));
+        vector.add(StringUtils.valueOf(this.getC_notnull()));
+        vector.add(StringUtils.valueOf(this.getC_fieldflag()));
+        vector.add(StringUtils.valueOf(this.getC_condition()));
+        vector.add(StringUtils.valueOf(this.getL_no()));
+        vector.add(StringUtils.valueOf(this.getC_viewlevel()));
+        vector.add(StringUtils.valueOf(this.getC_viewtype()));
+        vector.add(StringUtils.valueOf(this.getC_dicname()));
+        vector.add(StringUtils.valueOf(this.getC_midsearchname()));
+        vector.add(StringUtils.valueOf(this.getC_isdefault()));
+        vector.add(StringUtils.valueOf(this.getC_value()));
+
+        vector.add(StringUtils.valueOf(this.getC_existvalue()));
+        vector.add(StringUtils.valueOf(this.getRowid()));
+        return vector;
+    }
+    public TsvcInterface(String c_functionno,
+                         String c_flag,
+                         String c_packflag,
+                         String c_fieldname,
+                         String c_explain,
+                         String c_property,
+                         String l_len,
+                         String l_declen,
+                         String c_fieldtype,
+                         String c_notnull ,
+                         String c_fieldflag,
+                         String c_condition,
+                         String l_no,
+                         String c_viewlevel,
+                         String c_viewtype,
+                         String c_dicname,
+                         String c_midsearchname,
+                         String c_isdefault,
+                         String c_value,
+                         String c_existvalue) {
+        this.c_functionno = c_functionno;
+        this.c_flag = c_flag;
+        this.c_packflag = c_packflag;
+        this.c_fieldname = c_fieldname;
+        this.c_explain = c_explain;
+        this.c_property = c_property;
+        this.l_len = l_len;
+        this.l_declen = l_declen;
+        this.c_fieldtype = c_fieldtype;
+        this.c_fieldflag = c_fieldflag;
+        this.c_notnull = c_notnull;
+        this.c_condition = c_condition;
+        this.c_existvalue = c_existvalue;
+        this.c_viewlevel = c_viewlevel;
+        this.c_viewtype = c_viewtype;
+        this.c_dicname = c_dicname;
+        this.c_isdefault = c_isdefault;
+        this.c_value = c_value;
+        this.c_midsearchname = c_midsearchname;
+        this.l_no = l_no;
+    }
 
     @Override
     public String generateInsertSql() {

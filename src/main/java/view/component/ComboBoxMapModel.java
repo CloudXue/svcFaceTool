@@ -1,5 +1,7 @@
 package view.component;
 
+import util.StringUtils;
+
 import javax.swing.*;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -43,17 +45,20 @@ public class ComboBoxMapModel  extends AbstractListModel<String> implements Comb
 
     @Override
     public void setSelectedItem(Object anItem) {
-        if(objects.containsKey(anItem.toString())){
-            selectedObject=objects.get(anItem.toString());
+        if(StringUtils.isNullOrEmpty(anItem.toString())){
+            selectedObject=objects.get(key.get(0));
         }else{
-            for(Map.Entry<String,String> entry : objects.entrySet()){
-                if(anItem.toString().equals(entry.getValue())){
-                    selectedObject=entry.getValue();
-                    break;
+            if(objects.containsKey(anItem.toString())){
+                selectedObject=objects.get(anItem.toString());
+            }else{
+                for(Map.Entry<String,String> entry : objects.entrySet()){
+                    if(anItem.toString().equals(entry.getValue())){
+                        selectedObject=entry.getValue();
+                        break;
+                    }
                 }
             }
         }
-
     }
 
     @Override

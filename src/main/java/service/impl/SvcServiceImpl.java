@@ -197,6 +197,64 @@ public class SvcServiceImpl implements SvcService {
         return retMap;
     }
 
+    @Override
+    public void saveTsvcInterface(List<TsvcInterface> tsvcInterfaceList) {
+        if(tsvcInterfaceList==null || tsvcInterfaceList.size()<1){
+            return;
+        }
+        try {
+            tsvcInterfaceDao.openTransaction();
+            //先删除
+            String uc=tsvcInterfaceList.get(0).getC_functionno();
+            String deleteSql="delete TSVCINTERFACE where C_FUNCTIONNO='"+uc+"'";
+            tsvcInterfaceDao.executeSql(deleteSql);
+            //添加
+            for(TsvcInterface tsvcInterface: tsvcInterfaceList){
+                if(!tsvcInterfaceDao.insert(tsvcInterface)){
+                    throw new Exception("保存数据失败"+tsvcInterface.getC_fieldname());
+                }
+            }
+            //提交事务
+            tsvcInterfaceDao.commitTransaction();
+        } catch (Exception e) {
+            try {
+                tsvcInterfaceDao.rollbackTransaction();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void saveTsvcViewconfig(List<TsvcViewconfig> tsvcViewconfigsList) {
+        if(tsvcViewconfigsList==null || tsvcViewconfigsList.size()<1){
+            return;
+        }
+        try {
+            tsvcViewconfigDao.openTransaction();
+            //先删除
+            String uc=tsvcViewconfigsList.get(0).getC_functionno();
+            String deleteSql="delete TSVCVIEWCONFIG where C_FUNCTIONNO='"+uc+"'";
+            tsvcViewconfigDao.executeSql(deleteSql);
+            //添加
+            for(TsvcViewconfig tsvcViewconfig: tsvcViewconfigsList){
+                if(!tsvcViewconfigDao.insert(tsvcViewconfig)){
+                    throw new Exception("保存数据失败"+tsvcViewconfig.getC_property());
+                }
+            }
+            //提交事务
+            tsvcViewconfigDao.commitTransaction();
+        } catch (Exception e) {
+            try {
+                tsvcViewconfigDao.rollbackTransaction();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+
     private String valueOf(Object str) {
         return StringUtils.valueOf(str);
     }

@@ -281,7 +281,7 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
         Jdbcinfo  jdbcinfo=new Jdbcinfo();
         jdbcinfo.setUrl("jdbc:oracle:thin:@127.0.0.1:1521:mcs100");
         jdbcinfo.setPaswword("test1");
-        jdbcinfo.setUsername("jats002");
+        jdbcinfo.setUsername("jats001");
         jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
 
         /*jdbcinfo.setUrl( "jdbc:mysql://localhost:3306/crm?"+

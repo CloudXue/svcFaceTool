@@ -1,5 +1,6 @@
 package view.centercontent;
 
+import bean.TsvcInterface;
 import constant.EnActionEvent;
 import control.MyActionListener;
 import service.SvcService;
@@ -18,6 +19,7 @@ import java.awt.event.ActionListener;
  * Created by lyd on 2017/5/11.
  */
 public class UcInMaintain extends BaseJPanel  implements ActionListener {
+    SvcService svcService=new SvcServiceImpl();
     private   CenterContentPanel centerContentPanel;
     //初始化输入输出
     private JButton initBtn=new JButton("初始化输入输出");
@@ -127,18 +129,25 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
             System.out.println("正在刷新");
             return;
         }
-        if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_SAVECLICK.getCmd())){
-
+        if(e.getActionCommand().equals(EnActionEvent.UCIN_SAVE.getCmd())){
+            java.util.List<TsvcInterface> tsvcInterfaceList=centerTable.getAllColumnDatas();
+            //存盘
+            svcService.saveTsvcInterface(tsvcInterfaceList);
+            //刷新
+            centerTable.asynReloadUc(centerContentPanel.getUcNo());
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_INIT.getCmd())){
 
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_COPY.getCmd())){
 
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_INSERT.getCmd())){
-
+            //插入
+            centerTable.insert();
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_TAILINSERT.getCmd())){
-
+            //尾加
+            centerTable.tailInsert();
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_DEL.getCmd())){
-
+            //删除
+            centerTable.removeSelect();
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_REFRESH.getCmd())){
             centerTable.asynReloadUc(centerContentPanel.getUcNo());
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_UP.getCmd())){

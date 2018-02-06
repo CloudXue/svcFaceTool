@@ -2,6 +2,8 @@ package bean;
 
 import util.StringUtils;
 
+import java.util.Vector;
+
 /**
  * 功能说明: <br>
  * 系统版本: 1.0.0 <br>
@@ -14,7 +16,80 @@ public class TsvcViewconfig  extends BaseBean {
             "C_VIEWLEVEL,C_VIEWTYPE,C_DICNAME,C_VIEWNAME,C_RESERVE,L_NO,C_HYPERLINK,C_FRAMETYPE," +
             "C_CANSTAT,C_HIDDENELEM,C_EDITTYPE,C_INPUTTYPE,C_DEFAULTVALUE,C_LIMIT,C_MIDSEARCHNAME," +
             "C_EVENT,C_SEARCHLINK,C_LEN,C_PATTERN) VALUES ('%s','%s','%s','%s','%s','%s'," +
-            "'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');\n";
+            "'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')";
+    public static TsvcViewconfig generateDefault(){
+        TsvcViewconfig tsvcViewconfig=new TsvcViewconfig("","DEFAULT","","1",
+                "S", "","","","","","","",
+                "","","","","","", "");
+        return tsvcViewconfig;
+    }
+    public Vector<String> toVector(){
+        Vector<String> vector = new Vector<String>();
+        vector.add(StringUtils.valueOf(this.getC_businflag()));
+        vector.add(StringUtils.valueOf(this.getC_property()));
+        vector.add(StringUtils.valueOf(this.getC_viewlevel()));
+        vector.add(StringUtils.valueOf(this.getC_viewtype()));
+        vector.add(StringUtils.valueOf(this.getC_dicname()));
+        vector.add(StringUtils.valueOf(this.getC_viewname()));
+        vector.add(StringUtils.valueOf(this.getL_no()));
+        vector.add(StringUtils.valueOf(this.getC_hyperlink()));
+        vector.add(StringUtils.valueOf(this.getC_frametype()));
+        vector.add(StringUtils.valueOf(this.getC_len()));
+        vector.add(StringUtils.valueOf(this.getC_pattern()));
+        vector.add(StringUtils.valueOf(this.getC_hiddenelem()));
+        vector.add(StringUtils.valueOf(this.getC_edittype()));
+        vector.add(StringUtils.valueOf(this.getC_defaultvalue()));
+        vector.add(StringUtils.valueOf(this.getC_limit()));
+        vector.add(StringUtils.valueOf(this.getC_midsearchname()));
+        vector.add(StringUtils.valueOf(this.getC_event()));
+        vector.add(StringUtils.valueOf(this.getC_inputtype()));
+        vector.add(StringUtils.valueOf(this.getRowid()));
+        return vector;
+    }
+
+    public TsvcViewconfig(String c_functionno,
+                            String c_businflag,
+                            String c_property,
+                          String c_viewlevel,
+                          String c_viewtype,
+                          String c_dicname,
+                          String c_viewname,
+                          String l_no,
+                          String c_hyperlink,
+                          String c_frametype,
+                          String c_len,
+                          String c_pattern,
+                          String c_hiddenelem,
+                          String c_edittype,
+                          String c_defaultvalue,
+                          String c_limit,
+                          String c_midsearchname,
+                          String c_event,
+                          String c_inputtype) {
+        this.c_functionno = c_functionno;
+        this.c_businflag = c_businflag;
+        this.c_property = c_property;
+        this.c_viewlevel = c_viewlevel;
+        this.c_viewtype = c_viewtype;
+        this.c_dicname = c_dicname;
+        this.c_viewname = c_viewname;
+        this.l_no = l_no;
+        this.c_hyperlink = c_hyperlink;
+        this.c_frametype = c_frametype;
+        this.c_hiddenelem = c_hiddenelem;
+        this.c_edittype = c_edittype;
+        this.c_inputtype = c_inputtype;
+        this.c_defaultvalue = c_defaultvalue;
+        this.c_limit = c_limit;
+        this.c_midsearchname = c_midsearchname;
+        this.c_event = c_event;
+        this.c_len = c_len;
+        this.c_pattern = c_pattern;
+    }
+
+    public TsvcViewconfig() {
+    }
+
     @Override
     public String generateInsertSql() {
         return String.format(insertSql,

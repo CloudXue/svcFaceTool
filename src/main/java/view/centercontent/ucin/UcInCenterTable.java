@@ -1,8 +1,10 @@
 package view.centercontent.ucin;
 
+import bean.TsvcInterface;
 import control.MyActionListener;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
+import util.StringUtils;
 import util.SvcUtil;
 import view.centercontent.BaseJPanel;
 import view.centercontent.CenterContentPanel;
@@ -35,6 +37,8 @@ public class UcInCenterTable extends BaseJPanel {
     DefaultTableModel tableModel = null;
     DefaultListSelectionModel model;
     private Boolean isRefresh=false;
+
+    private int currentSelIndex=0;
 
     public UcInCenterTable(MyActionListener myActionListener, UcInMaintain ucInMaintain, CenterContentPanel centerContentPanel) {
         this.myActionListener = myActionListener;
@@ -71,6 +75,7 @@ public class UcInCenterTable extends BaseJPanel {
                 if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 1) {
                     int index = getClickedRow(e.getY());
                     if (index >= 0) {
+                        currentSelIndex=index;
                         cloumSelect(index);
                     }
                 }
@@ -108,7 +113,10 @@ public class UcInCenterTable extends BaseJPanel {
      * @param uc
      */
     public void   asynReloadUc(String uc){
-        new Thread(new Runnable() {
+        reloadUc(centerContentPanel.getUcNo());
+        //选择第一行
+        cloumSelect(0);
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 if(!isRefresh()){
@@ -117,18 +125,18 @@ public class UcInCenterTable extends BaseJPanel {
                     reloadUc(centerContentPanel.getUcNo());
                     //选择第一行
                     cloumSelect(0);
-                    /*try {
+                    *//*try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }*/
+                    }*//*
                     setIsRefresh(false);
                 }else{
                     System.out.println("刷新中");
                 }
 
             }
-        }).start();
+        }).start();*/
     }
     public void reloadUc(String uc) {
         try {
@@ -271,5 +279,86 @@ public class UcInCenterTable extends BaseJPanel {
     }
     public boolean isRefresh(){
         return isRefresh;
+    }
+    public java.util.List<TsvcInterface> getAllColumnDatas(){
+        java.util.List<TsvcInterface> retList=new java.util.ArrayList<TsvcInterface>();
+        if(tableModel.getRowCount()>0){
+            Vector<Vector<String>> datas=(Vector<Vector<String>>)tableModel.getDataVector();
+            for(Vector<String> data : datas){
+                TsvcInterface tsvcInterface=new TsvcInterface(centerContentPanel.getUcNo(),
+                        StringUtils.valueOf(data.get(0)),
+                        StringUtils.valueOf(data.get(1)),
+                        StringUtils.valueOf(data.get(2)),
+                        StringUtils.valueOf(data.get(3)),
+                        StringUtils.valueOf(data.get(4)),
+                        StringUtils.valueOf(data.get(5)),
+                        StringUtils.valueOf(data.get(6)),
+                        StringUtils.valueOf(data.get(7)),
+                        StringUtils.valueOf(data.get(8)),
+                        StringUtils.valueOf(data.get(9)),
+                        StringUtils.valueOf(data.get(10)),
+                        StringUtils.valueOf(data.get(11)),
+                        StringUtils.valueOf(data.get(12)),
+                        StringUtils.valueOf(data.get(13)),
+                        StringUtils.valueOf(data.get(14)),
+                        StringUtils.valueOf(data.get(15)),
+                        StringUtils.valueOf(data.get(16)),
+                        StringUtils.valueOf(data.get(17)),
+                        StringUtils.valueOf(data.get(18))
+                        );
+                retList.add(tsvcInterface);
+            }
+        }
+        return retList;
+    }
+    public TsvcInterface insert(){
+        TsvcInterface tsvcInterface=TsvcInterface.generateDefault();
+        tsvcInterface.setC_functionno(centerContentPanel.getUcNo());
+        int endindex=(tableModel.getRowCount()-1);
+        if(currentSelIndex>endindex){
+            currentSelIndex=endindex;
+        }
+        tableModel.insertRow(currentSelIndex,tsvcInterface.toVector());
+        this.cloumSelect(currentSelIndex);
+        return tsvcInterface;
+    }
+    /**
+     * 尾加
+     */
+    public TsvcInterface tailInsert(){
+        TsvcInterface tsvcInterface=TsvcInterface.generateDefault();
+        tsvcInterface.setC_functionno(centerContentPanel.getUcNo());
+        int index=(tableModel.getRowCount()-1);
+        String l_noStr=StringUtils.valueOf(StringUtils.valueOf(tableModel.getValueAt(index,11)));
+        if(StringUtils.isNotNullAndNotEmpty(l_noStr)){
+            Integer l_no=Integer.parseInt(l_noStr);
+            if(l_no!=null){
+                tsvcInterface.setL_no((l_no+10)+"");
+            }
+        }
+
+        tableModel.addRow(tsvcInterface.toVector());
+        index=(tableModel.getRowCount()-1);
+        this.cloumSelect(index);
+        return tsvcInterface;
+    }
+    public void removeSelect(){
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        int[] rows=table.getSelectedRows();
+        for (int i = 0; i < rows.length; i++) {
+            tableModel.removeRow(rows[i]-i);
+        }
+        if(tableModel.getRowCount()>0){
+            int endindex=(tableModel.getRowCount()-1);
+            if(rows[0]>endindex){
+                this.cloumSelect(endindex);
+            }else{
+                this.cloumSelect(rows[0]);
+            }
+        }else{
+            //全部删除完
+            currentSelIndex=0;
+        }
+
     }
 }

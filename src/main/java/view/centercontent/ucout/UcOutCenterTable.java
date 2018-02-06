@@ -1,8 +1,10 @@
 package view.centercontent.ucout;
 
+import bean.TsvcViewconfig;
 import control.MyActionListener;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
+import util.StringUtils;
 import util.SvcUtil;
 import view.centercontent.BaseJPanel;
 import view.centercontent.CenterContentPanel;
@@ -34,6 +36,8 @@ public class UcOutCenterTable extends BaseJPanel {
     private JTable table;
     DefaultTableModel tableModel = null;
     DefaultListSelectionModel model;
+
+    private int currentSelIndex=0;
 
     @Override
     public void close() {
@@ -76,6 +80,7 @@ public class UcOutCenterTable extends BaseJPanel {
                 if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 1) {
                     int index = getClickedRow(e.getY());
                     if (index >= 0) {
+                        currentSelIndex=index;
                         cloumSelect(index);
                     }
                 }
@@ -122,6 +127,8 @@ public class UcOutCenterTable extends BaseJPanel {
                     //table.getColumnModel().getColumn(i).setPreferredWidth(75);
                 }
             }
+            //选择第一行
+            cloumSelect(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -191,5 +198,84 @@ public class UcOutCenterTable extends BaseJPanel {
         }
         //ucDefineMaintain.tableSelect(index,functionno);
     }
+    public java.util.List<TsvcViewconfig> getAllColumnDatas(){
+        java.util.List<TsvcViewconfig> retList=new java.util.ArrayList<TsvcViewconfig>();
+        if(tableModel.getRowCount()>0){
+            Vector<Vector<String>> datas=(Vector<Vector<String>>)tableModel.getDataVector();
+            for(Vector<String> data : datas){
+                TsvcViewconfig tsvcViewconfig=new TsvcViewconfig(centerContentPanel.getUcNo(),
+                        StringUtils.valueOf(data.get(0)),
+                        StringUtils.valueOf(data.get(1)),
+                        StringUtils.valueOf(data.get(2)),
+                        StringUtils.valueOf(data.get(3)),
+                        StringUtils.valueOf(data.get(4)),
+                        StringUtils.valueOf(data.get(5)),
+                        StringUtils.valueOf(data.get(6)),
+                        StringUtils.valueOf(data.get(7)),
+                        StringUtils.valueOf(data.get(8)),
+                        StringUtils.valueOf(data.get(9)),
+                        StringUtils.valueOf(data.get(10)),
+                        StringUtils.valueOf(data.get(11)),
+                        StringUtils.valueOf(data.get(12)),
+                        StringUtils.valueOf(data.get(13)),
+                        StringUtils.valueOf(data.get(14)),
+                        StringUtils.valueOf(data.get(15)),
+                        StringUtils.valueOf(data.get(16)),
+                        StringUtils.valueOf(data.get(17))
+                );
+                retList.add(tsvcViewconfig);
+            }
+        }
+        return retList;
+    }
+    public TsvcViewconfig insert(){
+        TsvcViewconfig tsvcViewconfig=TsvcViewconfig.generateDefault();
+        tsvcViewconfig.setC_functionno(centerContentPanel.getUcNo());
+        int endindex=(tableModel.getRowCount()-1);
+        if(currentSelIndex>endindex){
+            currentSelIndex=endindex;
+        }
+        tableModel.insertRow(currentSelIndex,tsvcViewconfig.toVector());
+        this.cloumSelect(currentSelIndex);
+        return tsvcViewconfig;
+    }
+    /**
+     * 尾加
+     */
+    public TsvcViewconfig tailInsert(){
+        TsvcViewconfig tsvcViewconfig=TsvcViewconfig.generateDefault();
+        tsvcViewconfig.setC_functionno(centerContentPanel.getUcNo());
+        int index=(tableModel.getRowCount()-1);
+        String l_noStr=StringUtils.valueOf(tableModel.getValueAt(index,6));
+        if(StringUtils.isNotNullAndNotEmpty(l_noStr)){
+            Integer l_no=Integer.parseInt(l_noStr);
+            if(l_no!=null){
+                tsvcViewconfig.setL_no((l_no+10)+"");
+            }
+        }
 
+        tableModel.addRow(tsvcViewconfig.toVector());
+        index=(tableModel.getRowCount()-1);
+        this.cloumSelect(index);
+        return tsvcViewconfig;
+    }
+    public void removeSelect(){
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        int[] rows=table.getSelectedRows();
+        for (int i = 0; i < rows.length; i++) {
+            tableModel.removeRow(rows[i]-i);
+        }
+        if(tableModel.getRowCount()>0){
+            int endindex=(tableModel.getRowCount()-1);
+            if(rows[0]>endindex){
+                this.cloumSelect(endindex);
+            }else{
+                this.cloumSelect(rows[0]);
+            }
+        }else{
+            //全部删除完
+            currentSelIndex=0;
+        }
+
+    }
 }

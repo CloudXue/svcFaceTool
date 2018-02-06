@@ -1,7 +1,10 @@
 package view.centercontent;
 
+import bean.TsvcViewconfig;
 import constant.EnActionEvent;
 import control.MyActionListener;
+import service.SvcService;
+import service.impl.SvcServiceImpl;
 import view.centercontent.ucout.UcOutCenterTable;
 import view.factory.ColorFactory;
 import view.factory.FontFactory;
@@ -16,6 +19,7 @@ import java.awt.event.ActionListener;
  * Created by lyd on 2017/5/11.
  */
 public class UcOutMaintain extends BaseJPanel   implements ActionListener {
+    SvcService svcService=new SvcServiceImpl();
     private   CenterContentPanel centerContentPanel;
     //初始化输入输出
     private JButton initBtn=new JButton("初始化输入输出");
@@ -116,20 +120,39 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
     @Override
     public void onFocus(boolean refresh) {
         if(refresh){
-            //异步加载数据
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    centerTable.reloadUc(centerContentPanel.getUcNo());
-                    //选择第一行
-                    centerTable.cloumSelect(0);
-                }
-            }).start();
+            centerTable.reloadUc(centerContentPanel.getUcNo());
+
         }
     }
     @Override
     public void actionPerformed(ActionEvent e) {
         System.err.println(e.getActionCommand());
+        if(e.getActionCommand().equals(EnActionEvent.UCOUT_SAVE.getCmd())){
+            java.util.List<TsvcViewconfig> tsvcInterfaceList=centerTable.getAllColumnDatas();
+            //存盘
+            svcService.saveTsvcViewconfig(tsvcInterfaceList);
+            //刷新
+            centerTable.reloadUc(centerContentPanel.getUcNo());
+        }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_INIT.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_COPY.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_INSERT.getCmd())){
+            //插入
+            centerTable.insert();
+        }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_TAILINSERT.getCmd())){
+            //尾加
+            centerTable.tailInsert();
+        }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_DEL.getCmd())){
+            //删除
+            centerTable.removeSelect();
+        }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_REFRESH.getCmd())){
+            centerTable.reloadUc(centerContentPanel.getUcNo());
+        }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_UP.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_DOWN.getCmd())){
+
+        }
     }
 
 

@@ -1,5 +1,8 @@
 package service;
 
+import bean.TsvcInterface;
+import bean.TsvcViewconfig;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -33,4 +36,16 @@ public interface SvcService {
      * @return
      */
     public Map<String,String> getMidsearch();
+
+    /**
+     * 先删除，后保存。
+     * @param tsvcInterfaceList 同一uc的输出项
+     */
+    public void saveTsvcInterface(List<TsvcInterface> tsvcInterfaceList);
+
+    /**
+     * 先删除，后保存。
+     * @param tsvcViewconfigsList 同一uc的输出项
+     */
+    public void saveTsvcViewconfig(List<TsvcViewconfig> tsvcViewconfigsList);
 }

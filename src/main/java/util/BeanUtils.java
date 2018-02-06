@@ -17,7 +17,7 @@ public class BeanUtils {
         try {
             method = bean.getClass().getMethod(getGetMethodName(fieldName));
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             throw e;
         }
         return method.invoke(bean,new Object[]{});
@@ -107,7 +107,7 @@ public class BeanUtils {
             try {
                 value=getProperty(bean,name);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 value=null;
             }
             retMap.put(name,value);
