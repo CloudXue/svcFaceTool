@@ -117,19 +117,35 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
     @Override
     public void onFocus(boolean refresh) {
         if(refresh){
-            //异步加载数据
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    centerTable.reloadUc(centerContentPanel.getUcNo());
-                    //选择第一行
-                    centerTable.cloumSelect(0);
-                }
-            }).start();
+            centerTable.asynReloadUc(centerContentPanel.getUcNo());
         }
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.err.println(e.getActionCommand());
+        System.out.println(e.getActionCommand());
+        if(centerTable.isRefresh()){
+            System.out.println("正在刷新");
+            return;
+        }
+        if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_SAVECLICK.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_INIT.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_COPY.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_INSERT.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_TAILINSERT.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_DEL.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_REFRESH.getCmd())){
+            centerTable.asynReloadUc(centerContentPanel.getUcNo());
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_UP.getCmd())){
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_DOWN.getCmd())){
+
+        }
+
     }
 }

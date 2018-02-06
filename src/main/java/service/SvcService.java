@@ -1,6 +1,7 @@
 package service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -27,4 +28,9 @@ public interface SvcService {
      * @return
      */
     public List<String> getDictionies();
+    /**
+     * 获得辅助查询
+     * @return
+     */
+    public Map<String,String> getMidsearch();
 }

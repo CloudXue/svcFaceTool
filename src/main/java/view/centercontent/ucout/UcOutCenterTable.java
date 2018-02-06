@@ -136,6 +136,11 @@ public class UcOutCenterTable extends BaseJPanel {
         comboBox=new MapComboBox(mapModel);
         cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(3).setCellEditor( cellEditor );
+        //显示级别
+        mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewLevel());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(1).setCellEditor( cellEditor );
 
     }
     public void removeAll() {

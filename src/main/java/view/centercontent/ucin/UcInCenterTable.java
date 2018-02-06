@@ -3,9 +3,13 @@ package view.centercontent.ucin;
 import control.MyActionListener;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
+import util.SvcUtil;
 import view.centercontent.BaseJPanel;
 import view.centercontent.CenterContentPanel;
 import view.centercontent.UcInMaintain;
+import view.component.ComboBoxMapModel;
+import view.component.MapComboBox;
+import view.component.SvcTableCellEditor;
 import view.factory.FontFactory;
 
 import javax.swing.*;
@@ -30,6 +34,7 @@ public class UcInCenterTable extends BaseJPanel {
     private JTable table;
     DefaultTableModel tableModel = null;
     DefaultListSelectionModel model;
+    private Boolean isRefresh=false;
 
     public UcInCenterTable(MyActionListener myActionListener, UcInMaintain ucInMaintain, CenterContentPanel centerContentPanel) {
         this.myActionListener = myActionListener;
@@ -98,13 +103,40 @@ public class UcInCenterTable extends BaseJPanel {
         return title;
     }
 
+    /**
+     * 异步刷新
+     * @param uc
+     */
+    public void   asynReloadUc(String uc){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(!isRefresh()){
+                    System.out.println("开始刷新："+isRefresh());
+                    setIsRefresh(true);
+                    reloadUc(centerContentPanel.getUcNo());
+                    //选择第一行
+                    cloumSelect(0);
+                    /*try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }*/
+                    setIsRefresh(false);
+                }else{
+                    System.out.println("刷新中");
+                }
+
+            }
+        }).start();
+    }
     public void reloadUc(String uc) {
         try {
             removeAll();
             tableModel.setDataVector(svcService.getUcIn(uc), getTitle());
             for (int i = 0; i < table.getColumnCount(); i++) {
                 if (i == 2 || i == 3 || i == 4) {
-                    table.getColumnModel().getColumn(i).setPreferredWidth(120);
+                    table.getColumnModel().getColumn(i).setPreferredWidth(150);
                 }else{
                     //table.getColumnModel().getColumn(i).setPreferredWidth(75);
                 }
@@ -114,9 +146,68 @@ public class UcInCenterTable extends BaseJPanel {
         }
         TableColumnModel tcm = table.getColumnModel();
         //其实没有移除，仅仅隐藏显示而已,
-         tcm.removeColumn(tcm.getColumn(19));
-         tcm.removeColumn(tcm.getColumn(18));
+        if(tcm.getColumnCount()>19){
+            tcm.removeColumn(tcm.getColumn(19));
+        }
+        if(tcm.getColumnCount()>18){
+            tcm.removeColumn(tcm.getColumn(18));
+        }
          tcm.removeColumn(tcm.getColumn(1));
+        //初始化控件
+        initCombo(tcm);
+    }
+
+    /**
+     * 初始化下拉控件
+     * @param tcm
+     */
+    private void initCombo(TableColumnModel tcm){
+        //输入输出
+        ComboBoxMapModel mapModel=new ComboBoxMapModel(SvcUtil.getUcInFieldInOrOut());
+        JComboBox comboBox=new MapComboBox(mapModel);
+        SvcTableCellEditor cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(0).setCellEditor( cellEditor );
+        //数据库字段类型
+        mapModel=new ComboBoxMapModel(SvcUtil.getUcInDatabaseType());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(6).setCellEditor( cellEditor );
+
+        //非空
+        mapModel=new ComboBoxMapModel(SvcUtil.getUcInNotNull());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(7).setCellEditor( cellEditor );
+           //字段类别
+        mapModel=new ComboBoxMapModel(SvcUtil.getUcInFieldType());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(8).setCellEditor( cellEditor );
+        //条件
+        mapModel=new ComboBoxMapModel(SvcUtil.getUcInConditionType());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(9).setCellEditor( cellEditor );
+        //输入显示级别
+        mapModel=new ComboBoxMapModel(SvcUtil.getUcInViewLevel());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(11).setCellEditor( cellEditor );
+        //输入类型
+        mapModel=new ComboBoxMapModel(SvcUtil.getUcInViewType());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(12).setCellEditor( cellEditor );
+        //字典名称
+        mapModel=new ComboBoxMapModel(SvcUtil.getDiction());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(13).setCellEditor( cellEditor );
+        //辅助查询
+        mapModel=new ComboBoxMapModel(SvcUtil.getMidsearch());
+        comboBox=new MapComboBox(mapModel);
+        cellEditor=new SvcTableCellEditor(comboBox);
+        tcm.getColumn(14).setCellEditor( cellEditor );
 
     }
     public void removeAll() {
@@ -168,4 +259,17 @@ public class UcInCenterTable extends BaseJPanel {
         //ucDefineMaintain.tableSelect(index,functionno);
     }
 
+    private void setIsRefresh(boolean refresh){
+        if(this.isRefresh!=refresh){
+            synchronized (isRefresh){
+                if(this.isRefresh!=refresh){
+                    this.isRefresh=refresh;
+                }
+            };
+        }
+
+    }
+    public boolean isRefresh(){
+        return isRefresh;
+    }
 }

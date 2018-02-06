@@ -17,16 +17,25 @@ import java.util.Map;
 public class SvcUtil {
     private static SvcService svcService=new SvcServiceImpl();
     private static List<String> DICTIONARIES;
+    private static Map<String,String> MIDSEARCH;
+
 
     public static void init(){
         //初始化字字典
         DICTIONARIES=svcService.getDictionies();
-
+        //辅助查询
+        MIDSEARCH=svcService.getMidsearch();
     }
     public static String getSysName(){
         return "FUNDCRM";
     }
-
+    public static Map<String,String> getUcOutViewLevel(){
+        Map<String,String> map=new  LinkedHashMap<String,String>() ;
+        map.put("1:列表显示","1");
+        map.put("2:详细显示","2");
+        map.put("0:不显示","0");
+        return map;
+    }
     public static Map<String,String> getUcOutViewType(){
         Map<String,String> map=new  LinkedHashMap<String,String>() ;
         map.put("S:字符串","S");
@@ -49,7 +58,78 @@ public class SvcUtil {
         map.put("FY:亿","FY");
         return map;
     }
+    public static Map<String,String> getUcInFieldInOrOut(){
+        Map<String,String> map=new  LinkedHashMap<String,String>() ;
+        map.put("0:输入","0");
+        map.put("1:输出","1");
+        return map;
+    }
+    public static Map<String,String> getUcInDatabaseType(){
+        Map<String,String> map=new  LinkedHashMap<String,String>() ;
+        map.put("S:字符串","S");
+        map.put("D:日期","D");
+        map.put("C:字符","C");
+        map.put("I:整型","I");
+        map.put("F:浮点数","F");
+        return map;
+    }
+    public static Map<String,String> getUcInNotNull(){
+        Map<String,String> map=new  LinkedHashMap<String,String>() ;
+        map.put("1:非空","1");
+        map.put("D:可空","0");
+        return map;
+    }
+    public static Map<String,String> getUcInFieldType(){
+        Map<String,String> map=new  LinkedHashMap<String,String>() ;
+        map.put("0:普通","0");
+        map.put("1:主键","1");
+        map.put("2:查询条件(另条件：>,<,=,like,exist,incsub)","2");
+        map.put("3:传变量(property=var,则sql中应配成:var)","3");
+        return map;
+    }
+    public static Map<String,String> getUcInConditionType(){
+        Map<String,String> map=new  LinkedHashMap<String,String>() ;
+        map.put("=","=");
+        map.put(">=",">=");
+        map.put("<=","<=");
+        map.put("like","like");
+        map.put(">",">");
+        map.put("<","<");
+        map.put("exists","exists");
+        map.put("not exists","not exists");
+        map.put("incsub","incsub");
+        map.put("in","in");
+        map.put("not in","not in");
+        map.put("<>","<>");
+        map.put("rlike","rlike");
+        map.put("lrlike","lrlike");
+        return map;
+    }
+    public static Map<String,String> getUcInViewLevel(){
+        Map<String,String> map=new  LinkedHashMap<String,String>() ;
+        map.put("0:高级查询","0");
+        map.put("1:显示","1");
+        map.put("2:不显示","2");
+        return map;
+    }
+    public static Map<String,String> getUcInViewType(){
+        Map<String,String> map=new  LinkedHashMap<String,String>() ;
+        map.put("S:字符串","S");
+        map.put("N:字典显示","N");
+        map.put("D:日期","D");
+        map.put("T:时间","T");
+        map.put("DT:日期时间","DT");
+        map.put("C:字符","C");
+        map.put("I:整型","I");
+        map.put("F:浮点数(F4表示4位小数)","F");
+        map.put("F4:浮点数(4位小数)","F4");
+        map.put("M:辅助查询","M");
+        return map;
+    }
 
+    public static Map<String,String> getMidsearch(){
+        return MIDSEARCH;
+    }
     public static List<String> getDiction(){
         return DICTIONARIES;
     }

@@ -14,10 +14,7 @@ import util.DateUtil;
 import util.StringUtils;
 import util.SvcUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 
 /**
@@ -184,6 +181,21 @@ public class SvcServiceImpl implements SvcService {
         return retList;
     }
 
+    @Override
+    public Map<String, String> getMidsearch() {
+        Map<String, String> retMap = new LinkedHashMap<String, String>();
+        String sql = "select t.c_caption||'-'||t.c_type key,t.c_type value from tsvcmidsearch t  order by t.c_caption";
+        try {
+            List<Map<String, Object>> retMapList = hsiRightDao.queryForList(sql);
+            for (Map<String, Object> map : retMapList) {
+                retMap.put(valueOf(map.get("KEY")),valueOf(map.get("VALUE")));
+            }
+        } catch (Exception e) {
+            retMap.clear();
+            e.printStackTrace();
+        }
+        return retMap;
+    }
 
     private String valueOf(Object str) {
         return StringUtils.valueOf(str);
