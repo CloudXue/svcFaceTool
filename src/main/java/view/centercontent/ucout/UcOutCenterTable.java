@@ -231,9 +231,15 @@ public class UcOutCenterTable extends BaseJPanel {
     public TsvcViewconfig insert(){
         TsvcViewconfig tsvcViewconfig=TsvcViewconfig.generateDefault();
         tsvcViewconfig.setC_functionno(centerContentPanel.getUcNo());
-        int endindex=(tableModel.getRowCount()-1);
-        if(currentSelIndex>endindex){
+        if(tableModel.getRowCount()>0){
+            int endindex=(tableModel.getRowCount()-1);
+            if(currentSelIndex>endindex){
+                currentSelIndex=endindex;
+            }
+        }else{
+            int endindex=tableModel.getRowCount();
             currentSelIndex=endindex;
+            tsvcViewconfig.setL_no(10+"");
         }
         tableModel.insertRow(currentSelIndex,tsvcViewconfig.toVector());
         this.cloumSelect(currentSelIndex);
@@ -245,18 +251,27 @@ public class UcOutCenterTable extends BaseJPanel {
     public TsvcViewconfig tailInsert(){
         TsvcViewconfig tsvcViewconfig=TsvcViewconfig.generateDefault();
         tsvcViewconfig.setC_functionno(centerContentPanel.getUcNo());
-        int index=(tableModel.getRowCount()-1);
-        String l_noStr=StringUtils.valueOf(tableModel.getValueAt(index,6));
-        if(StringUtils.isNotNullAndNotEmpty(l_noStr)){
-            Integer l_no=Integer.parseInt(l_noStr);
-            if(l_no!=null){
-                tsvcViewconfig.setL_no((l_no+10)+"");
+        if(tableModel.getRowCount()>0){
+            int index=(tableModel.getRowCount()-1);
+            String l_noStr=StringUtils.valueOf(tableModel.getValueAt(index,6));
+            if(StringUtils.isNotNullAndNotEmpty(l_noStr)){
+                Integer l_no=Integer.parseInt(l_noStr);
+                if(l_no!=null){
+                    tsvcViewconfig.setL_no((l_no+10)+"");
+                }
             }
+            tableModel.addRow(tsvcViewconfig.toVector());
+            index=(tableModel.getRowCount()-1);
+            this.cloumSelect(index);
+        }else{
+            //无数据
+            tsvcViewconfig.setL_no(10+"");
+            tableModel.addRow(tsvcViewconfig.toVector());
+            int index=(tableModel.getRowCount()-1);
+            this.cloumSelect(index);
         }
 
-        tableModel.addRow(tsvcViewconfig.toVector());
-        index=(tableModel.getRowCount()-1);
-        this.cloumSelect(index);
+
         return tsvcViewconfig;
     }
     public void removeSelect(){

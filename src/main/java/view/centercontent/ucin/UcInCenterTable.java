@@ -314,9 +314,15 @@ public class UcInCenterTable extends BaseJPanel {
     public TsvcInterface insert(){
         TsvcInterface tsvcInterface=TsvcInterface.generateDefault();
         tsvcInterface.setC_functionno(centerContentPanel.getUcNo());
-        int endindex=(tableModel.getRowCount()-1);
-        if(currentSelIndex>endindex){
+        if(tableModel.getRowCount()>0){
+            int endindex=(tableModel.getRowCount()-1);
+            if(currentSelIndex>endindex){
+                currentSelIndex=endindex;
+            }
+        }else{
+            int endindex=tableModel.getRowCount();
             currentSelIndex=endindex;
+            tsvcInterface.setL_no(10+"");
         }
         tableModel.insertRow(currentSelIndex,tsvcInterface.toVector());
         this.cloumSelect(currentSelIndex);
@@ -328,18 +334,24 @@ public class UcInCenterTable extends BaseJPanel {
     public TsvcInterface tailInsert(){
         TsvcInterface tsvcInterface=TsvcInterface.generateDefault();
         tsvcInterface.setC_functionno(centerContentPanel.getUcNo());
-        int index=(tableModel.getRowCount()-1);
-        String l_noStr=StringUtils.valueOf(StringUtils.valueOf(tableModel.getValueAt(index,11)));
-        if(StringUtils.isNotNullAndNotEmpty(l_noStr)){
-            Integer l_no=Integer.parseInt(l_noStr);
-            if(l_no!=null){
-                tsvcInterface.setL_no((l_no+10)+"");
+        if(tableModel.getRowCount()>0){
+            int index=(tableModel.getRowCount()-1);
+            String l_noStr=StringUtils.valueOf(StringUtils.valueOf(tableModel.getValueAt(index,11)));
+            if(StringUtils.isNotNullAndNotEmpty(l_noStr)){
+                Integer l_no=Integer.parseInt(l_noStr);
+                if(l_no!=null){
+                    tsvcInterface.setL_no((l_no+10)+"");
+                }
             }
+            tableModel.addRow(tsvcInterface.toVector());
+            index=(tableModel.getRowCount()-1);
+            this.cloumSelect(index);
+        }else{
+            tsvcInterface.setL_no(10+"");
+            tableModel.addRow(tsvcInterface.toVector());
+            int index=(tableModel.getRowCount()-1);
+            this.cloumSelect(index);
         }
-
-        tableModel.addRow(tsvcInterface.toVector());
-        index=(tableModel.getRowCount()-1);
-        this.cloumSelect(index);
         return tsvcInterface;
     }
     public void removeSelect(){
