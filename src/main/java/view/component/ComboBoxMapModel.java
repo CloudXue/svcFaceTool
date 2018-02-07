@@ -45,17 +45,24 @@ public class ComboBoxMapModel  extends AbstractListModel<String> implements Comb
 
     @Override
     public void setSelectedItem(Object anItem) {
-        if(StringUtils.isNullOrEmpty(anItem.toString())){
+        if(anItem==null || StringUtils.isNullOrEmpty(anItem.toString())){
             selectedObject=objects.get(key.get(0));
         }else{
             if(objects.containsKey(anItem.toString())){
                 selectedObject=objects.get(anItem.toString());
+                fireContentsChanged(this, -1, -1);
             }else{
+                boolean hasItem=false;
                 for(Map.Entry<String,String> entry : objects.entrySet()){
                     if(anItem.toString().equals(entry.getValue())){
                         selectedObject=entry.getValue();
+                        hasItem=true;
                         break;
                     }
+                }
+                if(!hasItem){
+                    selectedObject=anItem.toString();
+                    fireContentsChanged(this, -1, -1);
                 }
             }
         }

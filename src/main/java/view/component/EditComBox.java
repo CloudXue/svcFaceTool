@@ -2,13 +2,14 @@ package view.component;
 
 import constant.EnActionEvent;
 import util.StringUtils;
+import view.component.ui.MyComboBoxUI;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.PlainDocument;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,27 +20,46 @@ import java.util.List;
  * 开发时间: 2018-02-01<br>
  * <br>
  */
-public class EditComBox extends JComboBox   implements ActionListener {
+public class EditComBox extends JComboBox   implements ActionListener,KeyListener {
     List<ActionListener> dataChangeListener=new ArrayList<ActionListener>();
     private  String previousValue=null;
     public EditComBox() {
         super();
-        //JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
-        //change the editor's document
-        //editor.setDocument(new FixedAutoSelection(getModel()));
-        setEditable(true);
-        addActionListener(this);
+        init();
+    }
+
+    public EditComBox(ComboBoxModel aModel) {
+        super(aModel);
+        init();
     }
 
     public EditComBox(Object[] items) {
         super(items);
-        //JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
-        //change the editor's document
-        //editor.setDocument(new FixedAutoSelection(getModel()));
-        //setEditable(true);
-        addActionListener(this);
+        init();
     }
+    private void init(){
+        setEditable(true);
+        setUI(new MyComboBoxUI());
+        ((MyComboBoxUI)getUI()).tips();
+        //JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
+        //editor.setDocument(new FixedAutoSelection(getModel()));
+        addActionListener(this);
+        getEditor().getEditorComponent().addKeyListener(this);
+        setFocusable(true);
+        /*this.addFocusListener(new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent e) {
+                System.out.println("focusGained");
+            }
 
+            @Override
+            public void focusLost(FocusEvent e) {
+                System.out.println("focusLost");
+                getModel().setSelectedItem(getEditor().getItem().toString());
+            }
+        });*/
+
+    }
     class FixedAutoSelection  extends PlainDocument{
         ComboBoxModel model;
         // flag to indicate if setSelectedItem has been called
@@ -102,5 +122,22 @@ public class EditComBox extends JComboBox   implements ActionListener {
 
     public void addDataChangeActionListener(ActionListener l) {
         dataChangeListener.add(l);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(e.getKeyChar()==e.VK_ENTER){
+            getModel().setSelectedItem(getEditor().getItem().toString());
+        }
+        //getModel().setSelectedItem(getEditor().getItem().toString());
     }
 }

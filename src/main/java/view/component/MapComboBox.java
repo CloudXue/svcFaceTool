@@ -1,5 +1,7 @@
 package view.component;
 
+import view.component.ui.MyComboBoxUI;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
@@ -29,34 +31,5 @@ public class MapComboBox extends JComboBox<String> {
         dataModel.setSelectedItem(anObject);
         super.setSelectedItem(anObject);
     }
-    class MyComboBoxUI extends BasicComboBoxUI {
-        public MyComboBoxUI() {
-            super();
-        }
 
-        public void tips() {
-            if (listBox != null) {
-                listBox.addMouseMotionListener(new MouseMotionListener() {
-                    Component oldCom;
-                    Component curCom;
-
-                    public void mouseMoved(MouseEvent e) {
-                        curCom = listBox.getCellRenderer()
-                                .getListCellRendererComponent(listBox, null, 0,
-                                        true, true);
-                        if (oldCom == null || oldCom != curCom) {
-                            oldCom = curCom;
-                        }
-                        if (oldCom instanceof JComponent) {
-                            ((JComponent) oldCom)
-                                    .setToolTipText(""+listBox.getSelectedValue());
-                        }
-                    }
-
-                    public void mouseDragged(MouseEvent e) {
-                    }
-                });
-            }
-        }
-    }
 }
