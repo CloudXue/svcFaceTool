@@ -1,5 +1,6 @@
 package view.centercontent.ucout;
 
+import bean.TsvcInterface;
 import bean.TsvcViewconfig;
 import control.MyActionListener;
 import service.SvcService;
@@ -15,11 +16,18 @@ import view.component.SvcTableCellEditor;
 import view.factory.FontFactory;
 
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -149,6 +157,17 @@ public class UcOutCenterTable extends BaseJPanel {
         cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(1).setCellEditor( cellEditor );
 
+        //程序属性
+        mapModel=new ComboBoxMapModel(getOutField(),"");
+        final EditComBox filedNameComboBox=new EditComBox(mapModel);
+        ((EditComBox)filedNameComboBox).addDataChangeActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(e.getSource());
+            }
+        });
+        cellEditor=new SvcTableCellEditor(filedNameComboBox);
+        tcm.getColumn(0).setCellEditor( cellEditor );
     }
     public void removeAll() {
         for (int i = tableModel.getDataVector().size() - 1; i >= 0; i--) {
@@ -292,5 +311,13 @@ public class UcOutCenterTable extends BaseJPanel {
             currentSelIndex=0;
         }
 
+    }
+    private Map<Object,String> getOutField(){
+        Map<Object,String> retMap=new LinkedHashMap<Object,String>();
+        List<TsvcInterface> tsvcInterfaceList= svcService.getOutTsvcInterface(centerContentPanel.getUcNo());
+        for(TsvcInterface tsvcInterface : tsvcInterfaceList){
+            retMap.put(tsvcInterface,tsvcInterface.getC_property());
+        }
+        return retMap;
     }
 }

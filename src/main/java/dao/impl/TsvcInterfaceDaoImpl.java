@@ -17,6 +17,21 @@ import java.util.Map;
  * <br>
  */
 public class TsvcInterfaceDaoImpl extends BaseDao<TsvcInterface> implements TsvcInterfaceDao{
+    @Override
+    public List<TsvcInterface> getOutTsvcInterface(String uc) throws Exception {
+        String sqlWhere=" where c_flag='1' and C_FUNCTIONNO ='"+uc+"' " +
+                " and not exists (select 1 from TSVCVIEWCONFIG t2  where " +
+                " t2.c_functionno='"+uc+"' and t2.c_property=t.c_property)" +
+                " order by t.l_no,t.c_fieldname ";
+        List<Map<String,Object>> maplist=getData(" t.* ",sqlWhere);
+        List<TsvcInterface> hsiRightList=new ArrayList<TsvcInterface>();
+        for (Map<String,Object> map : maplist){
+            TsvcInterface hsiRight=new TsvcInterface();
+            BeanUtils.covertMapToBean(hsiRight,map);
+            hsiRightList.add(hsiRight);
+        }
+        return hsiRightList;
+    }
 
     @Override
     public List<TsvcInterface> getTsvcInterfaceList(String uc) throws Exception {

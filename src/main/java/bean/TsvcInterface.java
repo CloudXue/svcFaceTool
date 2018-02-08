@@ -334,4 +334,9 @@ public class TsvcInterface extends BaseBean {
     public void setRowid(String rowid) {
         this.rowid = rowid;
     }
+
+    @Override
+    public String toString() {
+        return getC_property()+"-"+getC_explain();
+    }
 }

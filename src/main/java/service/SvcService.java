@@ -48,4 +48,11 @@ public interface SvcService {
      * @param tsvcViewconfigsList 同一uc的输出项
      */
     public void saveTsvcViewconfig(List<TsvcViewconfig> tsvcViewconfigsList);
+
+    /**
+     * 获取输入输出定义的输出的字段
+     * @param uc
+     * @return
+     */
+    public List<TsvcInterface> getOutTsvcInterface(String uc);
 }

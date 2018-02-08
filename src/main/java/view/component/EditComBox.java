@@ -5,7 +5,7 @@ import util.StringUtils;
 import view.component.ui.MyComboBoxUI;
 
 import javax.swing.*;
-import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -22,11 +22,13 @@ import java.util.List;
  * 开发时间: 2018-02-01<br>
  * <br>
  */
-public class EditComBox extends JComboBox   implements ActionListener,KeyListener {
+public class EditComBox extends JComboBox   implements KeyListener,ItemListener,Cloneable {
     List<ActionListener> dataChangeListener=new ArrayList<ActionListener>();
     private  String previousValue=null;
     private List<FocusListener> focusListenerList;
+
     private boolean firingActionEvent = false;
+    private boolean focusGained = false;
     public EditComBox() {
         super();
         init();
@@ -48,16 +50,69 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
         ((MyComboBoxUI)getUI()).tips();
         JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
         editor.setDocument(new FixedAutoSelection(getModel()));
-        addActionListener(this);
+        //addActionListener(this);
+        addItemListener(this);
         //添加按键监听，当按键释放则对控件赋值，这个值也会赋值到table里
         getEditor().getEditorComponent().addKeyListener(this);
 
 
         ComBoxFocusListener listener=new ComBoxFocusListener();
         getEditor().getEditorComponent().addFocusListener(listener);
+
         //this.addFocusListener(listener);
         //setFocusable(true);
     }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        //System.out.println(previousValue);
+        //System.out.println(e.getStateChange()+","+e.getItem()+"||--||"+getEditor().getItem().toString());
+        if(ItemEvent.SELECTED==e.getStateChange()){
+            if(StringUtils.isNullOrEmpty(e.getItem().toString())){
+                previousValue=getEditor().getItem().toString();
+                return ;
+            }
+            if(previousValue==null){
+                previousValue=getEditor().getItem().toString();
+                Object source=this;
+                if(this.getModel() instanceof ComboBoxMapModel){
+                    source=((ComboBoxMapModel)this.getModel()).getKey(e.getItem().toString());
+                }
+                ActionEvent event=new ActionEvent(source,1,"EditComBoxDataChange");
+                fireDataChangeListener(event);
+            }else{
+                if(!previousValue.equals(getEditor().getItem().toString())){
+                    Object source=this;
+                    if(this.getModel() instanceof ComboBoxMapModel){
+                        source=((ComboBoxMapModel)this.getModel()).getKey(e.getItem().toString());
+                        if(source==null){
+                            source=this;
+                        }
+                    }
+                    ActionEvent event=new ActionEvent(source,1,"EditComBoxDataChange");
+                    fireDataChangeListener(event);
+
+                    previousValue=getEditor().getItem().toString();
+
+                }
+            }
+        }else{
+            //System.out.println("focusGained"+focusGained);
+            if(focusGained){
+                if(previousValue==null){
+                    if(StringUtils.isNotNullAndNotEmpty(e.getItem().toString())){
+                        previousValue=getEditor().getItem().toString();
+                    }
+                }
+                focusGained=false;
+
+            }
+        }
+
+
+       // System.out.println(e);
+    }
+
     class FixedAutoSelection  extends PlainDocument{
         ComboBoxModel model;
         // flag to indicate if setSelectedItem has been called
@@ -110,23 +165,14 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(previousValue!=null){
-            if(!previousValue.equals(StringUtils.valueOf(getSelectedItem()))) {
-                previousValue = StringUtils.valueOf(getSelectedItem());
-                ActionEvent dataChange = new ActionEvent(this, ActionEvent.ACTION_FIRST, EnActionEvent.COMBOBOXDATACHANGE.getCmd());
-                for (ActionListener listener : dataChangeListener) {
-                    listener.actionPerformed(dataChange);
-                }
-            }
-        }else{
-            previousValue=StringUtils.valueOf(getSelectedItem());
-        }
-    }
 
     public void addDataChangeActionListener(ActionListener l) {
         dataChangeListener.add(l);
+    }
+    private void fireDataChangeListener(ActionEvent e){
+        for(ActionListener listener:dataChangeListener){
+            listener.actionPerformed(e);
+        }
     }
     protected void fireActionEvent(){
         fireActionEvent(false);
@@ -169,12 +215,18 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
     class ComBoxFocusListener implements FocusListener{
         @Override
         public void focusGained(FocusEvent e) {
-
+            focusGained=true;
+            previousValue=null;
+            //System.out.println("清空");
+           /* if(!getEditor().getItem().toString().equals(previousValue)){
+                previousValue=null;
+                System.out.println("清空");
+            }*/
         }
 
         @Override
         public void focusLost(FocusEvent e) {
-            getModel().setSelectedItem(getEditor().getItem().toString());
+
         }
     }
 
@@ -202,5 +254,14 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
             getEditor().setItem(anObject.toString());
         }
         super.setSelectedItem(anObject);
+    }
+
+    public  Object getSelectedItemReminder(){
+        return selectedItemReminder;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

@@ -255,6 +255,18 @@ public class SvcServiceImpl implements SvcService {
         }
     }
 
+    @Override
+    public List<TsvcInterface> getOutTsvcInterface(String uc) {
+        List<TsvcInterface> tsvcInterfaceList=null;
+        try {
+            tsvcInterfaceList=tsvcInterfaceDao.getOutTsvcInterface(uc);
+        } catch (Exception e) {
+            tsvcInterfaceList=new ArrayList<>();
+            e.printStackTrace();
+        }
+        return tsvcInterfaceList;
+    }
+
     private String valueOf(Object str) {
         return StringUtils.valueOf(str);
     }
