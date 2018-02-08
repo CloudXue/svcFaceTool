@@ -5,10 +5,12 @@ import util.StringUtils;
 import view.component.ui.MyComboBoxUI;
 
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.PlainDocument;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,8 @@ import java.util.List;
 public class EditComBox extends JComboBox   implements ActionListener,KeyListener {
     List<ActionListener> dataChangeListener=new ArrayList<ActionListener>();
     private  String previousValue=null;
+    private List<FocusListener> focusListenerList;
+    private boolean firingActionEvent = false;
     public EditComBox() {
         super();
         init();
@@ -38,27 +42,21 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
         init();
     }
     private void init(){
+        focusListenerList=new ArrayList<>();
         setEditable(true);
         setUI(new MyComboBoxUI());
         ((MyComboBoxUI)getUI()).tips();
-        //JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
-        //editor.setDocument(new FixedAutoSelection(getModel()));
+        JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
+        editor.setDocument(new FixedAutoSelection(getModel()));
         addActionListener(this);
+        //添加按键监听，当按键释放则对控件赋值，这个值也会赋值到table里
         getEditor().getEditorComponent().addKeyListener(this);
-        setFocusable(true);
-        /*this.addFocusListener(new FocusListener(){
-            @Override
-            public void focusGained(FocusEvent e) {
-                System.out.println("focusGained");
-            }
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                System.out.println("focusLost");
-                getModel().setSelectedItem(getEditor().getItem().toString());
-            }
-        });*/
 
+        ComBoxFocusListener listener=new ComBoxFocusListener();
+        getEditor().getEditorComponent().addFocusListener(listener);
+        //this.addFocusListener(listener);
+        //setFocusable(true);
     }
     class FixedAutoSelection  extends PlainDocument{
         ComboBoxModel model;
@@ -89,6 +87,13 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
             selecting = true;
             model.setSelectedItem(item);
             selecting = false;
+           /* if(item!=null && StringUtils.isNotNullAndNotEmpty(item.toString())){
+               if( getEditor().getItem().toString().equals(item)){
+                   selecting = false;
+               }
+            }else{
+                selecting = false;
+            }*/
         }
 
         private Object lookupItem(String pattern) {
@@ -96,7 +101,7 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
             for (int i=0, n=model.getSize(); i < n; i++) {
                 Object currentItem = model.getElementAt(i);
                 // current item starts with the pattern?
-                if (currentItem.toString().toUpperCase().startsWith(pattern.toUpperCase())) {
+                if (currentItem.toString().toUpperCase().contains(pattern.toUpperCase())) {
                     return currentItem;
                 }
             }
@@ -123,6 +128,55 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
     public void addDataChangeActionListener(ActionListener l) {
         dataChangeListener.add(l);
     }
+    protected void fireActionEvent(){
+        fireActionEvent(false);
+    }
+    protected void fireActionEvent(boolean stopCellEditing){
+        if (!firingActionEvent) {
+            // Set flag to ensure that an infinite loop is not created
+            firingActionEvent = true;
+            ActionEvent e = null;
+            // Guaranteed to return a non-null array
+            Object[] listeners = listenerList.getListenerList();
+            long mostRecentEventTime = EventQueue.getMostRecentEventTime();
+            int modifiers = 0;
+            AWTEvent currentEvent = EventQueue.getCurrentEvent();
+            if (currentEvent instanceof InputEvent) {
+                modifiers = ((InputEvent)currentEvent).getModifiers();
+            } else if (currentEvent instanceof ActionEvent) {
+                modifiers = ((ActionEvent)currentEvent).getModifiers();
+            }
+            // Process the listeners last to first, notifying
+            // those that are interested in this event
+            for ( int i = listeners.length-2; i>=0; i-=2 ) {
+                if ( listeners[i]==ActionListener.class ) {
+                    //DefaultCellEditor里事件会关闭下拉框
+                    if(!stopCellEditing){
+                        if((listeners[i+1]).getClass().getName().contains(DefaultCellEditor.class.getName())){
+                            continue;
+                        }
+                    }
+                    // Lazily create the event:
+                    e = new ActionEvent(this,ActionEvent.ACTION_PERFORMED,
+                            getActionCommand(),
+                            mostRecentEventTime, modifiers);
+                    ((ActionListener)listeners[i+1]).actionPerformed(e);
+                }
+            }
+            firingActionEvent = false;
+        }
+    }
+    class ComBoxFocusListener implements FocusListener{
+        @Override
+        public void focusGained(FocusEvent e) {
+
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            getModel().setSelectedItem(getEditor().getItem().toString());
+        }
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -131,13 +185,22 @@ public class EditComBox extends JComboBox   implements ActionListener,KeyListene
 
     @Override
     public void keyPressed(KeyEvent e) {
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(e.getKeyChar()==e.VK_ENTER){
-            getModel().setSelectedItem(getEditor().getItem().toString());
+        getModel().setSelectedItem(getEditor().getItem().toString());
+        //enter，触发事件，结束编辑
+        if(e.getKeyChar()==KeyEvent.VK_ENTER){
+            fireActionEvent(true);
         }
-        //getModel().setSelectedItem(getEditor().getItem().toString());
+    }
+    public void setSelectedItem(Object anObject) {
+        //回填选择的值
+        if(anObject!=null || StringUtils.isNotNullAndNotEmpty(anObject.toString())){
+            getEditor().setItem(anObject.toString());
+        }
+        super.setSelectedItem(anObject);
     }
 }

@@ -10,7 +10,7 @@ import view.centercontent.BaseJPanel;
 import view.centercontent.CenterContentPanel;
 import view.centercontent.UcOutMaintain;
 import view.component.ComboBoxMapModel;
-import view.component.MapComboBox;
+import view.component.EditComBox;
 import view.component.SvcTableCellEditor;
 import view.factory.FontFactory;
 
@@ -135,17 +135,17 @@ public class UcOutCenterTable extends BaseJPanel {
 
         //显示类型
         ComboBoxMapModel mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewType());
-        JComboBox comboBox=new MapComboBox(mapModel);
+        JComboBox comboBox=new EditComBox(mapModel);
         SvcTableCellEditor cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(2).setCellEditor( cellEditor );
         //字典
         mapModel=new ComboBoxMapModel(SvcUtil.getDiction());
-        comboBox=new MapComboBox(mapModel);
+        comboBox=new EditComBox(mapModel);
         cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(3).setCellEditor( cellEditor );
         //显示级别
         mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewLevel());
-        comboBox=new MapComboBox(mapModel);
+        comboBox=new EditComBox(mapModel);
         cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(1).setCellEditor( cellEditor );
 
