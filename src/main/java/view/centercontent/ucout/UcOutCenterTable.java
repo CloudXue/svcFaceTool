@@ -163,7 +163,9 @@ public class UcOutCenterTable extends BaseJPanel {
         ((EditComBox)filedNameComboBox).addDataChangeActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(e.getSource());
+                if(e.getSource() instanceof  TsvcInterface){
+                    backfill((TsvcInterface)e.getSource());
+                }
             }
         });
         cellEditor=new SvcTableCellEditor(filedNameComboBox);
@@ -319,5 +321,16 @@ public class UcOutCenterTable extends BaseJPanel {
             retMap.put(tsvcInterface,tsvcInterface.getC_property());
         }
         return retMap;
+    }
+    private void backfill(TsvcInterface tsvcInterface){
+        if(tsvcInterface==null){
+            return;
+        }
+        String viewName=StringUtils.valueOf(this.tableModel.getValueAt(currentSelIndex,5));
+        if(StringUtils.isNullOrEmpty(viewName)){
+            //可回填
+            this.tableModel.setValueAt(tsvcInterface.getC_explain(),currentSelIndex,5);
+            this.tableModel.setValueAt(tsvcInterface.getC_fieldtype(),currentSelIndex,3);
+        }
     }
 }
