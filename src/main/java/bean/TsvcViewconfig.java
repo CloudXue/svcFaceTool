@@ -16,7 +16,7 @@ public class TsvcViewconfig  extends BaseBean {
             "C_VIEWLEVEL,C_VIEWTYPE,C_DICNAME,C_VIEWNAME,C_RESERVE,L_NO,C_HYPERLINK,C_FRAMETYPE," +
             "C_CANSTAT,C_HIDDENELEM,C_EDITTYPE,C_INPUTTYPE,C_DEFAULTVALUE,C_LIMIT,C_MIDSEARCHNAME," +
             "C_EVENT,C_SEARCHLINK,C_LEN,C_PATTERN) VALUES ('%s','%s','%s','%s','%s','%s'," +
-            "'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')";
+            "'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');\n";
     public static TsvcViewconfig generateDefault(){
         TsvcViewconfig tsvcViewconfig=new TsvcViewconfig("","DEFAULT","","1",
                 "S", "","","","","","","",
