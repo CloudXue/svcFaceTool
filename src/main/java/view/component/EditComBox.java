@@ -68,7 +68,7 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
         //System.out.println(previousValue);
         //System.out.println(e.getStateChange()+","+e.getItem()+"||--||"+getEditor().getItem().toString());
         if(ItemEvent.SELECTED==e.getStateChange()){
-            fireActionEvent(true);
+            fireActionEvent(false);
             if(StringUtils.isNullOrEmpty(e.getItem().toString())){
                 previousValue=getEditor().getItem().toString();
                 return ;
