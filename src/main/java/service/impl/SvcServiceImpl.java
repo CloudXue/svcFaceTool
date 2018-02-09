@@ -1,14 +1,8 @@
 package service.impl;
 
 import bean.*;
-import dao.HsiRightDao;
-import dao.TsvcInterfaceDao;
-import dao.TsvcSqlDao;
-import dao.TsvcViewconfigDao;
-import dao.impl.HsiRightDaoImpl;
-import dao.impl.TsvcInterfaceDaoImpl;
-import dao.impl.TsvcSqlDaoImpl;
-import dao.impl.TsvcViewconfigDaoImpl;
+import dao.*;
+import dao.impl.*;
 import service.SvcService;
 import util.DateUtil;
 import util.StringUtils;
@@ -25,6 +19,7 @@ import java.util.*;
  * <br>
  */
 public class SvcServiceImpl implements SvcService {
+    SvcDao svcDao=new SvcDaoImpl();
     HsiRightDao hsiRightDao = new HsiRightDaoImpl();
     TsvcSqlDao tsvcSqlDao = new TsvcSqlDaoImpl();
     TsvcViewconfigDao tsvcViewconfigDao = new TsvcViewconfigDaoImpl();
@@ -37,6 +32,34 @@ public class SvcServiceImpl implements SvcService {
 
     public void initSystem() {
         SvcUtil.init();
+    }
+
+    public void findSqlField(String uc){
+        /**
+         * todo 未完成
+         * 1、处理sql
+         * 2、查询所有字段
+         * 3、获取所有表，
+         * 4、获取注释，表名+字段名
+         * 5、字段匹配第一注释，
+         * 6、一个字段有多个时候，由列表下拉出
+         */
+        String sql=" select * from HSI_RIGHT where 1<>1 ";
+        List<SqlFieldType> field= null;
+        try {
+            field = svcDao.findField(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<String > tableName=new ArrayList<>();
+        tableName.add("HSI_RIGHT");
+        tableName.add("TSVCSQL");
+        try {
+            Map<String,String> comm=svcDao.findFieldComments(tableName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(field);
     }
 
     @Override
