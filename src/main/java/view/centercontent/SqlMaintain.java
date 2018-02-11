@@ -122,7 +122,7 @@ public class SqlMaintain  extends BaseJPanel {
         northPanel.add(delBtn);
         northPanel.add(saveBtn);
         northPanel.add(refreshBtn);
-        northPanel.add(helpBtn);
+       // northPanel.add(helpBtn);
 
 
         //中间区域

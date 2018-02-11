@@ -99,14 +99,14 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
         northJPanel.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
         northJPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         northJPanel.add(initBtn);
-        northJPanel.add(copyBtn);
+        //northJPanel.add(copyBtn);
         northJPanel.add(insertBtn);
         northJPanel.add(tailInsertBtn);
         northJPanel.add(delBtn);
         northJPanel.add(saveBtn);
         northJPanel.add(refreshBtn);
-        northJPanel.add(upBtn);
-        northJPanel.add(downBtn);
+       // northJPanel.add(upBtn);
+        //northJPanel.add(downBtn);
         //</editor-fold>
 
 

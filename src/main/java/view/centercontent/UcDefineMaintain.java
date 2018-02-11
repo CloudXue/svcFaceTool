@@ -132,7 +132,7 @@ public class UcDefineMaintain extends BaseJPanel  {
         JPanel btnJpanel=new JPanel();
         FlowLayout flowLayout=new FlowLayout(FlowLayout.LEFT );
         btnJpanel.setLayout(flowLayout);
-        btnJpanel.add(insertBtn);
+       // btnJpanel.add(insertBtn);
         btnJpanel.add(tailInsertBtn);
         btnJpanel.add(delBtn);
         btnJpanel.add(saveBtn);

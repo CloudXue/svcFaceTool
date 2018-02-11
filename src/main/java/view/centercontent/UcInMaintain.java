@@ -105,14 +105,14 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         northJPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         northJPanel.add(initInBtn);
         northJPanel.add(initOutBtn);
-        northJPanel.add(copyBtn);
+       // northJPanel.add(copyBtn);
         northJPanel.add(insertBtn);
         northJPanel.add(tailInsertBtn);
         northJPanel.add(delBtn);
         northJPanel.add(saveBtn);
         northJPanel.add(refreshBtn);
-        northJPanel.add(upBtn);
-        northJPanel.add(downBtn);
+        //northJPanel.add(upBtn);
+        //northJPanel.add(downBtn);
         //</editor-fold>
 
 
