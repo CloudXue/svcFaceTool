@@ -42,7 +42,7 @@ public class SqlFieldType  implements Serializable {
 
             }
         }
-        tsvcInterface.setC_property(field);
+        tsvcInterface.setC_property(field.toLowerCase());
         tsvcInterface.setL_len(fieldLength+"");
         tsvcInterface.setC_fieldtype(getFieldTypeStr());
         if(way==0){
