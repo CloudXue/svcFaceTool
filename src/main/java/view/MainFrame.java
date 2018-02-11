@@ -72,12 +72,8 @@ public class MainFrame extends JFrame {
         centerPanel.addTab("");
     }
     public static void main(String[] args) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                svcService.initSystem();
-            }
-        }).start();
+        svcService.initSystem();
+
         if(args!=null && args.length>1){
             String logFilePaht=args[0];
             LogUtil.setFileLogPath(logFilePaht);

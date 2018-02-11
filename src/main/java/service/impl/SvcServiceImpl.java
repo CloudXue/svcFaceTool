@@ -31,7 +31,18 @@ public class SvcServiceImpl implements SvcService {
             "--*********************************************************";
 
     public void initSystem() {
-        SvcUtil.init();
+        try {
+            //基础数据需要同步加载
+            SystemData.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SvcUtil.init();
+            }
+        }).start();
     }
 
     public List<SqlFieldType> findSqlField(String uc){

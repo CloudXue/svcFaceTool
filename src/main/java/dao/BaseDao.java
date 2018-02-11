@@ -1,6 +1,7 @@
 package dao;
 
 import bean.BaseBean;
+import bean.SystemData;
 import util.BeanUtils;
 import util.StringUtils;
 
@@ -296,9 +297,10 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
 
     private Jdbcinfo getConninfo(){
         Jdbcinfo  jdbcinfo=new Jdbcinfo();
-        jdbcinfo.setUrl("jdbc:oracle:thin:@10.60.44.136:1521:mcs100");
-        jdbcinfo.setPaswword("test1");
-        jdbcinfo.setUsername("jats001");
+
+        jdbcinfo.setUrl(SystemData.getDataConnInfo().getJdbcurl());
+        jdbcinfo.setPaswword(SystemData.getDataConnInfo().getPaswword());
+        jdbcinfo.setUsername(SystemData.getDataConnInfo().getUsername());
         jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
 
         /*jdbcinfo.setUrl( "jdbc:mysql://localhost:3306/crm?"+
