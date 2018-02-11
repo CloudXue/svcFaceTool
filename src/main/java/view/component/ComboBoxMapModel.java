@@ -99,7 +99,9 @@ public class ComboBoxMapModel  extends AbstractListModel<String> implements Comb
     public String getElementAt(int index) {
         return key.get(index).toString();
     }
-
+    public String getElementValueAt(int index) {
+        return objects.get(key.get(index)).toString();
+    }
     /**
      * 通过value 获取对应的key
      * @param value

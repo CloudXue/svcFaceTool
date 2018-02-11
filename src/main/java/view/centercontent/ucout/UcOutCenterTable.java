@@ -271,6 +271,13 @@ public class UcOutCenterTable extends BaseJPanel {
      */
     public TsvcViewconfig tailInsert(){
         TsvcViewconfig tsvcViewconfig=TsvcViewconfig.generateDefault();
+        tailInsert(tsvcViewconfig);
+        return tsvcViewconfig;
+    }
+    /**
+     * 尾加
+     */
+    public TsvcViewconfig tailInsert(TsvcViewconfig tsvcViewconfig){
         tsvcViewconfig.setC_functionno(centerContentPanel.getUcNo());
         if(tableModel.getRowCount()>0){
             int index=(tableModel.getRowCount()-1);
@@ -311,6 +318,19 @@ public class UcOutCenterTable extends BaseJPanel {
         }else{
             //全部删除完
             currentSelIndex=0;
+        }
+
+    }
+    public void initData(){
+        List<TsvcInterface> tsvcInterfaceList= svcService.getOutTsvcInterface(centerContentPanel.getUcNo());
+        if(tsvcInterfaceList!=null && tsvcInterfaceList.size()>0){
+            for(TsvcInterface tsvcInterface : tsvcInterfaceList){
+                TsvcViewconfig tsvcViewconfig=TsvcViewconfig.generateDefault();
+                tsvcViewconfig.setC_property(tsvcInterface.getC_property());
+                tsvcViewconfig.setC_viewtype(tsvcInterface.getC_fieldtype());
+                tsvcViewconfig.setC_viewname(tsvcInterface.getC_explain());
+                tailInsert(tsvcViewconfig);
+            }
         }
 
     }

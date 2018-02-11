@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 功能说明: 可以编辑的下拉框<br>
+ * 功能说明: 可以编辑的下拉框,和配合使用ComboBoxMapModel<br>
  * 系统版本: 2.3.7.0 <br>
  * 开发人员: lyd
  * 开发时间: 2018-02-01<br>
@@ -49,7 +49,7 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
         setUI(new MyComboBoxUI());
         ((MyComboBoxUI)getUI()).tips();
         JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
-        editor.setDocument(new FixedAutoSelection(getModel()));
+        editor.setDocument(new FixedAutoSelection((ComboBoxMapModel)getModel()));
         //addActionListener(this);
         addItemListener(this);
         //添加按键监听，当按键释放则对控件赋值，这个值也会赋值到table里
@@ -78,6 +78,9 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
                 Object source=this;
                 if(this.getModel() instanceof ComboBoxMapModel){
                     source=((ComboBoxMapModel)this.getModel()).getKey(e.getItem().toString());
+                }
+                if(source==null){
+                    source=this;
                 }
                 ActionEvent event=new ActionEvent(source,1,"EditComBoxDataChange");
                 fireDataChangeListener(event);
@@ -115,11 +118,11 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
     }
 
     class FixedAutoSelection  extends PlainDocument{
-        ComboBoxModel model;
+        ComboBoxMapModel model;
         // flag to indicate if setSelectedItem has been called
         // subsequent calls to remove/insertString should be ignored
         boolean selecting=false;
-        public FixedAutoSelection(ComboBoxModel model) {
+        public FixedAutoSelection(ComboBoxMapModel model) {
             this.model = model;
         }
         public void remove(int offs, int len) throws BadLocationException {
@@ -264,5 +267,20 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+    public int getSelectedIndex() {
+        Object sObject =dataModel.getSelectedItem();
+        int i,c;
+        Object obj;
+
+        for ( i=0,c=dataModel.getSize();i<c;i++ ) {
+            obj = dataModel.getElementAt(i);
+            if ( obj != null && obj.equals(sObject) )
+                return i;
+            obj = ((ComboBoxMapModel)dataModel).getElementValueAt(i);
+            if ( obj != null && obj.equals(sObject) )
+                return i;
+        }
+        return -1;
     }
 }

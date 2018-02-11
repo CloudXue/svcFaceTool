@@ -130,11 +130,11 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
         if(e.getActionCommand().equals(EnActionEvent.UCOUT_SAVE.getCmd())){
             java.util.List<TsvcViewconfig> tsvcInterfaceList=centerTable.getAllColumnDatas();
             //存盘
-            svcService.saveTsvcViewconfig(tsvcInterfaceList);
+            svcService.saveTsvcViewconfig(tsvcInterfaceList,centerContentPanel.getUcNo());
             //刷新
             centerTable.reloadUc(centerContentPanel.getUcNo());
         }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_INIT.getCmd())){
-
+            centerTable.initData();
         }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_COPY.getCmd())){
 
         }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_INSERT.getCmd())){

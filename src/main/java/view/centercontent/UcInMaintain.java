@@ -1,5 +1,6 @@
 package view.centercontent;
 
+import bean.SqlFieldType;
 import bean.TsvcInterface;
 import constant.EnActionEvent;
 import control.MyActionListener;
@@ -14,6 +15,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  * Created by lyd on 2017/5/11.
@@ -22,7 +24,8 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
     SvcService svcService=new SvcServiceImpl();
     private   CenterContentPanel centerContentPanel;
     //初始化输入输出
-    private JButton initBtn=new JButton("初始化输入输出");
+    private JButton initInBtn=new JButton("初始化输入");
+    private JButton initOutBtn=new JButton("初始化输出");
     //拷贝自
     private JButton copyBtn=new JButton("拷贝自");
     //插入
@@ -57,7 +60,8 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
 
     private void init(){
         //<editor-fold desc="设置命令">
-        initBtn.setActionCommand(EnActionEvent.UCIN_INIT.getCmd());
+        initInBtn.setActionCommand(EnActionEvent.UCIN_INITIN.getCmd());
+        initOutBtn.setActionCommand(EnActionEvent.UCIN_INITOUT.getCmd());
         copyBtn.setActionCommand(EnActionEvent.UCIN_COPY.getCmd());
         insertBtn.setActionCommand(EnActionEvent.UCIN_INSERT.getCmd());
         tailInsertBtn.setActionCommand(EnActionEvent.UCIN_TAILINSERT.getCmd());
@@ -69,7 +73,8 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         //</editor-fold>
 
         //<editor-fold desc="设置监听">
-        initBtn.addActionListener(this);
+        initInBtn.addActionListener(this);
+        initOutBtn.addActionListener(this);
         copyBtn.addActionListener(this);
         insertBtn.addActionListener(this);
         tailInsertBtn.addActionListener(this);
@@ -81,7 +86,8 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         //</editor-fold>
 
         //<editor-fold desc="设置字体">
-        initBtn.setFont(FontFactory.getBtnFont());
+        initInBtn.setFont(FontFactory.getBtnFont());
+        initOutBtn.setFont(FontFactory.getBtnFont());
         copyBtn.setFont(FontFactory.getBtnFont());
         insertBtn.setFont(FontFactory.getBtnFont());
         tailInsertBtn.setFont(FontFactory.getBtnFont());
@@ -97,7 +103,8 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         //设置边框
         northJPanel.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
         northJPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        northJPanel.add(initBtn);
+        northJPanel.add(initInBtn);
+        northJPanel.add(initOutBtn);
         northJPanel.add(copyBtn);
         northJPanel.add(insertBtn);
         northJPanel.add(tailInsertBtn);
@@ -132,10 +139,18 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         if(e.getActionCommand().equals(EnActionEvent.UCIN_SAVE.getCmd())){
             java.util.List<TsvcInterface> tsvcInterfaceList=centerTable.getAllColumnDatas();
             //存盘
-            svcService.saveTsvcInterface(tsvcInterfaceList);
+            svcService.saveTsvcInterface(tsvcInterfaceList,centerContentPanel.getUcNo());
             //刷新
             centerTable.asynReloadUc(centerContentPanel.getUcNo());
-        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_INIT.getCmd())){
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_INITIN.getCmd())){
+            //初始化
+            List<SqlFieldType> fieldList= svcService.findSqlField(centerContentPanel.getUcNo());
+            centerTable.initIn(fieldList);
+
+        }else if(e.getActionCommand().equals(EnActionEvent.UCIN_INITOUT.getCmd())){
+            //初始化
+            List<SqlFieldType> fieldList= svcService.findSqlField(centerContentPanel.getUcNo());
+            centerTable.initOut(fieldList);
 
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_COPY.getCmd())){
 

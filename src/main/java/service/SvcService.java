@@ -1,5 +1,6 @@
 package service;
 
+import bean.SqlFieldType;
 import bean.TsvcInterface;
 import bean.TsvcViewconfig;
 
@@ -41,13 +42,13 @@ public interface SvcService {
      * 先删除，后保存。
      * @param tsvcInterfaceList 同一uc的输出项
      */
-    public void saveTsvcInterface(List<TsvcInterface> tsvcInterfaceList);
+    public void saveTsvcInterface(List<TsvcInterface> tsvcInterfaceList,String uc);
 
     /**
      * 先删除，后保存。
      * @param tsvcViewconfigsList 同一uc的输出项
      */
-    public void saveTsvcViewconfig(List<TsvcViewconfig> tsvcViewconfigsList);
+    public void saveTsvcViewconfig(List<TsvcViewconfig> tsvcViewconfigsList,String uc);
 
     /**
      * 获取输入输出定义的输出的字段
@@ -55,4 +56,5 @@ public interface SvcService {
      * @return
      */
     public List<TsvcInterface> getOutTsvcInterface(String uc);
+    public List<SqlFieldType> findSqlField(String uc);
 }

@@ -1,5 +1,6 @@
 package view.centercontent.ucin;
 
+import bean.SqlFieldType;
 import bean.TsvcInterface;
 import control.MyActionListener;
 import service.SvcService;
@@ -18,8 +19,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -217,6 +223,20 @@ public class UcInCenterTable extends BaseJPanel {
         cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(14).setCellEditor( cellEditor );
 
+        //SQL字段
+        mapModel=new ComboBoxMapModel(getOutField(),"");
+        final EditComBox filedNameComboBox=new EditComBox(mapModel);
+        ((EditComBox)filedNameComboBox).addDataChangeActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() instanceof  SqlFieldType){
+                    backfill((SqlFieldType)e.getSource());
+                }
+            }
+        });
+        cellEditor=new SvcTableCellEditor(filedNameComboBox);
+        tcm.getColumn(1).setCellEditor( cellEditor );
+
     }
     public void removeAll() {
         for (int i = tableModel.getDataVector().size() - 1; i >= 0; i--) {
@@ -311,8 +331,26 @@ public class UcInCenterTable extends BaseJPanel {
         }
         return retList;
     }
+    public void initIn(List<SqlFieldType> fieldList){
+        if(fieldList!=null && fieldList.size()>0){
+            for(SqlFieldType sqlFieldType : fieldList){
+                tailInsert(sqlFieldType.toTsvcInterface(0));
+            }
+        }
+    }
+    public void initOut(List<SqlFieldType> fieldList){
+        if(fieldList!=null && fieldList.size()>0){
+            for(SqlFieldType sqlFieldType : fieldList){
+                tailInsert(sqlFieldType.toTsvcInterface(1));
+            }
+        }
+    }
     public TsvcInterface insert(){
         TsvcInterface tsvcInterface=TsvcInterface.generateDefault();
+        insert(tsvcInterface);
+        return tsvcInterface;
+    }
+    private TsvcInterface insert(TsvcInterface tsvcInterface){
         tsvcInterface.setC_functionno(centerContentPanel.getUcNo());
         if(tableModel.getRowCount()>0){
             int endindex=(tableModel.getRowCount()-1);
@@ -333,6 +371,13 @@ public class UcInCenterTable extends BaseJPanel {
      */
     public TsvcInterface tailInsert(){
         TsvcInterface tsvcInterface=TsvcInterface.generateDefault();
+        tailInsert(tsvcInterface);
+        return tsvcInterface;
+    }
+    /**
+     * 尾加
+     */
+    public TsvcInterface tailInsert(TsvcInterface tsvcInterface){
         tsvcInterface.setC_functionno(centerContentPanel.getUcNo());
         if(tableModel.getRowCount()>0){
             int index=(tableModel.getRowCount()-1);
@@ -372,5 +417,26 @@ public class UcInCenterTable extends BaseJPanel {
             currentSelIndex=0;
         }
 
+    }
+    private Map<Object,String> getOutField(){
+        Map<Object,String> retMap=new LinkedHashMap<Object,String>();
+        List<SqlFieldType> sqlFieldTypeList= svcService.findSqlField(centerContentPanel.getUcNo());
+        for(SqlFieldType sqlFieldType : sqlFieldTypeList){
+            retMap.put(sqlFieldType,sqlFieldType.getField());
+        }
+        return retMap;
+    }
+    private void backfill(SqlFieldType sqlFieldType){
+        if(sqlFieldType==null){
+            return;
+        }
+        String viewName=StringUtils.valueOf(this.tableModel.getValueAt(currentSelIndex,3));
+        if(StringUtils.isNullOrEmpty(viewName)){
+            //可回填
+            this.tableModel.setValueAt(sqlFieldType.getFieldName(),currentSelIndex,3);
+            this.tableModel.setValueAt(sqlFieldType.getField().toLowerCase(),currentSelIndex,4);
+            this.tableModel.setValueAt(sqlFieldType.getFieldLength(),currentSelIndex,5);
+            this.tableModel.setValueAt(sqlFieldType.getFieldTypeStr(),currentSelIndex,7);
+        }
     }
 }

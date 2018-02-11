@@ -28,15 +28,19 @@ public class SvcDaoImpl extends BaseDao<BaseBean> implements SvcDao {
     public List<SqlFieldType> findField(String sql) throws Exception {
         List<SqlFieldType> fieldList = new ArrayList<SqlFieldType>();
         PreparedStatement pstmt = getPreStmt(sql);
-        ResultSet rs = pstmt.executeQuery();
-        ResultSetMetaData rsm = rs.getMetaData(); //获得列集
-        int col = rsm.getColumnCount();
-        for (int i = 1; i <= col; i++) {
-            SqlFieldType sqlFieldType=new SqlFieldType();
-            sqlFieldType.setField(rsm.getColumnLabel(i)) ;
-            sqlFieldType.setFieldType(rsm.getColumnType(i)); ;
-            sqlFieldType.setFieldLength(rsm.getColumnDisplaySize(i));
-            fieldList.add(sqlFieldType);
+        try {
+            ResultSet rs = pstmt.executeQuery();
+            ResultSetMetaData rsm = rs.getMetaData(); //获得列集
+            int col = rsm.getColumnCount();
+            for (int i = 1; i <= col; i++) {
+                SqlFieldType sqlFieldType=new SqlFieldType();
+                sqlFieldType.setField(rsm.getColumnLabel(i)) ;
+                sqlFieldType.setFieldType(rsm.getColumnType(i)); ;
+                sqlFieldType.setFieldLength(rsm.getColumnDisplaySize(i));
+                fieldList.add(sqlFieldType);
+            }
+        } finally {
+            pstmt.close();
         }
         return fieldList;
     }
@@ -50,7 +54,7 @@ public class SvcDaoImpl extends BaseDao<BaseBean> implements SvcDao {
           List<Map<String,Object>> mapList= queryForList(sql);
           if(mapList!=null && mapList.size()>0){
               for(Map<String,Object> map : mapList){
-                  commentsMap.put(map.get("TABLE_NAME")+"#"+map.get("COLUMN_NAME"), StringUtils.valueOf(map.get("COMMENTS")));
+                  commentsMap.put(map.get("TABLE_NAME")+"#"+map.get("COLUMN_NAME")+"#", StringUtils.valueOf(map.get("COMMENTS")));
               }
           }
           return commentsMap;

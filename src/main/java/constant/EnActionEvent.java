@@ -112,7 +112,11 @@ public enum EnActionEvent {
     /**
      * UC输入定义-初始化输入输出
      */
-    UCIN_INIT("UCIN_INIT"),
+    UCIN_INITIN("UCIN_INITIN"),
+    /**
+     * UC输入定义-初始化输入输出
+     */
+    UCIN_INITOUT("UCIN_INIT"),
     /**
      * UC输入定义-拷贝自
      */
