@@ -319,6 +319,12 @@ public class SvcServiceImpl implements SvcService {
             String[] sqlWords=retSql.split("=|\\s+");
             for(String word : sqlWords){
                 if(word.contains(":")){
+                    if(word.contains("(")){
+                        word=word.replaceAll("\\(","");
+                    }
+                    if(word.contains(")")){
+                        word=word.replaceAll("\\)","");
+                    }
                     retSql=retSql.replaceAll(word,"''");
                 }
             }
@@ -333,6 +339,10 @@ public class SvcServiceImpl implements SvcService {
         String currentTab="";
         for(String word : sqlWords){
             if(hasFrom){
+                if(word.equalsIgnoreCase("select")){
+                    hasFrom=false;
+                    continue;
+                }
                 if(word.equalsIgnoreCase("where")||word.equalsIgnoreCase("(")){
                     if(StringUtils.isNotNullAndNotEmpty(currentTab)){
                         tableName.add(currentTab.toUpperCase());
