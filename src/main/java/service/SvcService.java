@@ -3,6 +3,7 @@ package service;
 import bean.SqlFieldType;
 import bean.TsvcInterface;
 import bean.TsvcViewconfig;
+import control.MyActionListener;
 
 import java.util.List;
 import java.util.Map;
@@ -57,4 +58,5 @@ public interface SvcService {
      */
     public List<TsvcInterface> getOutTsvcInterface(String uc);
     public List<SqlFieldType> findSqlField(String uc);
+    public void setViewListener(MyActionListener viewListener);
 }

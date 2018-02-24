@@ -3,6 +3,7 @@ package view.centercontent;
 import bean.TsvcSql;
 import constant.EnActionEvent;
 import control.MyActionListener;
+import service.ServiceFactory;
 import service.TsvcSqlService;
 import service.impl.TsvcSqlServiceImpl;
 import util.StringUtils;
@@ -24,7 +25,7 @@ import java.util.Map;
  * Created by lyd on 2017/5/11.
  */
 public class SqlMaintain  extends BaseJPanel {
-    TsvcSqlService tsvcSqlService=new TsvcSqlServiceImpl();
+    TsvcSqlService tsvcSqlService= ServiceFactory.getTsvcSqlService();
     private boolean enableTestSql=false;
     /**
      * 数据，原始

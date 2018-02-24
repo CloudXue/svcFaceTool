@@ -24,4 +24,8 @@ public class FootBar  extends JToolBar {
         this.addSeparator();
         this.add(errorinfo);
     }
+    public void changeMsg(String status,String msg){
+        connstate.setText(status);
+        errorinfo.setText(msg);
+    }
 }

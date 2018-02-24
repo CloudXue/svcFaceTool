@@ -2,6 +2,7 @@ package view;
 
 import constant.ENWarningLevel;
 import control.MyActionListener;
+import service.ServiceFactory;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
 import util.LogUtil;
@@ -14,7 +15,7 @@ import java.io.File;
  * Created by lyd on 2017/1/4.
  */
 public class MainFrame extends JFrame {
-    static SvcService svcService=new SvcServiceImpl();
+    static SvcService svcService= ServiceFactory.getSvcService();
     private MenuBar menuBar;
     private ToolBar toolBar;
     private FootBar footBar;
@@ -35,6 +36,8 @@ public class MainFrame extends JFrame {
 
         //region 菜单
         myActionListener =new MyActionListener(this);
+        //设置服务里监听，用于后台提交信息到窗体
+        svcService.setViewListener(myActionListener);
         menuBar=new MenuBar(myActionListener);
         this.setJMenuBar(menuBar);
         //endregion
@@ -109,4 +112,8 @@ public class MainFrame extends JFrame {
         filePahtName=file.getAbsolutePath();
         return filePahtName;
     }
+    public void changeFootMsg(String status,String msg){
+        footBar.changeMsg(status,msg);
+    }
+
 }

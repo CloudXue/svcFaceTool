@@ -3,6 +3,7 @@ package view.centercontent;
 import bean.TsvcViewconfig;
 import constant.EnActionEvent;
 import control.MyActionListener;
+import service.ServiceFactory;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
 import view.centercontent.ucout.UcOutCenterTable;
@@ -19,7 +20,7 @@ import java.awt.event.ActionListener;
  * Created by lyd on 2017/5/11.
  */
 public class UcOutMaintain extends BaseJPanel   implements ActionListener {
-    SvcService svcService=new SvcServiceImpl();
+    SvcService svcService= ServiceFactory.getSvcService();
     private   CenterContentPanel centerContentPanel;
     //初始化输入输出
     private JButton initBtn=new JButton("初始化输入输出");

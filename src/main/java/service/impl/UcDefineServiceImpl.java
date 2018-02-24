@@ -1,6 +1,7 @@
 package service.impl;
 
 import bean.HsiRight;
+import dao.DaoFactory;
 import dao.HsiRightDao;
 import dao.impl.HsiRightDaoImpl;
 import service.UcDefineService;
@@ -12,7 +13,7 @@ import java.util.List;
  * Created by lyd on 2017-06-30.
  */
 public class UcDefineServiceImpl implements UcDefineService {
-    HsiRightDao hsiRightDao=new HsiRightDaoImpl();
+    HsiRightDao hsiRightDao= DaoFactory.getHsiRightDao();
     @Override
     public List<HsiRight> getAllUc() throws Exception {
         return hsiRightDao.getHsiRighFuzzy("");

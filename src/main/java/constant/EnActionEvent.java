@@ -4,6 +4,13 @@ package constant;
  * Created by lyd on 2017/1/4.
  */
 public enum EnActionEvent {
+
+    //region 公共
+    COMMOM_WARNING("COMMOM_WARNING",ENWarningLevel.WARNING),
+    COMMOM_ERROR("COMMOM_ERROR",ENWarningLevel.ERROR),
+    COMMOM_INFO("COMMOM_INFO",ENWarningLevel.INFO),
+    //endregion
+
     /**
      * 登录点击
      */
@@ -187,10 +194,13 @@ public enum EnActionEvent {
     UCOUT_DOWN("UCOUT_DOWN"),
 
 
+
+
     ;
     private String cmd;
     private String msg;
-
+    private Object obj;
+    private ENWarningLevel warningLevel=ENWarningLevel.INFO;
 
 
     EnActionEvent(String cmd) {
@@ -201,7 +211,10 @@ public enum EnActionEvent {
         this.cmd = cmd;
         this.msg = msg;
     }
-
+    EnActionEvent(String cmd, ENWarningLevel warningLevel) {
+        this.cmd = cmd;
+        this.warningLevel = warningLevel;
+    }
     public String getMsg() {
         return msg;
     }
@@ -212,5 +225,16 @@ public enum EnActionEvent {
 
     public String getCmd(){
         return this.cmd;
+    }
+
+    public ENWarningLevel getWarningLevel() {
+        return warningLevel;
+    }
+    public Object getObj() {
+        return obj;
+    }
+
+    public void setObj(Object obj) {
+        this.obj = obj;
     }
 }

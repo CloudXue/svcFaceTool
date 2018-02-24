@@ -2,6 +2,7 @@ package view.centercontent.fcdefine;
 
 import bean.HsiRight;
 import control.MyActionListener;
+import service.ServiceFactory;
 import service.UcDefineService;
 import service.impl.UcDefineServiceImpl;
 import util.StringUtils;
@@ -24,7 +25,7 @@ import java.util.List;
  * 功能表定义维护-列表显示界面
  */
 public class CenterTable  extends BaseJPanel {
-    UcDefineService ucDefineService=new UcDefineServiceImpl();
+    UcDefineService ucDefineService= ServiceFactory.getUcDefineService();
 
     private UcDefineMaintain ucDefineMaintain;
     private JTable table;

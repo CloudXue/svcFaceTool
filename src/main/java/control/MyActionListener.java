@@ -32,6 +32,11 @@ public class MyActionListener implements ActionListener {
 
     }
 
+    public void actionPerformedFromService(ENWarningLevel warningLevel,ActionEvent e) {
+        EnActionEvent enActionEvent=(EnActionEvent)e.getSource();
+        mainFrame.showMsg("警告",enActionEvent.getMsg(), ENWarningLevel.WARNING);
+
+    }
     public MyActionListener(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
     }

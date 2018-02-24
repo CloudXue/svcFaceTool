@@ -2,6 +2,7 @@ package view.centercontent;
 
 import constant.EnActionEvent;
 import control.MyActionListener;
+import service.ServiceFactory;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
 import util.DateUtil;
@@ -28,7 +29,7 @@ import java.util.List;
  * Created by lyd on 2017/5/11.
  */
 public class GenerateSql  extends BaseJPanel implements ActionListener {
-    private SvcService svcService=new SvcServiceImpl();
+    private SvcService svcService= ServiceFactory.getSvcService();
     private   CenterContentPanel centerContentPanel;
     /**
      *生成SQL

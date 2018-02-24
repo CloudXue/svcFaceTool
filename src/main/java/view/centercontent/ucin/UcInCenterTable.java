@@ -3,6 +3,7 @@ package view.centercontent.ucin;
 import bean.SqlFieldType;
 import bean.TsvcInterface;
 import control.MyActionListener;
+import service.ServiceFactory;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
 import util.StringUtils;
@@ -36,7 +37,7 @@ import java.util.Vector;
  * <br>
  */
 public class UcInCenterTable extends BaseJPanel {
-    private SvcService svcService = new SvcServiceImpl();
+    private SvcService svcService = ServiceFactory.getSvcService();
     private CenterContentPanel centerContentPanel;
     UcInMaintain ucInMaintain;
     private JTable table;

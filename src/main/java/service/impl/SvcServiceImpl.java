@@ -1,6 +1,8 @@
 package service.impl;
 
 import bean.*;
+import constant.EnActionEvent;
+import control.MyActionListener;
 import dao.*;
 import dao.impl.*;
 import service.SvcService;
@@ -19,11 +21,12 @@ import java.util.*;
  * <br>
  */
 public class SvcServiceImpl implements SvcService {
-    SvcDao svcDao=new SvcDaoImpl();
-    HsiRightDao hsiRightDao = new HsiRightDaoImpl();
-    TsvcSqlDao tsvcSqlDao = new TsvcSqlDaoImpl();
-    TsvcViewconfigDao tsvcViewconfigDao = new TsvcViewconfigDaoImpl();
-    TsvcInterfaceDao tsvcInterfaceDao = new TsvcInterfaceDaoImpl();
+    MyActionListener viewListener;
+    SvcDao svcDao=DaoFactory.getSvcDao();
+    HsiRightDao hsiRightDao = DaoFactory.getHsiRightDao();
+    TsvcSqlDao tsvcSqlDao = DaoFactory.getTsvcSqlDao();
+    TsvcViewconfigDao tsvcViewconfigDao =DaoFactory.getTsvcViewconfigDao();
+    TsvcInterfaceDao tsvcInterfaceDao = DaoFactory.getTsvcInterfaceDao();
     private final static String sqlHead = "--*********************************************************\n" +
             "--FUNDCRM系统初始化脚本\n" +
             "--创建日期：%1$s\n" +
@@ -374,5 +377,13 @@ public class SvcServiceImpl implements SvcService {
             currentTab=null ;
         }
         return tableName;
+    }
+    public void throwErrorMsg(EnActionEvent enActionEvent, String msg){
+        //logger.info("提交事件："+enActionEvent.getCmd()+",消息："+msg);
+        viewListener.actionPerformedFromService(enActionEvent.getWarningLevel(),MyActionListener.getActionEvent(enActionEvent,msg));
+    }
+
+    public void setViewListener(MyActionListener viewListener) {
+        this.viewListener = viewListener;
     }
 }

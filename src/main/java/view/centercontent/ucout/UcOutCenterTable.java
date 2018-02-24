@@ -3,6 +3,7 @@ package view.centercontent.ucout;
 import bean.TsvcInterface;
 import bean.TsvcViewconfig;
 import control.MyActionListener;
+import service.ServiceFactory;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
 import util.StringUtils;
@@ -38,7 +39,7 @@ import java.util.Vector;
  * <br>
  */
 public class UcOutCenterTable extends BaseJPanel {
-    private SvcService svcService = new SvcServiceImpl();
+    private SvcService svcService = ServiceFactory.getSvcService();
     private CenterContentPanel centerContentPanel;
     UcOutMaintain ucOutMaintain;
     private JTable table;

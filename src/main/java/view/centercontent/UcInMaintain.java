@@ -4,6 +4,7 @@ import bean.SqlFieldType;
 import bean.TsvcInterface;
 import constant.EnActionEvent;
 import control.MyActionListener;
+import service.ServiceFactory;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
 import view.centercontent.ucin.UcInCenterTable;
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by lyd on 2017/5/11.
  */
 public class UcInMaintain extends BaseJPanel  implements ActionListener {
-    SvcService svcService=new SvcServiceImpl();
+    SvcService svcService= ServiceFactory.getSvcService();
     private   CenterContentPanel centerContentPanel;
     //初始化输入输出
     private JButton initInBtn=new JButton("初始化输入");

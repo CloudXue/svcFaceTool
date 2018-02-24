@@ -1,5 +1,6 @@
 package util;
 
+import service.ServiceFactory;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  * <br>
  */
 public class SvcUtil {
-    private static SvcService svcService=new SvcServiceImpl();
+    private static SvcService svcService= ServiceFactory.getSvcService();
     private static List<String> DICTIONARIES;
     private static Map<String,String> MIDSEARCH;
 

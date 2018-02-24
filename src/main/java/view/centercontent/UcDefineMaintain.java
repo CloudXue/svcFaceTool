@@ -2,6 +2,7 @@ package view.centercontent;
 
 import bean.HsiRight;
 import constant.EnActionEvent;
+import service.ServiceFactory;
 import service.UcDefineService;
 import service.impl.UcDefineServiceImpl;
 import util.CommonUtil;
@@ -29,7 +30,7 @@ import java.util.Map;
  */
 public class UcDefineMaintain extends BaseJPanel  {
     private   CenterContentPanel centerContentPanel;
-    UcDefineService ucDefineService=new UcDefineServiceImpl();
+    UcDefineService ucDefineService= ServiceFactory.getUcDefineService();
     private JButton insertBtn;    //插入按钮
     private JButton tailInsertBtn;//尾加按钮
     private JButton delBtn;       //删除按钮

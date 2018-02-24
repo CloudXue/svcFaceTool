@@ -1,6 +1,7 @@
 package service.impl;
 
 import bean.TsvcSql;
+import dao.DaoFactory;
 import dao.TsvcSqlDao;
 import dao.impl.TsvcSqlDaoImpl;
 import service.TsvcSqlService;
@@ -14,7 +15,7 @@ import util.StringUtils;
  * <br>
  */
 public class TsvcSqlServiceImpl implements TsvcSqlService {
-    TsvcSqlDao tsvcSqlDao = new TsvcSqlDaoImpl();
+    TsvcSqlDao tsvcSqlDao = DaoFactory.getTsvcSqlDao();
 
     @Override
     public TsvcSql getTsvcSql(String ucNo) {
