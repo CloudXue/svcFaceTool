@@ -123,25 +123,20 @@ public class UcOutCenterTable extends BaseJPanel {
 
     public void reloadUc(String uc) {
         TableColumnModel tcm = table.getColumnModel();
-        try {
-            removeAll();
-            tableModel.setDataVector(svcService.getUcOut(uc), getTitle());
-            //其实没有移除，仅仅隐藏显示而已,
-            tcm.removeColumn(tcm.getColumn(18));
-            tcm.removeColumn(tcm.getColumn(0));
-            for (int i = 0; i < table.getColumnCount(); i++) {
-                if (i ==0 || i == 3 || i == 4) {
-                    table.getColumnModel().getColumn(i).setPreferredWidth(120);
-                }else{
-                    //table.getColumnModel().getColumn(i).setPreferredWidth(75);
-                }
+        removeAll();
+        tableModel.setDataVector(svcService.getUcOut(uc), getTitle());
+        //其实没有移除，仅仅隐藏显示而已,
+        tcm.removeColumn(tcm.getColumn(18));
+        tcm.removeColumn(tcm.getColumn(0));
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            if (i == 0 || i == 3 || i == 4) {
+                table.getColumnModel().getColumn(i).setPreferredWidth(120);
+            } else {
+                //table.getColumnModel().getColumn(i).setPreferredWidth(75);
             }
-            //选择第一行
-            cloumSelect(0);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
+        //选择第一行
+        cloumSelect(0);
         //显示类型
         ComboBoxMapModel mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewType());
         JComboBox comboBox=new EditComBox(mapModel);

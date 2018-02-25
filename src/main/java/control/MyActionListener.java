@@ -1,5 +1,6 @@
 package control;
 
+import bean.SystemData;
 import constant.ENWarningLevel;
 import constant.EnActionEvent;
 import view.MainFrame;
@@ -34,8 +35,16 @@ public class MyActionListener implements ActionListener {
 
     public void actionPerformedFromService(ENWarningLevel warningLevel,ActionEvent e) {
         EnActionEvent enActionEvent=(EnActionEvent)e.getSource();
-        mainFrame.showMsg("警告",enActionEvent.getMsg(), ENWarningLevel.WARNING);
-
+        if(enActionEvent==EnActionEvent.SYSTEM_SUCSTART){
+            String jdbcurl=SystemData.getDataConnInfo().getJdbcurl();
+            jdbcurl=jdbcurl.substring(jdbcurl.indexOf("@"),jdbcurl.length());
+            mainFrame.changeFootMsg(SystemData.getDataConnInfo().getUsername()+"/"+
+                    SystemData.getDataConnInfo().getPaswword()+"/"+jdbcurl,"连接成功","");
+        }else if(enActionEvent==EnActionEvent.SYSTEM_FAILSTART) {
+            mainFrame.showMsg("警告",enActionEvent.getMsg(), ENWarningLevel.WARNING);
+        }else{
+            mainFrame.showMsg("警告",enActionEvent.getMsg(), ENWarningLevel.WARNING);
+        }
     }
     public MyActionListener(MainFrame mainFrame) {
         this.mainFrame = mainFrame;

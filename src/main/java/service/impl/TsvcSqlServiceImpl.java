@@ -1,10 +1,15 @@
 package service.impl;
 
 import bean.TsvcSql;
+import constant.EnActionEvent;
 import dao.DaoFactory;
 import dao.TsvcSqlDao;
 import dao.impl.TsvcSqlDaoImpl;
+import org.apache.log4j.Logger;
+import service.ServiceFactory;
+import service.SvcService;
 import service.TsvcSqlService;
+import util.LogUtil;
 import util.StringUtils;
 
 /**
@@ -15,14 +20,17 @@ import util.StringUtils;
  * <br>
  */
 public class TsvcSqlServiceImpl implements TsvcSqlService {
+    private static Logger logger= LogUtil.getLogger(TsvcSqlServiceImpl.class);
     TsvcSqlDao tsvcSqlDao = DaoFactory.getTsvcSqlDao();
+    private SvcService svcService = ServiceFactory.getSvcService();
 
     @Override
     public TsvcSql getTsvcSql(String ucNo) {
         try {
             return tsvcSqlDao.getTsvcSql(ucNo);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("查询配置sql异常：",e);
+            svcService.throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
         }
         return null;
     }
@@ -32,8 +40,8 @@ public class TsvcSqlServiceImpl implements TsvcSqlService {
         if (StringUtils.isNotNullAndNotEmpty(tsvcSql.getC_functionno())) {
             TsvcSql tsvcSqlDb = null;
             try {
+                tsvcSqlDao.openTransaction();
                 tsvcSqlDb = tsvcSqlDao.getTsvcSql(tsvcSql.getC_functionno());
-
                 if (StringUtils.isNullOrEmpty(tsvcSql.getC_sqlstatement()) ) {
                     if(tsvcSqlDb != null){
                         //如果没有sql  删除
@@ -50,8 +58,11 @@ public class TsvcSqlServiceImpl implements TsvcSqlService {
                         tsvcSqlDao.insert(tsvcSql);
                     }
                 }
+                tsvcSqlDao.commitTransaction();
             } catch (Exception e) {
-                e.printStackTrace();
+                tsvcSqlDao.rollbackTransaction();
+                logger.error("保存sql异常：",e);
+                svcService.throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
             }
         }
     }

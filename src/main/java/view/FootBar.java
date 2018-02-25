@@ -15,9 +15,9 @@ public class FootBar  extends JToolBar {
         init();
     }
     private void init(){
-        conninfo=new JLabel("jats101@127.0.0.1/mcs100");
+        conninfo=new JLabel("*");
         connstate=new JLabel("未连接数据库");
-        errorinfo=new JLabel("errorinfo");
+        errorinfo=new JLabel("*");
         this.add(conninfo);
         this.addSeparator();
         this.add(connstate);
@@ -25,6 +25,11 @@ public class FootBar  extends JToolBar {
         this.add(errorinfo);
     }
     public void changeMsg(String status,String msg){
+        connstate.setText(status);
+        errorinfo.setText(msg);
+    }
+    public void changeMsg(String conninfoStr,String status,String msg){
+        conninfo.setText(conninfoStr);
         connstate.setText(status);
         errorinfo.setText(msg);
     }

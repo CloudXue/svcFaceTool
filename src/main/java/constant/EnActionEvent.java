@@ -193,8 +193,16 @@ public enum EnActionEvent {
      */
     UCOUT_DOWN("UCOUT_DOWN"),
 
-
-
+    //region 服务端事件
+    /**
+     * 后端初始化完成
+     */
+    SYSTEM_SUCSTART("SYSTEM_SUCSTART"),
+    /**
+     * 后端初始化失败
+     */
+    SYSTEM_FAILSTART("SYSTEM_FAILSTART"),
+    //endregion
 
     ;
     private String cmd;

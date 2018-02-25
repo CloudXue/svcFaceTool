@@ -21,7 +21,7 @@ public class SvcUtil {
     private static Map<String,String> MIDSEARCH;
 
 
-    public static void init(){
+    public static void init() throws Exception {
         //初始化字字典
         DICTIONARIES=svcService.getDictionies();
         //辅助查询

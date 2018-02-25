@@ -146,11 +146,7 @@ public class CenterTable  extends BaseJPanel {
 
     private Vector<Vector<String>> getData(String condition){
         List<HsiRight> hsiRightList=new ArrayList<HsiRight>();
-        try {
-            hsiRightList=ucDefineService.getAllUc(condition);
-        } catch (Exception e) {
-            handleExceptionMsg(e);
-        }
+        hsiRightList=ucDefineService.getAllUc(condition);
         Vector<Vector<String>> dataVector=new Vector<Vector<String>>();
         for(HsiRight hsiRight : hsiRightList){
             dataVector.add(hsiRight.toVector());

@@ -9,16 +9,15 @@ import java.util.List;
  * uc定义
  */
 public interface UcDefineService {
-    public List<HsiRight> getAllUc() throws Exception;
-    public List<HsiRight> getAllUc( String condition) throws Exception;
-    public HsiRight getUc(String functionno) throws Exception;
+    public List<HsiRight> getAllUc() ;
+    public List<HsiRight> getAllUc( String condition) ;
+    public HsiRight getUc(String functionno) ;
     /**
      *
      * @param delList
      * @param addUcList
      * @param editUcList
-     * @throws Exception
      */
-    public void save(List<String> delList,List<HsiRight> addUcList,List<HsiRight> editUcList) throws Exception;
+    public void save(List<String> delList,List<HsiRight> addUcList,List<HsiRight> editUcList) ;
 
 }

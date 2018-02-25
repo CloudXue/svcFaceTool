@@ -181,14 +181,12 @@ public class UcDefineMaintain extends BaseJPanel  {
             hsiRight=editUcMap.get(index+"");
         }else{
             opttype=FootPanel.OPTTYPE_MOD;
-            try {
-                if(StringUtils.isNotNullAndNotEmpty(functionno)){
-                    //不为空才去查
-                    hsiRight = ucDefineService.getUc(functionno);
-                }
-            } catch (Exception e) {
-                handleExceptionMsg(e);
+
+            if(StringUtils.isNotNullAndNotEmpty(functionno)){
+                //不为空才去查
+                hsiRight = ucDefineService.getUc(functionno);
             }
+
         }
         if(hsiRight==null){
             //更改title
@@ -293,12 +291,7 @@ public class UcDefineMaintain extends BaseJPanel  {
                 List addUcList= CommonUtil.mapvalueToList(addUcMap);
                 List editUcList= CommonUtil.mapvalueToList(editUcMap);
                 boolean suc=true;
-                try {
-                    ucDefineService.save(deleUcList,addUcList,editUcList);
-                } catch (Exception e1) {
-                    handleExceptionMsg(e1);
-                    suc=false;
-                }
+                ucDefineService.save(deleUcList,addUcList,editUcList);
                 if(suc){
                     //清空所有缓存数据
                     addUcMap.clear();;

@@ -3,6 +3,7 @@ package service;
 import bean.SqlFieldType;
 import bean.TsvcInterface;
 import bean.TsvcViewconfig;
+import constant.EnActionEvent;
 import control.MyActionListener;
 
 import java.util.List;
@@ -25,19 +26,19 @@ public interface SvcService {
      */
     public String generateSql(String uc) ;
 
-    public Vector<Vector<String>> getUcIn(String uc) throws Exception;
-    public Vector<Vector<String>> getUcOut(String uc) throws Exception;
+    public Vector<Vector<String>> getUcIn(String uc) ;
+    public Vector<Vector<String>> getUcOut(String uc) ;
 
     /**
      * 获得字典和字典缓存
      * @return
      */
-    public List<String> getDictionies();
+    public List<String> getDictionies() throws Exception;
     /**
      * 获得辅助查询
      * @return
      */
-    public Map<String,String> getMidsearch();
+    public Map<String,String> getMidsearch() throws Exception;
 
     /**
      * 先删除，后保存。
@@ -59,4 +60,5 @@ public interface SvcService {
     public List<TsvcInterface> getOutTsvcInterface(String uc);
     public List<SqlFieldType> findSqlField(String uc);
     public void setViewListener(MyActionListener viewListener);
+    public  void throwErrorMsg(EnActionEvent enActionEvent, String msg);
 }

@@ -5,8 +5,10 @@ import constant.EnActionEvent;
 import control.MyActionListener;
 import dao.*;
 import dao.impl.*;
+import org.apache.log4j.Logger;
 import service.SvcService;
 import util.DateUtil;
+import util.LogUtil;
 import util.StringUtils;
 import util.SvcUtil;
 
@@ -21,6 +23,8 @@ import java.util.*;
  * <br>
  */
 public class SvcServiceImpl implements SvcService {
+    private static Logger logger= LogUtil.getLogger(SvcServiceImpl.class);
+
     MyActionListener viewListener;
     SvcDao svcDao=DaoFactory.getSvcDao();
     HsiRightDao hsiRightDao = DaoFactory.getHsiRightDao();
@@ -38,12 +42,18 @@ public class SvcServiceImpl implements SvcService {
             //基础数据需要同步加载
             SystemData.init();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("基础数据加载异常",e);
+            throwErrorMsg(EnActionEvent.SYSTEM_FAILSTART,"基础数据加载异常"+e.getMessage());
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
-                SvcUtil.init();
+                try {
+                    SvcUtil.init();
+                    throwErrorMsg(EnActionEvent.SYSTEM_SUCSTART,"启动成功");
+                } catch (Exception e) {
+                    throwErrorMsg(EnActionEvent.SYSTEM_FAILSTART,"启动成功");
+                }
             }
         }).start();
     }
@@ -78,7 +88,8 @@ public class SvcServiceImpl implements SvcService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("查询sql配置字段异常",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
         }
         return field;
     }
@@ -128,7 +139,8 @@ public class SvcServiceImpl implements SvcService {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("生成sql异常",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
         }
 
 
@@ -141,9 +153,16 @@ public class SvcServiceImpl implements SvcService {
     }
 
     @Override
-    public Vector<Vector<String>> getUcIn(String uc) throws Exception {
+    public Vector<Vector<String>> getUcIn(String uc)  {
         Vector<Vector<String>> retVector = new Vector<Vector<String>>();
-        List<TsvcInterface> tsvcInterfaceList = tsvcInterfaceDao.getTsvcInterfaceListHasOrder(uc);
+        List<TsvcInterface> tsvcInterfaceList = null;
+        try {
+            tsvcInterfaceList = tsvcInterfaceDao.getTsvcInterfaceListHasOrder(uc);
+        } catch (Exception e) {
+            logger.error("查询配置输入输出异常：",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            return retVector;
+        }
         if (tsvcInterfaceList != null) {
             for (TsvcInterface tsvcInterface : tsvcInterfaceList) {
                 Vector<String> vector = new Vector<String>();
@@ -175,9 +194,16 @@ public class SvcServiceImpl implements SvcService {
     }
 
     @Override
-    public Vector<Vector<String>> getUcOut(String uc) throws Exception {
+    public Vector<Vector<String>> getUcOut(String uc) {
         Vector<Vector<String>> retVector = new Vector<Vector<String>>();
-        List<TsvcViewconfig> tsvcViewconfigList = tsvcViewconfigDao.getTsvcViewconfigHasOrder(uc);
+        List<TsvcViewconfig> tsvcViewconfigList = null;
+        try {
+            tsvcViewconfigList = tsvcViewconfigDao.getTsvcViewconfigHasOrder(uc);
+        } catch (Exception e) {
+            logger.error("查询配置显示异常：",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            return retVector;
+        }
         if (tsvcViewconfigList != null) {
             for (TsvcViewconfig tsvcViewconfig : tsvcViewconfigList) {
                 Vector<String> vector = new Vector<String>();
@@ -207,7 +233,7 @@ public class SvcServiceImpl implements SvcService {
     }
 
     @Override
-    public List<String> getDictionies() {
+    public List<String> getDictionies() throws Exception {
         List<String> retList = new ArrayList<String>();
         String sql = "select * from (select t.c_caption caption from tdictionarycache t where  t.c_keyvalue='#' " +
                 " union all " +
@@ -220,13 +246,14 @@ public class SvcServiceImpl implements SvcService {
             }
         } catch (Exception e) {
             retList.clear();
-            e.printStackTrace();
+            logger.error("获取字典数据异常",e);
+            throw e;
         }
         return retList;
     }
 
     @Override
-    public Map<String, String> getMidsearch() {
+    public Map<String, String> getMidsearch() throws Exception {
         Map<String, String> retMap = new LinkedHashMap<String, String>();
         String sql = "select t.c_caption||'-'||t.c_type key,t.c_type value from tsvcmidsearch t  order by t.c_caption";
         try {
@@ -236,7 +263,8 @@ public class SvcServiceImpl implements SvcService {
             }
         } catch (Exception e) {
             retMap.clear();
-            e.printStackTrace();
+            logger.error("获取辅助查询数据异常",e);
+            throw e;
         }
         return retMap;
     }
@@ -260,12 +288,9 @@ public class SvcServiceImpl implements SvcService {
             //提交事务
             tsvcInterfaceDao.commitTransaction();
         } catch (Exception e) {
-            try {
-                tsvcInterfaceDao.rollbackTransaction();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
+            tsvcInterfaceDao.rollbackTransaction();
+            logger.error("保存功能输入输出异常",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
         }
     }
 
@@ -288,12 +313,9 @@ public class SvcServiceImpl implements SvcService {
             //提交事务
             tsvcViewconfigDao.commitTransaction();
         } catch (Exception e) {
-            try {
-                tsvcViewconfigDao.rollbackTransaction();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
+            tsvcViewconfigDao.rollbackTransaction();
+            logger.error("保存功能查询显示异常",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
         }
     }
 
@@ -304,7 +326,8 @@ public class SvcServiceImpl implements SvcService {
             tsvcInterfaceList=tsvcInterfaceDao.getOutTsvcInterface(uc);
         } catch (Exception e) {
             tsvcInterfaceList=new ArrayList<>();
-            e.printStackTrace();
+            logger.error("获取查询显示数据异常：",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
         }
         return tsvcInterfaceList;
     }
@@ -388,7 +411,7 @@ public class SvcServiceImpl implements SvcService {
         }
         return tableName;
     }
-    public void throwErrorMsg(EnActionEvent enActionEvent, String msg){
+    public  void throwErrorMsg(EnActionEvent enActionEvent, String msg){
         //logger.info("提交事件："+enActionEvent.getCmd()+",消息："+msg);
         viewListener.actionPerformedFromService(enActionEvent.getWarningLevel(),MyActionListener.getActionEvent(enActionEvent,msg));
     }

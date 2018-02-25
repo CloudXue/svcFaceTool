@@ -17,7 +17,7 @@ public interface IBaseDao<TDtoModel extends BaseBean>  {
     /**
      * 回滚事务
      */
-    public void rollbackTransaction() throws Exception ;
+    public void rollbackTransaction() ;
     /**
      * 提交事务
      */

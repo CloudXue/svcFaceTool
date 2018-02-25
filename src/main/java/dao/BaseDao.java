@@ -2,7 +2,9 @@ package dao;
 
 import bean.BaseBean;
 import bean.SystemData;
+import org.apache.log4j.Logger;
 import util.BeanUtils;
+import util.LogUtil;
 import util.StringUtils;
 
 import java.sql.*;
@@ -13,6 +15,7 @@ import java.util.*;
  * Created by lyd on 2017-06-29.
  */
 public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<TDtoModel> {
+    private static Logger logger= LogUtil.getLogger(BaseDao.class);
     protected abstract  String getTableName();
 
     /**
@@ -43,10 +46,14 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
     /**
      * 回滚事务
      */
-    public void rollbackTransaction() throws Exception {
-        getConn();
-        connection.rollback();
-        connection.setAutoCommit(true);
+    public void rollbackTransaction()  {
+        try {
+            getConn();
+            connection.rollback();
+            connection.setAutoCommit(true);
+        } catch (Exception e) {
+            logger.error("回滚数据异常",e);
+        }
     }
     /**
      * 提交事务

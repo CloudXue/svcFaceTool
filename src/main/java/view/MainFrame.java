@@ -115,5 +115,7 @@ public class MainFrame extends JFrame {
     public void changeFootMsg(String status,String msg){
         footBar.changeMsg(status,msg);
     }
-
+    public void changeFootMsg(String conninfoStr,String status,String msg){
+        footBar.changeMsg(conninfoStr,status,msg);
+    }
 }

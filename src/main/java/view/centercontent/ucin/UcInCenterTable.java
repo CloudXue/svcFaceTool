@@ -146,25 +146,21 @@ public class UcInCenterTable extends BaseJPanel {
         }).start();*/
     }
     public void reloadUc(String uc) {
-        try {
-            removeAll();
-            tableModel.setDataVector(svcService.getUcIn(uc), getTitle());
-            for (int i = 0; i < table.getColumnCount(); i++) {
-                if (i == 2 || i == 3 || i == 4) {
-                    table.getColumnModel().getColumn(i).setPreferredWidth(150);
-                }else{
-                    //table.getColumnModel().getColumn(i).setPreferredWidth(75);
-                }
+        removeAll();
+        tableModel.setDataVector(svcService.getUcIn(uc), getTitle());
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            if (i == 2 || i == 3 || i == 4) {
+                table.getColumnModel().getColumn(i).setPreferredWidth(150);
+            } else {
+                //table.getColumnModel().getColumn(i).setPreferredWidth(75);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         TableColumnModel tcm = table.getColumnModel();
         //其实没有移除，仅仅隐藏显示而已,
-        if(tcm.getColumnCount()>19){
+        if (tcm.getColumnCount() > 19) {
             tcm.removeColumn(tcm.getColumn(19));
         }
-        if(tcm.getColumnCount()>18){
+        if (tcm.getColumnCount() > 18) {
             tcm.removeColumn(tcm.getColumn(18));
         }
          tcm.removeColumn(tcm.getColumn(1));
