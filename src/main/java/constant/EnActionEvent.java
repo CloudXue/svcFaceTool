@@ -107,6 +107,7 @@ public enum EnActionEvent {
      *生成sql,生成
      */
     GENERATESQL_GEN("GENERATESQL_GEN"),
+    GENERATESQL_GEN_NODATE("GENERATESQL_GEN_NODATE"),
     /**
      *生成sql,打开文件
      */

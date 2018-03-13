@@ -35,6 +35,7 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
      *生成SQL
      */
     private SButton generateSqlBtn=new SButton("生成SQL");
+    private SButton generateSqlNoDateBtn=new SButton("生成SQL（无日期）");
     private JTextField filepath = new JTextField(60);
 
     private SButton filechooserbtn=new SButton("选择目录");
@@ -65,9 +66,12 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
         jLabel2.setFont(FontFactory.getJTableFont());
 
         generateSqlBtn.setActionCommand(EnActionEvent.GENERATESQL_GEN.getCmd());
+        generateSqlNoDateBtn.setActionCommand(EnActionEvent.GENERATESQL_GEN_NODATE.getCmd());
         filechooserbtn.setActionCommand(EnActionEvent.GENERATESQL_OPENFILESEL.getCmd());
         saveBtn.setActionCommand(EnActionEvent.GENERATESQL_SAVE.getCmd());
+        generateSqlNoDateBtn.addActionListener(this);
         generateSqlBtn.addActionListener(this);
+        generateSqlNoDateBtn.addActionListener(this);
         filechooserbtn.addActionListener(this);
         saveBtn.addActionListener(this);
 
@@ -77,6 +81,7 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
         northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         northPanel.add(jLabel1);
         northPanel.add(generateSqlBtn);
+        northPanel.add(generateSqlNoDateBtn);
         northPanel.add(jLabel2);
         northPanel.add(filepath);
         northPanel.add(filechooserbtn);
@@ -111,6 +116,30 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
                 filePathNamestr+=separator+getFileName();
             }else{
                 filePathNamestr=SystemUtil.getSvcDirectory()+getFileName();
+            }
+
+            if(File.separator.equals("/")){
+                filePathNamestr=filePathNamestr.replaceAll("\\\\",separator);
+            }else{
+                filePathNamestr=filePathNamestr.replaceAll("/","\\\\");
+            }
+            filepath.setText(filePathNamestr);
+            sqlText.setText(sql);
+        }else if(e.getActionCommand().equals(EnActionEvent.GENERATESQL_GEN_NODATE.getCmd())){
+            String sql=svcService.generateSql(centerContentPanel.getUcNo());
+            String filePathNamestr=filepath.getText();
+            String separator="/";
+            if(File.separator.equals("/")){
+                separator="/";
+            }else{
+                separator="\\";
+            }
+            if(StringUtils.isNotNullAndNotEmpty(filePathNamestr)){
+
+                filePathNamestr=filePathNamestr.substring(0,filePathNamestr.lastIndexOf(separator));
+                filePathNamestr+=separator+getFileNameNoDate();
+            }else{
+                filePathNamestr=SystemUtil.getSvcDirectory()+getFileNameNoDate();
             }
 
             if(File.separator.equals("/")){
@@ -218,5 +247,12 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
      */
     private String getFileName(){
         return centerContentPanel.getUcCodeField()+"_"+ DateUtil.getCurrentDateString("yyyyMMdd")+".sql";
+    }
+    /**
+     * 返回文件名称
+     * @return
+     */
+    private String getFileNameNoDate(){
+        return centerContentPanel.getUcCodeField()+".sql";
     }
 }
