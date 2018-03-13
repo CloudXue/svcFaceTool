@@ -200,9 +200,10 @@ public class CenterTable  extends BaseJPanel {
         //region 隐藏最后一列
         TableColumnModel tcm = table.getColumnModel();
         //其实没有移除，仅仅隐藏显示而已
-        TableColumn tc = tcm.getColumn(6);
-       //todo 方便测试，先不隐藏
-        // tcm.removeColumn(tc);
+        TableColumn tc = tcm.getColumn(7);
+        tcm.removeColumn(tc);
+        tc = tcm.getColumn(6);
+        tcm.removeColumn(tc);
         //endregion
     }
 
