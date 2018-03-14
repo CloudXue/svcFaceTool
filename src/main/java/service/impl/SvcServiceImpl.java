@@ -1,10 +1,12 @@
 package service.impl;
 
 import bean.*;
+import constant.ENWarningLevel;
 import constant.EnActionEvent;
 import control.MyActionListener;
 import dao.*;
 import dao.impl.*;
+import exception.ViewException;
 import org.apache.log4j.Logger;
 import service.SvcService;
 import util.DateUtil;
@@ -414,6 +416,9 @@ public class SvcServiceImpl implements SvcService {
     public  void throwErrorMsg(EnActionEvent enActionEvent, String msg){
         //logger.info("提交事件："+enActionEvent.getCmd()+",消息："+msg);
         viewListener.actionPerformedFromService(enActionEvent.getWarningLevel(),MyActionListener.getActionEvent(enActionEvent,msg));
+        if(enActionEvent.getWarningLevel().equals(ENWarningLevel.ERROR)){
+            throw new ViewException(msg);
+        }
     }
 
     public void setViewListener(MyActionListener viewListener) {
