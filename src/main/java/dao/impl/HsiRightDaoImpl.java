@@ -60,7 +60,7 @@ public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
         if (StringUtils.isNotNullAndNotEmpty(condition)) {
             sqlWhere = " where C_FUNCTIONNO like '%"+condition+"%' " +
                     " or C_RIGHTCODE like '%"+condition+"%'" +
-                    " or C_RIGHTNAME like '%"+condition+"%'";
+                    " or C_RIGHTNAME like '%"+condition+"%' order by C_RIGHTCODE";
         }
         List<Map<String,Object>> maplist=getData(" t.*,t.C_FUNCTIONNO as c_functionno_hid,C_RIGHTCODE as c_rightcode_hid ",sqlWhere);
         for (Map<String,Object> map : maplist){
