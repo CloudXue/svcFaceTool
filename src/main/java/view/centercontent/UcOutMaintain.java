@@ -106,8 +106,8 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
         northJPanel.add(delBtn);
         northJPanel.add(saveBtn);
         northJPanel.add(refreshBtn);
-       // northJPanel.add(upBtn);
-        //northJPanel.add(downBtn);
+        northJPanel.add(upBtn);
+        northJPanel.add(downBtn);
         //</editor-fold>
 
 
@@ -150,9 +150,15 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
         }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_REFRESH.getCmd())){
             centerTable.reloadUc(centerContentPanel.getUcNo());
         }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_UP.getCmd())){
-
+            int index=centerTable.getCurrentSelIndex();
+            if(index>0){
+                centerTable.cloumSelect(index-1);
+            }
         }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_DOWN.getCmd())){
-
+            int index=centerTable.getCurrentSelIndex();
+            if(index<centerTable.getTotalCount()-1){
+                centerTable.cloumSelect(index+1);
+            }
         }
     }
 

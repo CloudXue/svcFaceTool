@@ -112,8 +112,8 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         northJPanel.add(delBtn);
         northJPanel.add(saveBtn);
         northJPanel.add(refreshBtn);
-        //northJPanel.add(upBtn);
-        //northJPanel.add(downBtn);
+        northJPanel.add(upBtn);
+        northJPanel.add(downBtn);
         //</editor-fold>
 
 
@@ -167,9 +167,15 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_REFRESH.getCmd())){
             centerTable.asynReloadUc(centerContentPanel.getUcNo());
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_UP.getCmd())){
-
+            int index=centerTable.getCurrentSelIndex();
+            if(index>0){
+                centerTable.cloumSelect(index-1);
+            }
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_DOWN.getCmd())){
-
+            int index=centerTable.getCurrentSelIndex();
+            if(index<centerTable.getTotalCount()-1){
+                centerTable.cloumSelect(index+1);
+            }
         }
 
     }

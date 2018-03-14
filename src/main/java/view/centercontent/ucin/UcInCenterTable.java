@@ -272,6 +272,7 @@ public class UcInCenterTable extends BaseJPanel {
      * @param index
      */
     public void cloumSelect(int index) {
+        this.currentSelIndex=index;
         //选中这一行
         model.setSelectionInterval(index, index);
         //滚动到这一行
@@ -435,5 +436,12 @@ public class UcInCenterTable extends BaseJPanel {
             this.tableModel.setValueAt(sqlFieldType.getFieldLength(),currentSelIndex,5);
             this.tableModel.setValueAt(sqlFieldType.getFieldTypeStr(),currentSelIndex,7);
         }
+    }
+
+    public int getCurrentSelIndex() {
+        return currentSelIndex;
+    }
+    public int getTotalCount() {
+        return tableModel.getRowCount();
     }
 }
