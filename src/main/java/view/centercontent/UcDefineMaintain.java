@@ -197,7 +197,7 @@ public class UcDefineMaintain extends BaseJPanel  {
             footPanel.setFootPanelData(null,index,"");
         }else{
             //更改title
-            centerContentPanel.setTitle(hsiRight.getC_functionno());
+            centerContentPanel.setTitle(hsiRight.getC_rightname());
             //头部更改
             centerContentPanel.setHeadValue(hsiRight.getC_rightcode(),hsiRight.getC_functionno(),hsiRight.getC_rightname());
             //底部修改
