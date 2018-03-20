@@ -69,6 +69,7 @@ public class SvcUtil {
         Map<String,String> map=new  LinkedHashMap<String,String>() ;
         map.put("S:字符串","S");
         map.put("D:日期","D");
+        map.put("DT:日期时间","DT");
         map.put("C:字符","C");
         map.put("I:整型","I");
         map.put("F:浮点数","F");
