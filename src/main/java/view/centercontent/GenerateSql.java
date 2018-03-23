@@ -124,7 +124,7 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
                 filePathNamestr=filePathNamestr.replaceAll("/","\\\\");
             }
             filepath.setText(filePathNamestr);
-            sqlText.setText(sql);
+            refreshSqlText(sql);
         }else if(e.getActionCommand().equals(EnActionEvent.GENERATESQL_GEN_NODATE.getCmd())){
             String sql=svcService.generateSql(centerContentPanel.getUcNo());
             String filePathNamestr=filepath.getText();
@@ -148,7 +148,7 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
                 filePathNamestr=filePathNamestr.replaceAll("/","\\\\");
             }
             filepath.setText(filePathNamestr);
-            sqlText.setText(sql);
+            refreshSqlText(sql);
         }else if(e.getActionCommand().equals(EnActionEvent.GENERATESQL_OPENFILESEL.getCmd())){
             String filePath= MainFrame.openFileSelect();
             if(StringUtils.isNotNullAndNotEmpty(filePath)){
@@ -254,5 +254,31 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
      */
     private String getFileNameNoDate(){
         return centerContentPanel.getUcCodeField()+".sql";
+    }
+    private void refreshSqlText(final String sql){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(30);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                sqlText.setText("loading..");
+                try {
+                    Thread.sleep(30);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                sqlText.setText("loading...");
+                try {
+                    Thread.sleep(30);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                sqlText.setText("loading....");
+                sqlText.setText(sql);
+            }
+        }).start();
     }
 }
