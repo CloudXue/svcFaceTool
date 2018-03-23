@@ -78,10 +78,23 @@ public class SvcServiceImpl implements SvcService {
             if(StringUtils.isNullOrEmpty(tsvcSql.getC_sqlstatement())){
                 return field;
             }
+
             String sql=analysisUcSql(tsvcSql.getC_sqlstatement());
+            List<String > sourcetableName=getTableName(sql);
+            List<String> tableNameList=new ArrayList<>();
+            //<editor-fold desc="处理R table">
+            for(String tableName : sourcetableName){
+                String table=tableName;
+                if(table.startsWith("R")){
+                    table=table.substring(1,table.length());
+                    sql=sql.replaceAll(tableName,table);
+                }
+                tableNameList.add(table.toUpperCase());
+            }
+            //</editor-fold>
             field = svcDao.findField(sql);
-            List<String > tableName=getTableName(sql);
-            Map<String,String> comm=svcDao.findFieldComments(tableName);
+
+            Map<String,String> comm=svcDao.findFieldComments(tableNameList);
             for(Map.Entry<String,String> entry : comm.entrySet()){
                 for(SqlFieldType sqlFieldType : field){
                     if(entry.getKey().toUpperCase().contains("#"+sqlFieldType.getField().toUpperCase()+"#")){
@@ -370,7 +383,10 @@ public class SvcServiceImpl implements SvcService {
                 }
                 if(word.equalsIgnoreCase("where")||word.equalsIgnoreCase("(")){
                     if(StringUtils.isNotNullAndNotEmpty(currentTab)){
-                        tableName.add(currentTab.toUpperCase());
+                        if(!tableName.contains(currentTab)){
+                            tableName.add(currentTab);
+                        }
+
                         currentTab=null ;
                     }
                     hasFrom=false;
@@ -379,7 +395,9 @@ public class SvcServiceImpl implements SvcService {
                 }
                 if(StringUtils.isNotNullAndNotEmpty(currentTab)){
                     if(word.contains(",")||word.equalsIgnoreCase("join")){
-                        tableName.add(currentTab.toUpperCase());
+                        if(!tableName.contains(currentTab)){
+                            tableName.add(currentTab);
+                        }
                         currentTab=null ;
                         if(word.contains(",")){
                             if(word.indexOf(",")<word.length()){
@@ -390,8 +408,11 @@ public class SvcServiceImpl implements SvcService {
                     }
                 }else{
                     if(word.contains(",")){
-                        currentTab=null ;
-                        tableName.add(word.replaceAll(",","").toUpperCase());
+                        currentTab=word.replaceAll(",","") ;
+                        if(!tableName.contains(currentTab)){
+                            tableName.add(currentTab);
+                        }
+                        currentTab=null;
                         if(word.indexOf(",")<word.length()){
                             currentTab=word.substring(word.indexOf(","),word.length());
                         }
@@ -408,7 +429,9 @@ public class SvcServiceImpl implements SvcService {
             }
         }
         if(StringUtils.isNotNullAndNotEmpty(currentTab)){
-            tableName.add(currentTab.toUpperCase());
+            if(!tableName.contains(currentTab)){
+                tableName.add(currentTab);
+            }
             currentTab=null ;
         }
         return tableName;
