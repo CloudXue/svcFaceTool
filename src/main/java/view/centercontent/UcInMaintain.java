@@ -13,6 +13,8 @@ import view.factory.FontFactory;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +23,7 @@ import java.util.List;
 /**
  * Created by lyd on 2017/5/11.
  */
-public class UcInMaintain extends BaseJPanel  implements ActionListener {
+public class UcInMaintain extends BaseJPanel  implements ActionListener,DocumentListener {
     SvcService svcService= ServiceFactory.getSvcService();
     private   CenterContentPanel centerContentPanel;
     //初始化输入输出
@@ -43,6 +45,9 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
     private JButton upBtn=new JButton("上移");
     //下移
     private JButton downBtn=new JButton("下移");
+    //输入条件sql
+    private JTextArea existsArea=new JTextArea();
+    JScrollPane sqlexistsAreaScrollPane = new JScrollPane(existsArea);
 
     //中间table展示
     private UcInCenterTable centerTable;
@@ -122,6 +127,11 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         this.setLayout(new BorderLayout());
         this.add(northJPanel,BorderLayout.NORTH);
         this.add(centerTable,BorderLayout.CENTER);
+        existsArea.setFont(FontFactory.getSqlInputFootFont());
+        sqlexistsAreaScrollPane.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
+        this.add(sqlexistsAreaScrollPane,BorderLayout.SOUTH);
+        existsArea.getDocument().addDocumentListener(this);
+        hideExistsArea();
 
     }
     @Override
@@ -169,7 +179,7 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_UP.getCmd())){
             int index=centerTable.getCurrentSelIndex();
             if(index>0){
-                if(svcService.exchange(centerTable.getCurrentCloum(),centerTable.getCloum(index-1))){
+                if(svcService.exchange(centerTable.getCurrentRow(),centerTable.getRow(index-1))){
                     centerTable.asynReloadUc(centerContentPanel.getUcNo());
                     centerTable.cloumSelect(index-1);
                 }
@@ -177,12 +187,70 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_DOWN.getCmd())){
             int index=centerTable.getCurrentSelIndex();
             if(index<centerTable.getTotalCount()-1){
-                if(svcService.exchange(centerTable.getCurrentCloum(),centerTable.getCloum(index+1))){
+                if(svcService.exchange(centerTable.getCurrentRow(),centerTable.getRow(index+1))){
                     centerTable.asynReloadUc(centerContentPanel.getUcNo());
                     centerTable.cloumSelect(index+1);
                 }
             }
         }
 
+    }
+    public void tableSelect(int index,TsvcInterface tsvcInterface){
+        if(tsvcInterface.getC_flag().equals("0")){
+            if(tsvcInterface.getC_condition().equals("exists") || tsvcInterface.getC_condition().equals("not exists")){
+                existsAreaSetText("");
+                showExistsArea();
+                existsAreaSetText(tsvcInterface.getC_existvalue());
+            }else{
+                hideExistsArea();
+            }
+        }else{
+            hideExistsArea();
+        }
+
+    }
+    public void showExistsArea(){
+        existsArea.setColumns(5);
+        existsArea.setRows(5);
+        existsArea.setVisible(true);
+        sqlexistsAreaScrollPane.setVisible(true);
+
+        //<editor-fold desc="触发界面重新绘制">
+        this.setVisible(false);
+        this.setVisible(true);
+        //</editor-fold>
+    }
+    public void hideExistsArea(){
+        existsArea.setColumns(0);
+        existsArea.setRows(0);
+        existsArea.setVisible(false);
+        sqlexistsAreaScrollPane.setVisible(false);
+
+        this.setVisible(false);
+        this.setVisible(true);
+    }
+
+    public void existsAreaSetText(String txt){
+        existsArea.setText(txt);
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        changeExistsSql(existsArea.getText());
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        changeExistsSql(existsArea.getText());
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        changeExistsSql(existsArea.getText());
+    }
+    private void changeExistsSql(String sql){
+        TsvcInterface tsvcInterface=centerTable.getCurrentRow();
+        tsvcInterface.setC_existvalue(sql);
+        centerTable.updateRow(centerTable.getCurrentSelIndex(),tsvcInterface);
     }
 }
