@@ -2,6 +2,8 @@ package bean;
 
 import view.centercontent.GenerateSql;
 
+import java.util.List;
+
 /**
  * Created by lyd on 2017-07-06.
  */
@@ -19,7 +21,7 @@ public abstract class BaseBean  {
      * 主键
      * @return
      */
-    public abstract String getKeyStr();
+    public abstract List<String> getKeyStr();
     /**
      * 主键
      * @return
@@ -29,7 +31,7 @@ public abstract class BaseBean  {
      *
      * @return
      */
-    public abstract  String getKeyValueStr();
+    public abstract  List<String> getKeyValueStr();
 
     /**
      *UC功能号

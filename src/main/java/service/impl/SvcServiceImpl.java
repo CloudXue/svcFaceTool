@@ -447,4 +447,78 @@ public class SvcServiceImpl implements SvcService {
     public void setViewListener(MyActionListener viewListener) {
         this.viewListener = viewListener;
     }
+    @Override
+    public boolean exchange(TsvcInterface current, TsvcInterface opp) {
+        if(!current.getC_flag().equals(opp.getC_flag())){
+            return false;
+        }
+        if(!canMove(current)){
+            return false;
+        }
+        if(!canMove(opp)){
+            return false;
+        }
+        String currentno=current.getL_no();
+        current.setL_no(opp.getL_no());
+        opp.setL_no(currentno);
+        try {
+            tsvcInterfaceDao.update(current,new String[]{"l_no"});
+            tsvcInterfaceDao.update(opp,new String[]{"l_no"});
+        } catch (Exception e) {
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+        }
+        return true;
+
+    }
+
+
+    @Override
+    public boolean exchange(TsvcViewconfig current, TsvcViewconfig opp) {
+        if(!canMove(current)){
+            return false;
+        }
+        if(!canMove(opp)){
+            return false;
+        }
+        String currentno=current.getL_no();
+        current.setL_no(opp.getL_no());
+        opp.setL_no(currentno);
+        try {
+            tsvcViewconfigDao.update(current,new String[]{"l_no"});
+            tsvcViewconfigDao.update(opp,new String[]{"l_no"});
+        } catch (Exception e) {
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+        }
+        return true;
+    }
+
+    private boolean canMove(TsvcInterface current){
+        if(current==null){
+            return false;
+        }
+        if(StringUtils.isNullOrEmpty(current.getL_no())){
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,"序号为空");
+        }
+        try {
+            Integer.parseInt(current.getL_no());
+        } catch (NumberFormatException e) {
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+        }
+        return true;
+    }
+
+    private boolean canMove(TsvcViewconfig current){
+        if(current==null){
+            return false;
+        }
+        if(StringUtils.isNullOrEmpty(current.getL_no())){
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,"序号为空");
+        }
+        try {
+            Integer.parseInt(current.getL_no());
+        } catch (NumberFormatException e) {
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+        }
+        return true;
+    }
 }

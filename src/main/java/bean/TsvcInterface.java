@@ -2,6 +2,8 @@ package bean;
 
 import util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -138,8 +140,12 @@ public class TsvcInterface extends BaseBean {
                 "--****************************************************\n";
     }
     @Override
-    public String getKeyStr() {
-        return "C_FUNCTIONNO";
+    public List<String> getKeyStr() {
+        List<String> key=new ArrayList<>();
+        key.add("c_functionno");
+        key.add("c_flag");
+        key.add("c_property");
+        return key;
     }
 
     @Override
@@ -148,8 +154,12 @@ public class TsvcInterface extends BaseBean {
     }
 
     @Override
-    public String getKeyValueStr() {
-        return "C_FUNCTIONNO";
+    public List<String> getKeyValueStr() {
+        List<String> key=new ArrayList<>();
+        key.add("c_functionno");
+        key.add("c_flag");
+        key.add("c_property");
+        return key;
     }
 
     @Override

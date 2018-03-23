@@ -152,12 +152,18 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
         }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_UP.getCmd())){
             int index=centerTable.getCurrentSelIndex();
             if(index>0){
-                centerTable.cloumSelect(index-1);
+                if(svcService.exchange(centerTable.getCurrentCloum(),centerTable.getCloum(index-1))){
+                    centerTable.reloadUc(centerContentPanel.getUcNo());
+                    centerTable.cloumSelect(index-1);
+                }
             }
         }else if(e.getActionCommand().equals(EnActionEvent.UCOUT_DOWN.getCmd())){
             int index=centerTable.getCurrentSelIndex();
             if(index<centerTable.getTotalCount()-1){
-                centerTable.cloumSelect(index+1);
+                if(svcService.exchange(centerTable.getCurrentCloum(),centerTable.getCloum(index+1))){
+                    centerTable.reloadUc(centerContentPanel.getUcNo());
+                    centerTable.cloumSelect(index+1);
+                }
             }
         }
     }

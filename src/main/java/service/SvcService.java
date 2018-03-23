@@ -61,4 +61,7 @@ public interface SvcService {
     public List<SqlFieldType> findSqlField(String uc);
     public void setViewListener(MyActionListener viewListener);
     public  void throwErrorMsg(EnActionEvent enActionEvent, String msg);
+    public boolean exchange(TsvcInterface current,TsvcInterface opp);
+    public boolean exchange(TsvcViewconfig current,TsvcViewconfig opp);
+
 }

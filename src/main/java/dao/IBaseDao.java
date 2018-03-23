@@ -24,7 +24,8 @@ public interface IBaseDao<TDtoModel extends BaseBean>  {
     public void commitTransaction() throws Exception ;
 
     public int del(TDtoModel bean)throws Exception;
-    public boolean update(TDtoModel bean)throws Exception;
+    public void update(TDtoModel bean)throws Exception;
+    public void update(TDtoModel bean,String[] fieldNames)throws Exception;
     public boolean insert(TDtoModel bean)throws Exception;
     public int executeSql(String sql) throws Exception;
     public List<Map<String,Object>> queryForList(String sql)throws Exception;

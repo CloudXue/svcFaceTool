@@ -444,4 +444,58 @@ public class UcInCenterTable extends BaseJPanel {
     public int getTotalCount() {
         return tableModel.getRowCount();
     }
+    public TsvcInterface getCloum(int cloum){
+        if(cloum>getTotalCount()){
+            return null;
+        }
+        Vector<Vector<String>> datas=(Vector<Vector<String>>)tableModel.getDataVector();
+        Vector<String> data=datas.get(cloum);
+        TsvcInterface tsvcInterface=new TsvcInterface(centerContentPanel.getUcNo(),
+                StringUtils.valueOf(data.get(0)),
+                StringUtils.valueOf(data.get(1)),
+                StringUtils.valueOf(data.get(2)),
+                StringUtils.valueOf(data.get(3)),
+                StringUtils.valueOf(data.get(4)),
+                StringUtils.valueOf(data.get(5)),
+                StringUtils.valueOf(data.get(6)),
+                StringUtils.valueOf(data.get(7)),
+                StringUtils.valueOf(data.get(8)),
+                StringUtils.valueOf(data.get(9)),
+                StringUtils.valueOf(data.get(10)),
+                StringUtils.valueOf(data.get(11)),
+                StringUtils.valueOf(data.get(12)),
+                StringUtils.valueOf(data.get(13)),
+                StringUtils.valueOf(data.get(14)),
+                StringUtils.valueOf(data.get(15)),
+                StringUtils.valueOf(data.get(16)),
+                StringUtils.valueOf(data.get(17)),
+                StringUtils.valueOf(data.get(18)));
+        return tsvcInterface;
+    }
+    public TsvcInterface getCurrentCloum(){
+
+        Vector<Vector<String>> datas=(Vector<Vector<String>>)tableModel.getDataVector();
+        Vector<String> data=datas.get(getCurrentSelIndex());
+        TsvcInterface tsvcInterface=new TsvcInterface(centerContentPanel.getUcNo(),
+                StringUtils.valueOf(data.get(0)),
+                StringUtils.valueOf(data.get(1)),
+                StringUtils.valueOf(data.get(2)),
+                StringUtils.valueOf(data.get(3)),
+                StringUtils.valueOf(data.get(4)),
+                StringUtils.valueOf(data.get(5)),
+                StringUtils.valueOf(data.get(6)),
+                StringUtils.valueOf(data.get(7)),
+                StringUtils.valueOf(data.get(8)),
+                StringUtils.valueOf(data.get(9)),
+                StringUtils.valueOf(data.get(10)),
+                StringUtils.valueOf(data.get(11)),
+                StringUtils.valueOf(data.get(12)),
+                StringUtils.valueOf(data.get(13)),
+                StringUtils.valueOf(data.get(14)),
+                StringUtils.valueOf(data.get(15)),
+                StringUtils.valueOf(data.get(16)),
+                StringUtils.valueOf(data.get(17)),
+                StringUtils.valueOf(data.get(18)));
+        return tsvcInterface;
+    }
 }

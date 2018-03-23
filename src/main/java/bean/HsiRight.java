@@ -4,6 +4,8 @@ import util.StringUtils;
 import util.SvcUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -34,14 +36,20 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
         return this.c_functionno;
     }
 
-    @Override
-    public String getKeyStr() {
-        return "c_functionno";
-    }
 
     @Override
-    public String getKeyValueStr() {
-        return "c_functionno_hid";
+    public List<String> getKeyStr() {
+        List<String> key=new ArrayList<>();
+        key.add("c_functionno");
+        return key;
+    }
+
+
+    @Override
+    public List<String> getKeyValueStr() {
+        List<String> key=new ArrayList<>();
+        key.add("c_functionno");
+        return key;
     }
 
     public static String tableName="HSI_RIGHT";

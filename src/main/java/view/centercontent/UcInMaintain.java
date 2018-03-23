@@ -169,12 +169,18 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener {
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_UP.getCmd())){
             int index=centerTable.getCurrentSelIndex();
             if(index>0){
-                centerTable.cloumSelect(index-1);
+                if(svcService.exchange(centerTable.getCurrentCloum(),centerTable.getCloum(index-1))){
+                    centerTable.asynReloadUc(centerContentPanel.getUcNo());
+                    centerTable.cloumSelect(index-1);
+                }
             }
         }else if(e.getActionCommand().equals(EnActionEvent.UCIN_DOWN.getCmd())){
             int index=centerTable.getCurrentSelIndex();
             if(index<centerTable.getTotalCount()-1){
-                centerTable.cloumSelect(index+1);
+                if(svcService.exchange(centerTable.getCurrentCloum(),centerTable.getCloum(index+1))){
+                    centerTable.asynReloadUc(centerContentPanel.getUcNo());
+                    centerTable.cloumSelect(index+1);
+                }
             }
         }
 

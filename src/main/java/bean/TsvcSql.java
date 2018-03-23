@@ -3,6 +3,8 @@ package bean;
 import util.StringUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -52,16 +54,17 @@ public class TsvcSql extends  BaseBean implements Serializable,Cloneable {
      *数据源
      */
     private String c_datasource;
-
-
     @Override
-    public String getKeyStr() {
-        return "c_functionno";
+    public List<String> getKeyStr() {
+        List<String> key=new ArrayList<>();
+        key.add("c_functionno");
+        return key;
     }
-
     @Override
-    public String getKeyValueStr() {
-        return "c_functionno";
+    public List<String> getKeyValueStr() {
+        List<String> key=new ArrayList<>();
+        key.add("c_functionno");
+        return key;
     }
 
     public String getC_functionno() {

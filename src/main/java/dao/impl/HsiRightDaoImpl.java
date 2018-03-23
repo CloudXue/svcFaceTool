@@ -146,9 +146,7 @@ public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
         }
         //更新本表
         for(HsiRight hsiRight : ucList){
-            if(!update(hsiRight)){
-                throw new Exception("保存："+hsiRight.getC_functionno()+"失败");
-            }
+            update(hsiRight);
         }
     }
 

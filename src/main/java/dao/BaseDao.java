@@ -89,7 +89,7 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
         return pstmt;
     }
     public int del(TDtoModel dtoModel) throws Exception {
-        String sql="delete "+getTableName()+" where "+dtoModel.getKeyStr()+"='"+dtoModel.getKeyValue()+"'";
+        String sql="delete "+getTableName()+" where "+dtoModel.getKeyStr().get(0)+"='"+dtoModel.getKeyValue()+"'";
         return executeSql(sql);
     }
     public boolean insert(TDtoModel dtoModel) throws Exception {
@@ -136,11 +136,11 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
         }
     }
 
-    public boolean update(TDtoModel dtoModel) throws Exception {
-        return update(dtoModel, null);
+    public void update(TDtoModel dtoModel) throws Exception {
+         update(dtoModel, null);
     }
 
-    public boolean update(TDtoModel dtoModel, String[] fieldNames) throws Exception {
+    public void update(TDtoModel dtoModel, String[] fieldNames) throws Exception {
 
         //获取model的map<属性名称，属性值>
         Map<String, Object> mapFields = BeanUtils.getProperties(dtoModel);
@@ -184,14 +184,18 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
             }
         }
 
-        stringSqlBuilder.append(" WHERE "+dtoModel.getKeyStr()+"=?  ");
-        objectSqlParams.add(mapFields.get(dtoModel.getKeyValueStr().toLowerCase()));
+        stringSqlBuilder.append(" WHERE 1=1  ");
+        for(String key : dtoModel.getKeyStr()){
+            stringSqlBuilder.append(" and "+key+"=?  ");
+        }
+        for(String keyValue : dtoModel.getKeyValueStr()){
+            objectSqlParams.add(mapFields.get(keyValue.toLowerCase()));
+        }
+
 
         int tmpCount = this.executeSQL(stringSqlBuilder.toString(), objectSqlParams.toArray());
-        if (1 == tmpCount) {
-            return true;
-        } else {
-            return false;
+        if (1 != tmpCount) {
+           throw new Exception("更新行数为："+tmpCount);
         }
     }
     /**
