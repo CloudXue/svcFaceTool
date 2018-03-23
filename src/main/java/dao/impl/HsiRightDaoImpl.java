@@ -56,12 +56,13 @@ public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
     public List<HsiRight> getHsiRighFuzzy(String condition) throws Exception {
         List<HsiRight> hsiRightList=new ArrayList<HsiRight>();
 
-        String sqlWhere= "";
+        String sqlWhere= " where 1=1 ";
         if (StringUtils.isNotNullAndNotEmpty(condition)) {
-            sqlWhere = " where C_FUNCTIONNO like '%"+condition+"%' " +
+            sqlWhere += " and C_FUNCTIONNO like '%"+condition+"%' " +
                     " or C_RIGHTCODE like '%"+condition+"%'" +
-                    " or C_RIGHTNAME like '%"+condition+"%' order by C_RIGHTCODE";
+                    " or C_RIGHTNAME like '%"+condition+"%' ";
         }
+        sqlWhere +=" order by C_RIGHTCODE ";
         List<Map<String,Object>> maplist=getData(" t.*,t.C_FUNCTIONNO as c_functionno_hid,C_RIGHTCODE as c_rightcode_hid ",sqlWhere);
         for (Map<String,Object> map : maplist){
             HsiRight hsiRight=new HsiRight();
