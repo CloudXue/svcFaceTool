@@ -381,6 +381,12 @@ public class SvcServiceImpl implements SvcService {
                     hasFrom=false;
                     continue;
                 }
+                //todo 临时过滤 start with的词表，查询包含下级组织时会出现
+                if(word.equalsIgnoreCase("start")){
+                    hasFrom=false;
+                    currentTab=null;
+                    continue;
+                }
                 if(word.equalsIgnoreCase("where")||word.equalsIgnoreCase("(")){
                     if(StringUtils.isNotNullAndNotEmpty(currentTab)){
                         if(!tableName.contains(currentTab)){
