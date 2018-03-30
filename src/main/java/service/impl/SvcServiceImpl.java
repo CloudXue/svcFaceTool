@@ -33,10 +33,10 @@ public class SvcServiceImpl implements SvcService {
     TsvcSqlDao tsvcSqlDao = DaoFactory.getTsvcSqlDao();
     TsvcViewconfigDao tsvcViewconfigDao =DaoFactory.getTsvcViewconfigDao();
     TsvcInterfaceDao tsvcInterfaceDao = DaoFactory.getTsvcInterfaceDao();
-    private final static String sqlHead = "--*********************************************************\n" +
-            "--FUNDCRM系统初始化脚本\n" +
-            "--创建日期：%1$s\n" +
-            "--数据库  ：fundcrm/fundcrm@localdb\n" +
+    private final static String sqlHead = "--*********************************************************\r\n" +
+            "--FUNDCRM系统初始化脚本\r\n" +
+            "--创建日期：%1$s\r\n" +
+            "--数据库  ：fundcrm/fundcrm@localdb\r\n" +
             "--*********************************************************";
 
     public void initSystem() {
@@ -115,41 +115,41 @@ public class SvcServiceImpl implements SvcService {
         try {
             sb = new StringBuilder();
             sb.append(String.format(sqlHead, DateUtil.getCurrentDateTimeString()));
-            sb.append("\n");
-            sb.append("\n");
+            sb.append("\r\n");
+            sb.append("\r\n");
             sb.append(HsiRight.generateHead());
             sb.append(BaseBean.generateDelSql(HsiRight.tableName, uc));
-            sb.append("\n");
+            sb.append("\r\n");
             HsiRight hsiRight = hsiRightDao.getHsiRigh(uc);
             sb.append(hsiRight.generateInsertSql());
-            sb.append("\n");
-            sb.append("\n");
+            sb.append("\r\n");
+            sb.append("\r\n");
             sb.append(TsvcSql.generateHead());
             TsvcSql tsvcSql = tsvcSqlDao.getTsvcSql(uc);
             sb.append(BaseBean.generateDelSql(TsvcSql.tableName, uc));
-            sb.append("\n");
+            sb.append("\r\n");
             if (tsvcSql != null) {
                 sb.append(tsvcSql.generateInsertSql());
             }
-            sb.append("\n");
-            sb.append("\n");
+            sb.append("\r\n");
+            sb.append("\r\n");
             sb.append(TsvcInterface.generateHead());
             sb.append(BaseBean.generateDelSql(TsvcInterface.tableName, uc));
-            sb.append("\n");
+            sb.append("\r\n");
             List<TsvcInterface> tsvcInterfaceList = tsvcInterfaceDao.getTsvcInterfaceList(uc);
             for (TsvcInterface tsvcInterface : tsvcInterfaceList) {
                 sb.append(tsvcInterface.generateInsertSql());
             }
-            sb.append("\n");
-            sb.append("\n");
+            sb.append("\r\n");
+            sb.append("\r\n");
             sb.append(TsvcViewconfig.generateHead());
             sb.append(BaseBean.generateDelSql(TsvcViewconfig.tableName, uc));
-            sb.append("\n");
+            sb.append("\r\n");
             List<TsvcViewconfig> tsvcViewconfigsList = tsvcViewconfigDao.getTsvcViewconfig(uc);
             for (TsvcViewconfig tsvcViewconfig : tsvcViewconfigsList) {
                 sb.append(tsvcViewconfig.generateInsertSql());
             }
-            sb.append("\n");
+            sb.append("\r\n");
             sb.append("commit;");
 
 

@@ -23,9 +23,9 @@ public class TsvcSql extends  BaseBean implements Serializable,Cloneable {
                 StringUtils.valueOf(getC_orderby()),getC_sqltype());
     }
     public static String generateHead() {
-        return "--****************************************************\n" +
-                "--**  英文表名：TSVCSQL\n" +
-                "--****************************************************\n";
+        return "--****************************************************\r\n" +
+                "--**  英文表名：TSVCSQL\r\n" +
+                "--****************************************************\r\n";
     }
 
     @Override

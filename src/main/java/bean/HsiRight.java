@@ -18,9 +18,9 @@ public class HsiRight extends BaseBean implements Serializable,Cloneable {
             " ('%s','%s','%s','FUNDCRM','%s','%s','%s',NULL,NULL,'%s','%s');";
 
     public static String generateHead() {
-        return "--****************************************************\n" +
-                "--**  英文表名：HSI_RIGHT\n" +
-                "--****************************************************\n";
+        return "--****************************************************\r\n" +
+                "--**  英文表名：HSI_RIGHT\r\n" +
+                "--****************************************************\r\n";
     }
 
     @Override

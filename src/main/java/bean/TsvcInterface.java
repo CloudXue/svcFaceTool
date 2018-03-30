@@ -18,7 +18,7 @@ public class TsvcInterface extends BaseBean {
             "C_FIELDNAME,C_EXPLAIN,C_PROPERTY,L_LEN,L_DECLEN,C_FIELDTYPE,C_FIELDFLAG,C_NOTNULL," +
             "C_CONDITION,C_EXISTVALUE,C_VIEWLEVEL,C_VIEWTYPE,C_DICNAME,C_ISDEFAULT,C_VALUE," +
             "C_MIDSEARCHNAME,L_NO,C_NOTSHOWALLITEM) VALUES ('%s','%s','%s','%s','%s','%s','%s'," +
-            "'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');\n";
+            "'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');\r\n";
     public static String tableName="TSVCINTERFACE";
     private String c_functionno;
     private String c_flag;
@@ -135,9 +135,9 @@ public class TsvcInterface extends BaseBean {
                 StringUtils.valueOf(getL_no()),StringUtils.valueOf(getC_notshowallitem()));
     }
     public static String generateHead() {
-        return "--****************************************************\n" +
-                "--**  英文表名：TSVCINTERFACE\n" +
-                "--****************************************************\n";
+        return "--****************************************************\r\n" +
+                "--**  英文表名：TSVCINTERFACE\r\n" +
+                "--****************************************************\r\n";
     }
     @Override
     public List<String> getKeyStr() {
