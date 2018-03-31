@@ -15,6 +15,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  * Created by lyd on 2017/5/11.
@@ -43,7 +44,10 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
 
     //中间table展示
     private UcOutCenterTable centerTable;
-
+    //用于判断是否刷新
+    String currentUc="";
+    List<TsvcViewconfig> ucOutDatas;
+    private boolean isDataChanged=false;
     @Override
     public void close() {
         centerTable=null;
@@ -110,8 +114,6 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
         northJPanel.add(downBtn);
         //</editor-fold>
 
-
-
         //添加组件到窗体
         this.setLayout(new BorderLayout());
         this.add(northJPanel,BorderLayout.NORTH);
@@ -120,10 +122,14 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
     }
     @Override
     public void onFocus(boolean refresh) {
-        if(refresh){
+        if(!currentUc.equals(centerContentPanel.getUcNo())){
             centerTable.reloadUc(centerContentPanel.getUcNo());
-
+        }else{
+            if(refresh){
+                centerTable.reloadUc(centerContentPanel.getUcNo());
+            }
         }
+        currentUc=centerContentPanel.getUcNo();
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -167,6 +173,63 @@ public class UcOutMaintain extends BaseJPanel   implements ActionListener {
             }
         }
     }
+    private void dataChahge(){
+        if(hasChange()){
+            centerContentPanel.dataChange(true);
+            isDataChanged=true;
+        }else{
+            centerContentPanel.dataChange(false);
+            isDataChanged=false;
+        }
 
+    }
 
+    /**
+     * 判断是否数据改变
+     * @return
+     */
+    private boolean hasChange(){
+        List<TsvcViewconfig> ucInDatasView=centerTable.getAllColumnDatas();
+        if(ucInDatasView==null || ucInDatasView.size()==0){
+            if(ucOutDatas!=null && ucOutDatas.size()>0){
+                return true;
+            }
+        }else{
+            if(ucOutDatas==null || ucOutDatas.size()==0){
+                return true;
+            }
+            /**
+             * 判断是否有变更
+             *1、长度不相同
+             * 2、逐条判断hash
+             */
+            if(ucInDatasView.size()!=ucOutDatas.size()){
+                return true;
+            }
+            for (int i=0;i<ucOutDatas.size();i++){
+                if(ucOutDatas.get(i).hashCode()!=ucInDatasView.get(i).hashCode()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canLoseFcous() {
+        dataChahge();
+        return super.canLoseFcous();
+    }
+
+    public void setUcOutDatas(List<TsvcViewconfig> ucOutDatas) {
+        this.ucOutDatas = ucOutDatas;
+    }
+
+    public boolean isDataChanged() {
+        return isDataChanged;
+    }
+
+    public void setDataChanged(boolean dataChanged) {
+        isDataChanged = dataChanged;
+    }
 }

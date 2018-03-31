@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by lyd on 2017/5/11.
@@ -51,6 +52,10 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
 
     //中间table展示
     private UcInCenterTable centerTable;
+    //用于判断是否刷新
+    String currentUc="";
+    List<TsvcInterface> ucInDatas;
+    private boolean isDataChanged=false;
 
     @Override
     public void close() {
@@ -136,9 +141,15 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
     }
     @Override
     public void onFocus(boolean refresh) {
-        if(refresh){
+        if(!currentUc.equals(centerContentPanel.getUcNo())){
             centerTable.asynReloadUc(centerContentPanel.getUcNo());
+        }else{
+            if(refresh){
+                centerTable.asynReloadUc(centerContentPanel.getUcNo());
+            }
         }
+        currentUc=centerContentPanel.getUcNo();
+
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -252,5 +263,65 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
         TsvcInterface tsvcInterface=centerTable.getCurrentRow();
         tsvcInterface.setC_existvalue(sql);
         centerTable.updateRow(centerTable.getCurrentSelIndex(),tsvcInterface);
+    }
+
+    public void setUcInDatas(List<TsvcInterface> ucInDatas) {
+        this.ucInDatas = ucInDatas;
+    }
+
+    private void dataChahge(){
+        if(hasChange()){
+            centerContentPanel.dataChange(true);
+            isDataChanged=true;
+        }else{
+            centerContentPanel.dataChange(false);
+            isDataChanged=false;
+        }
+
+    }
+
+    /**
+     * 判断是否数据改变
+     * @return
+     */
+    private boolean hasChange(){
+        List<TsvcInterface> ucInDatasView=centerTable.getAllColumnDatas();
+        if(ucInDatasView==null || ucInDatasView.size()==0){
+            if(ucInDatas!=null && ucInDatas.size()>0){
+                return true;
+            }
+        }else{
+            if(ucInDatas==null || ucInDatas.size()==0){
+                return true;
+            }
+            /**
+             * 判断是否有变更
+             *1、长度不相同
+             * 2、逐条判断hash
+             */
+            if(ucInDatasView.size()!=ucInDatas.size()){
+                return true;
+            }
+            for (int i=0;i<ucInDatas.size();i++){
+                if(ucInDatas.get(i).hashCode()!=ucInDatasView.get(i).hashCode()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canLoseFcous() {
+        dataChahge();
+        return super.canLoseFcous();
+    }
+
+    public boolean isDataChanged() {
+        return isDataChanged;
+    }
+
+    public void setDataChanged(boolean dataChanged) {
+        isDataChanged = dataChanged;
     }
 }

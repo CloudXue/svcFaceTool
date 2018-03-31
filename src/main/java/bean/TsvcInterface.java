@@ -4,6 +4,7 @@ import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 /**
@@ -348,5 +349,18 @@ public class TsvcInterface extends BaseBean {
     @Override
     public String toString() {
         return getC_property()+"-"+getC_explain();
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(StringUtils.valueOf(c_functionno), StringUtils.valueOf(c_flag), StringUtils.valueOf(c_packflag),
+                StringUtils.valueOf(c_fieldname),StringUtils.valueOf( c_explain), StringUtils.valueOf(c_property),
+                        StringUtils.valueOf(l_len), StringUtils.valueOf(l_declen),
+                        StringUtils.valueOf(c_fieldtype), StringUtils.valueOf( c_fieldflag),  StringUtils.valueOf(c_notnull),
+                StringUtils.valueOf(c_condition),
+                        StringUtils.valueOf(c_existvalue), StringUtils.valueOf(c_viewlevel), StringUtils.valueOf(c_viewtype),
+                        StringUtils.valueOf(c_dicname),StringUtils.valueOf( c_isdefault), StringUtils.valueOf(c_value),
+                        StringUtils.valueOf(c_midsearchname),  StringUtils.valueOf(l_no), StringUtils.valueOf(c_notshowallitem));
     }
 }

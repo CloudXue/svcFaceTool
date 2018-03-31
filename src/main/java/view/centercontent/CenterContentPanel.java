@@ -2,11 +2,14 @@ package view.centercontent;
 
 import control.MyActionListener;
 import view.CenterpanelTab;
+import view.factory.FontFactory;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by lyd on 2017/5/11.
@@ -25,8 +28,13 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
     private BaseJPanel ucInMaintain;
     private BaseJPanel ucOutMaintain;
     private BaseJPanel generateSql;
+    private Map<Integer,String> title=new HashMap<>();
 
     public CenterContentPanel(MyActionListener myActionListener, CenterpanelTab centerpanelTab) {
+        title.put(0,"功能表定义维护");
+        title.put(1,"数据源SQL维护");
+        title.put(2,"功能输入输出定义");
+        title.put(3,"数据源→查询显示配置");
         this.centerpanelTab = centerpanelTab;
         this.myActionListener = myActionListener;
         ucDefineMaintain = new UcDefineMaintain(myActionListener, this);
@@ -67,17 +75,40 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
         return headPanel.getUcCodeField();
     }
 
+    /**
+     * 更改外层title
+     * @param title
+     */
     public void setTitle(String title) {
         centerpanelTab.setTitle(title);
     }
 
+    /**
+     * 更改内层title。用于记录是否有数据变动
+     */
+    public void dataChange(boolean hasChange){
+        String titleStr=title.get(contentTab.getSelectedIndex());
+        JLabel titleLabel=new JLabel(titleStr);
+        titleLabel.setFont(FontFactory.getContentTabTitle());
+        if(hasChange){
+            titleLabel.setForeground(Color.red);
+
+        }else{
+            titleLabel.setForeground(Color.BLACK);
+        }
+        contentTab.setTabComponentAt(contentTab.getSelectedIndex(),titleLabel);
+    }
     @Override
     public void stateChanged(ChangeEvent e) {
         ((BaseJPanel) contentTab.getSelectedComponent()).onFocus(false);
-       /* contentTab.removeChangeListener(this);
+        contentTab.removeChangeListener(this);
         int nextIndex=contentTab.getSelectedIndex();
         contentTab.setSelectedIndex(currentSelectIndex);
         if(((BaseJPanel) contentTab.getSelectedComponent()).canLoseFcous()){
+            //有为改变数据
+        }
+        contentTab.setSelectedIndex(nextIndex);
+       /* if(((BaseJPanel) contentTab.getSelectedComponent()).canLoseFcous()){
             contentTab.setSelectedIndex(nextIndex);
             ((BaseJPanel) contentTab.getSelectedComponent()).onFocus(true);
         }else{
@@ -91,9 +122,9 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
                 ((BaseJPanel) contentTab.getSelectedComponent()).onFocus(true);
 
             }
-        }
+        }*/
         contentTab.addChangeListener(this);
-        currentSelectIndex=contentTab.getSelectedIndex();*/
+        currentSelectIndex=contentTab.getSelectedIndex();
     }
 
     public void close() {

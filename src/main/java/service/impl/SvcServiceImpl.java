@@ -168,16 +168,8 @@ public class SvcServiceImpl implements SvcService {
     }
 
     @Override
-    public Vector<Vector<String>> getUcIn(String uc)  {
+    public Vector<Vector<String>> ucTsvcInterfaceToVector(List<TsvcInterface> tsvcInterfaceList)  {
         Vector<Vector<String>> retVector = new Vector<Vector<String>>();
-        List<TsvcInterface> tsvcInterfaceList = null;
-        try {
-            tsvcInterfaceList = tsvcInterfaceDao.getTsvcInterfaceListHasOrder(uc);
-        } catch (Exception e) {
-            logger.error("查询配置输入输出异常：",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
-            return retVector;
-        }
         if (tsvcInterfaceList != null) {
             for (TsvcInterface tsvcInterface : tsvcInterfaceList) {
                 Vector<String> vector = new Vector<String>();
@@ -207,18 +199,23 @@ public class SvcServiceImpl implements SvcService {
         }
         return retVector;
     }
+    @Override
+    public List<TsvcInterface> getUcTsvcInterface(String uc)  {
+
+        List<TsvcInterface> tsvcInterfaceList = null;
+        try {
+            tsvcInterfaceList = tsvcInterfaceDao.getTsvcInterfaceListHasOrder(uc);
+        } catch (Exception e) {
+            logger.error("查询配置输入输出异常：",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+        }
+        return tsvcInterfaceList;
+    }
+
 
     @Override
-    public Vector<Vector<String>> getUcOut(String uc) {
+    public Vector<Vector<String>> ucTsvcViewconfigToVector(List<TsvcViewconfig> tsvcViewconfigList) {
         Vector<Vector<String>> retVector = new Vector<Vector<String>>();
-        List<TsvcViewconfig> tsvcViewconfigList = null;
-        try {
-            tsvcViewconfigList = tsvcViewconfigDao.getTsvcViewconfigHasOrder(uc);
-        } catch (Exception e) {
-            logger.error("查询配置显示异常：",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
-            return retVector;
-        }
         if (tsvcViewconfigList != null) {
             for (TsvcViewconfig tsvcViewconfig : tsvcViewconfigList) {
                 Vector<String> vector = new Vector<String>();
@@ -246,7 +243,19 @@ public class SvcServiceImpl implements SvcService {
         }
         return retVector;
     }
+    @Override
+    public  List<TsvcViewconfig> getUcTsvcViewconfig(String uc) {
+        List<TsvcViewconfig> tsvcViewconfigList = null;
+        try {
+            tsvcViewconfigList = tsvcViewconfigDao.getTsvcViewconfigHasOrder(uc);
+        } catch (Exception e) {
+            logger.error("查询配置显示异常：",e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
 
+        }
+
+        return tsvcViewconfigList;
+    }
     @Override
     public List<String> getDictionies() throws Exception {
         List<String> retList = new ArrayList<String>();

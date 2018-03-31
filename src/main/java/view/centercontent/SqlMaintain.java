@@ -17,6 +17,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,7 +26,7 @@ import java.util.Map;
 /**
  * Created by lyd on 2017/5/11.
  */
-public class SqlMaintain  extends BaseJPanel {
+public class SqlMaintain  extends BaseJPanel implements ActionListener,KeyListener {
     TsvcSqlService tsvcSqlService= ServiceFactory.getTsvcSqlService();
     private boolean enableTestSql=false;
     /**
@@ -88,6 +90,9 @@ public class SqlMaintain  extends BaseJPanel {
 
     private JTable sqlTestResultTable=new JTable();//测试结果table
 
+    //用于判断是否刷新
+    String currentUc="";
+
     @Override
     public void close() {
         tsvcSqlService=null;
@@ -134,14 +139,18 @@ public class SqlMaintain  extends BaseJPanel {
         centerSqlHead.add(new JLabel("SQL语句："));
         centerSqlHead.add(new JLabel("默认排序字段："));
         orderField.setFont(FontFactory.getTxtInputFootFont());
+        orderField.addKeyListener(this);
         centerSqlHead.add(orderField);
         centerSqlHead.add(new JLabel("SQL类型："));
+        sqlType.addActionListener(this);
         centerSqlHead.add(sqlType);
 
         centerPanel.setLayout(new BorderLayout());
         centerPanel.add(centerSqlHead,BorderLayout.NORTH);
         //设置边框
         sqlText.setFont(FontFactory.getSqlInputFootFont());
+        sqlText.addKeyListener(this);
+
 
         JScrollPane sqlTextScrollPane = new JScrollPane(sqlText);
         sqlTextScrollPane.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
@@ -189,8 +198,7 @@ public class SqlMaintain  extends BaseJPanel {
             }else if(e.getActionCommand().equals(EnActionEvent.SQLMAINTAIN_SQLPAGING.getCmd())){
 
             }
-
-
+            dataChahge();
         }
     }
 
@@ -244,6 +252,7 @@ public class SqlMaintain  extends BaseJPanel {
                 sqlType.setSelectedItem(tsvcSql.getC_sqltype());
             }
         }
+        dataChahge();
     }
 
     /**
@@ -251,35 +260,75 @@ public class SqlMaintain  extends BaseJPanel {
      * @return
      */
     public boolean isDataChange() {
-        String sql=sqlText.getText();
-        String order=orderField.getText();
-        String type=sqlType.getSelectItemValue();
+        String sql=StringUtils.valueOf(sqlText.getText());
+        String order=StringUtils.valueOf(orderField.getText());
+        String type=StringUtils.valueOf(sqlType.getSelectItemValue());
         if(tsvcSql_old==null){
-            if(StringUtils.isNotNullAndNotEmpty(sql) ||StringUtils.isNotNullAndNotEmpty(order)
-                    ||StringUtils.isNotNullAndNotEmpty(type)){
+            if(StringUtils.isNotNullAndNotEmpty(sql)){
                 return true;
             }
         }else{
-            if(!sql.equals(tsvcSql_old.getC_sqlstatement()) || !order.equals(tsvcSql_old.getC_orderby())
-                    || !type.equals(tsvcSql_old.getC_sqltype())){
+            if(!sql.equals(StringUtils.valueOf(tsvcSql_old.getC_sqlstatement())) || !order.equals(StringUtils.valueOf(tsvcSql_old.getC_orderby()))
+                    || !type.equals(StringUtils.valueOf(tsvcSql_old.getC_sqltype()))){
                 return true;
             }
         }
         return false;
     }
+    private void dataChahge(){
+        if(isDataChange()){
+            centerContentPanel.dataChange(true);
+            isDataChange=true;
+        }else{
+            centerContentPanel.dataChange(false);
+            isDataChange=false;
+        }
 
+    }
 
     @Override
     public void onFocus(boolean refresh) {
-       if(refresh){
-           String ucNo=centerContentPanel.getUcNo();
-           reSetSqlMaintainData();
-          /* if(  tsvcSql_old!=null && tsvcSql_old.getC_functionno().equals(ucNo)){
-               System.out.println("不更新sql");
-           }else{
-               reSetSqlMaintainData();
-           }*/
+       /* String ucNo=centerContentPanel.getUcNo();
+        if(  tsvcSql_old!=null && tsvcSql_old.getC_functionno().equals(ucNo)){
+            if(refresh){
+                reSetSqlMaintainData();
+            }
+        }else{
+            reSetSqlMaintainData();
+        }
+*/
+        if(!currentUc.equals(centerContentPanel.getUcNo())){
+            reSetSqlMaintainData();
+        }else{
+            if(refresh){
+                reSetSqlMaintainData();
+            }
+        }
+        currentUc=centerContentPanel.getUcNo();
 
-       }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        dataChahge();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        dataChahge();
+    }
+
+    public void setDataChange(boolean dataChange) {
+        isDataChange = dataChange;
     }
 }

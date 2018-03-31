@@ -211,6 +211,7 @@ public class UcDefineMaintain extends BaseJPanel  {
        addUcMap.put(index,hsiRight);
        //联动更改列表数据
        centerTable.setColumnData(Integer.parseInt(index),hsiRight);
+        dataChahge();
     }
     public void removeAddUcMap(String index,HsiRight hsiRight){
         if(addUcMap.containsKey(index)){
@@ -218,12 +219,14 @@ public class UcDefineMaintain extends BaseJPanel  {
             //联动更改列表数据
             centerTable.setColumnData(Integer.parseInt(index),hsiRight);
         }
+        dataChahge();
     }
 
     public void addEditUcMap(String index,HsiRight hsiRight){
         editUcMap.put(index,hsiRight);
         //联动更改列表数据
         centerTable.setColumnData(Integer.parseInt(index),hsiRight);
+        dataChahge();
     }
 
     public void removeEditUcMap(String index,HsiRight hsiRight){
@@ -232,6 +235,7 @@ public class UcDefineMaintain extends BaseJPanel  {
             //联动更改列表数据
             centerTable.setColumnData(Integer.parseInt(index),hsiRight);
         }
+        dataChahge();
     }
 
     //内部监听类
@@ -294,9 +298,9 @@ public class UcDefineMaintain extends BaseJPanel  {
                     //底部选择第一行
                     centerTable.cloumSelect(0);
                 }
-
                 //endregion
             }
+            dataChahge();
             //向上传播
             ucDefineMaintain.spreadAction(e);
         }
@@ -328,5 +332,13 @@ public class UcDefineMaintain extends BaseJPanel  {
         if(refresh){
             query();
         }
+    }
+    private void dataChahge(){
+        if(addUcMap.size()>0 || editUcMap.size()>0 || deleUcList.size()>0){
+            centerContentPanel.dataChange(true);
+        }else{
+            centerContentPanel.dataChange(false);
+        }
+
     }
 }

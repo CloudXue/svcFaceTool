@@ -26,9 +26,10 @@ public interface SvcService {
      */
     public String generateSql(String uc) ;
 
-    public Vector<Vector<String>> getUcIn(String uc) ;
-    public Vector<Vector<String>> getUcOut(String uc) ;
-
+    public Vector<Vector<String>> ucTsvcInterfaceToVector(List<TsvcInterface> uc) ;
+    public List<TsvcInterface> getUcTsvcInterface(String uc);
+    public Vector<Vector<String>> ucTsvcViewconfigToVector(List<TsvcViewconfig> list) ;
+    public  List<TsvcViewconfig> getUcTsvcViewconfig(String uc);
     /**
      * 获得字典和字典缓存
      * @return

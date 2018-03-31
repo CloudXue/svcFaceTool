@@ -122,6 +122,8 @@ public class UcInCenterTable extends BaseJPanel implements ActionListener, ItemL
         reloadUc(centerContentPanel.getUcNo());
         //选择第一行
         cloumSelect(0);
+        centerContentPanel.dataChange(false);
+        ucInMaintain.setDataChanged(false);
         /*new Thread(new Runnable() {
             @Override
             public void run() {
@@ -147,7 +149,10 @@ public class UcInCenterTable extends BaseJPanel implements ActionListener, ItemL
 
     public void reloadUc(String uc) {
         removeAll();
-        tableModel.setDataVector(svcService.getUcIn(uc), getTitle());
+        List<TsvcInterface> tsvcInterfaceList=svcService.getUcTsvcInterface(uc);
+        Vector<Vector<String>> datas=svcService.ucTsvcInterfaceToVector(tsvcInterfaceList);
+        ucInMaintain.setUcInDatas(tsvcInterfaceList);
+        tableModel.setDataVector(datas, getTitle());
         for (int i = 0; i < table.getColumnCount(); i++) {
             if (i == 2 || i == 3 || i == 4) {
                 table.getColumnModel().getColumn(i).setPreferredWidth(150);
@@ -287,7 +292,9 @@ public class UcInCenterTable extends BaseJPanel implements ActionListener, ItemL
         if (index < tableModel.getRowCount()) {
             functionno = (String) tableModel.getValueAt(index, 6);
         }
-        ucInMaintain.tableSelect(index, getCurrentRow());
+        if(tableModel.getRowCount()>index){
+            ucInMaintain.tableSelect(index, getCurrentRow());
+        }
     }
 
     private void setIsRefresh(boolean refresh) {
@@ -306,6 +313,9 @@ public class UcInCenterTable extends BaseJPanel implements ActionListener, ItemL
         return isRefresh;
     }
 
+    public Vector<Vector<String>> getAllColumnDatasVector(){
+        return  (Vector<Vector<String>>) tableModel.getDataVector();
+    }
     public java.util.List<TsvcInterface> getAllColumnDatas() {
         java.util.List<TsvcInterface> retList = new java.util.ArrayList<TsvcInterface>();
         if (tableModel.getRowCount() > 0) {

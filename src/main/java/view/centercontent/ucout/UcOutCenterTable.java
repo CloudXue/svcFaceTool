@@ -124,7 +124,13 @@ public class UcOutCenterTable extends BaseJPanel {
     public void reloadUc(String uc) {
         TableColumnModel tcm = table.getColumnModel();
         removeAll();
-        tableModel.setDataVector(svcService.getUcOut(uc), getTitle());
+        //设置数据未改变
+        ucOutMaintain.setDataChanged(false);
+        centerContentPanel.dataChange(false);
+        //查询数据
+        List<TsvcViewconfig> tsvcViewconfigList=svcService.getUcTsvcViewconfig(uc);
+        ucOutMaintain.setUcOutDatas(tsvcViewconfigList);
+        tableModel.setDataVector(svcService.ucTsvcViewconfigToVector(tsvcViewconfigList), getTitle());
         //其实没有移除，仅仅隐藏显示而已,
         tcm.removeColumn(tcm.getColumn(18));
         tcm.removeColumn(tcm.getColumn(0));

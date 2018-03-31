@@ -4,6 +4,7 @@ import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 /**
@@ -161,6 +162,19 @@ public class TsvcViewconfig  extends BaseBean {
         key.add("c_property");
         key.add("c_viewtype");
         return key;
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(StringUtils.valueOf(c_functionno), StringUtils.valueOf(c_businflag), StringUtils.valueOf(c_property), StringUtils.valueOf(c_viewlevel),
+                StringUtils.valueOf(c_viewtype), StringUtils.valueOf(c_dicname), StringUtils.valueOf(c_viewname), StringUtils.valueOf(c_reserve),
+                StringUtils.valueOf(l_no), StringUtils.valueOf(c_hyperlink), StringUtils.valueOf(c_frametype), StringUtils.valueOf(c_canstat),
+                StringUtils.valueOf(c_hiddenelem),  StringUtils.valueOf(c_edittype),  StringUtils.valueOf(c_inputtype),
+                StringUtils.valueOf(c_defaultvalue),  StringUtils.valueOf(c_limit),  StringUtils.valueOf(c_midsearchname),
+                StringUtils.valueOf(c_event), StringUtils.valueOf( c_searchlink),  StringUtils.valueOf(c_len),
+                StringUtils.valueOf(c_pattern));
     }
 
     @Override
