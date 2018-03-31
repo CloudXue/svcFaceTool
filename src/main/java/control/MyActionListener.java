@@ -3,6 +3,11 @@ package control;
 import bean.SystemData;
 import constant.ENWarningLevel;
 import constant.EnActionEvent;
+import org.apache.log4j.Logger;
+import service.ServiceFactory;
+import service.SvcService;
+import util.LogUtil;
+import util.SvcUtil;
 import view.MainFrame;
 
 import java.awt.event.ActionEvent;
@@ -12,6 +17,8 @@ import java.awt.event.ActionListener;
  * Created by lyd on 2017/1/4.
  */
 public class MyActionListener implements ActionListener {
+    SvcService svcService= ServiceFactory.getSvcService();
+    private static Logger logger= LogUtil.getLogger(MyActionListener.class);
     private MainFrame mainFrame;
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -29,6 +36,15 @@ public class MyActionListener implements ActionListener {
         }else if(e.getActionCommand().equals(EnActionEvent.WARNING.getCmd())){
             EnActionEvent enActionEvent=(EnActionEvent)e.getSource();
             mainFrame.showMsg("警告",enActionEvent.getMsg(), ENWarningLevel.WARNING);
+        }else if(e.getActionCommand().equals(EnActionEvent.REFRESHCACHE.getCmd())){
+            //刷新缓存
+            try {
+                SvcUtil.refreshCache();
+                mainFrame.showMsg("消息","刷新成功", ENWarningLevel.INFO);
+            } catch (Exception e1) {
+                logger.error("刷新缓存失败",e1);
+                mainFrame.showMsg("警告","刷新缓存失败:"+e1.getMessage(), ENWarningLevel.WARNING);
+            }
         }
 
     }

@@ -22,11 +22,15 @@ public class SvcUtil {
 
 
     public static void init() throws Exception {
+        refreshCache();
+    }
+    public  static void refreshCache() throws Exception {
         //初始化字字典
         DICTIONARIES=svcService.getDictionies();
         //辅助查询
         MIDSEARCH=svcService.getMidsearch();
     }
+
     public static String getSysName(){
         return "FUNDCRM";
     }

@@ -32,6 +32,10 @@ public enum EnActionEvent {
      */
     NEWTABCLICK("newtabclick"),
     /**
+     *刷新字典、辅助查询缓存
+     */
+    REFRESHCACHE("refreshcache"),
+    /**
      *关闭所有点击
      */
     CLOSEALLTABCLICK("closealltabclick"),
