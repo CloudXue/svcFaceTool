@@ -273,11 +273,12 @@ public class SqlMaintain  extends BaseJPanel {
     public void onFocus(boolean refresh) {
        if(refresh){
            String ucNo=centerContentPanel.getUcNo();
-           if(  tsvcSql_old!=null && tsvcSql_old.getC_functionno().equals(ucNo)){
+           reSetSqlMaintainData();
+          /* if(  tsvcSql_old!=null && tsvcSql_old.getC_functionno().equals(ucNo)){
                System.out.println("不更新sql");
            }else{
                reSetSqlMaintainData();
-           }
+           }*/
 
        }
     }

@@ -13,6 +13,10 @@ import java.awt.*;
  * 内层panel,包含多个tab页
  */
 public class CenterContentPanel extends BaseJPanel implements ChangeListener {
+    /**
+     * 记录选项卡当前选择下表，切换前用于判断是否可以切换
+     */
+    private int currentSelectIndex=-1;
     private CenterpanelTab centerpanelTab;
     private HeadPanel headPanel;
     private JTabbedPane contentTab;
@@ -31,6 +35,7 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
         ucOutMaintain = new UcOutMaintain(myActionListener, this);
         generateSql = new GenerateSql(myActionListener, this);
         init();
+        currentSelectIndex=contentTab.getSelectedIndex();
     }
 
     private void init() {
@@ -68,7 +73,27 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        ((BaseJPanel) contentTab.getSelectedComponent()).onFocus(true);
+        ((BaseJPanel) contentTab.getSelectedComponent()).onFocus(false);
+       /* contentTab.removeChangeListener(this);
+        int nextIndex=contentTab.getSelectedIndex();
+        contentTab.setSelectedIndex(currentSelectIndex);
+        if(((BaseJPanel) contentTab.getSelectedComponent()).canLoseFcous()){
+            contentTab.setSelectedIndex(nextIndex);
+            ((BaseJPanel) contentTab.getSelectedComponent()).onFocus(true);
+        }else{
+            int i=JOptionPane.showConfirmDialog(this,"修改没有保存。确定不保存当前修改吗？","提示修改",JOptionPane.WARNING_MESSAGE);
+            if(i==2){
+                //取消
+                ((BaseJPanel) contentTab.getSelectedComponent()).onFocus(false);
+            }else{
+                //确认切换
+                contentTab.setSelectedIndex(nextIndex);
+                ((BaseJPanel) contentTab.getSelectedComponent()).onFocus(true);
+
+            }
+        }
+        contentTab.addChangeListener(this);
+        currentSelectIndex=contentTab.getSelectedIndex();*/
     }
 
     public void close() {

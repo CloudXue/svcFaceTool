@@ -246,17 +246,7 @@ public class UcDefineMaintain extends BaseJPanel  {
         public void actionPerformed(ActionEvent e) {
             System.err.println(e.getActionCommand());
             if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_QUERYCLICK.getCmd())){
-                //region 查询
-                //清空所有缓存数据
-                addUcMap.clear();;
-                editUcMap.clear();
-                deleUcList.clear();
-                //重新加载table
-                String searchTxt=ucDefineMaintain.getInputTxt();
-                centerTable.reloadUc(searchTxt);
-                //底部选择第一行
-                centerTable.cloumSelect(0);
-                //endregion
+                query();
             }else if(e.getActionCommand().equals(EnActionEvent.UCDEFINE_INSERTCLICK.getCmd())){
                 //插入
 
@@ -311,5 +301,32 @@ public class UcDefineMaintain extends BaseJPanel  {
             ucDefineMaintain.spreadAction(e);
         }
 
+    }
+
+    private void query() {
+        //清空所有缓存数据
+        addUcMap.clear();
+        editUcMap.clear();
+        deleUcList.clear();
+        //重新加载table
+        String searchTxt = this.getInputTxt();
+        centerTable.reloadUc(searchTxt);
+        //底部选择第一行
+        centerTable.cloumSelect(0);
+
+    }
+    @Override
+    public boolean canLoseFcous() {
+        if(addUcMap.size()>0 || editUcMap.size()>0 || deleUcList.size()>0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onFocus(boolean refresh) {
+        if(refresh){
+            query();
+        }
     }
 }
