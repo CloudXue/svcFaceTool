@@ -1,3 +1,2 @@
-@echo off
-java  -jar svcFaceTool.jar  %~sdp0
+start javaw  -Xmx200m -Xms100m   -jar svcFaceTool.jar
 exit
