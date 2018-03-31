@@ -36,6 +36,10 @@ public enum EnActionEvent {
      */
     REFRESHCACHE("refreshcache"),
     /**
+     *更改系统列下
+     */
+    SWITCHSYSTEM("switchsystem"),
+    /**
      *关闭所有点击
      */
     CLOSEALLTABCLICK("closealltabclick"),

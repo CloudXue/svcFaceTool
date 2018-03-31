@@ -1,5 +1,7 @@
 package bean;
 
+import constant.ENSystem;
+
 import java.io.*;
 import java.net.URLDecoder;
 import java.util.Properties;
@@ -14,6 +16,7 @@ import java.util.Properties;
 public class SystemData {
 
     private static DataConnInfo dataConnInfo;
+    private static ENSystem system=ENSystem.ATS;
 
     public static void  init() throws Exception {
         String fileLogPath = SystemData.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -75,5 +78,13 @@ public class SystemData {
 
     public static void setDataConnInfo(DataConnInfo dataConnInfo) {
         SystemData.dataConnInfo = dataConnInfo;
+    }
+
+    public static ENSystem getSystem() {
+        return system;
+    }
+
+    public static void setSystem(ENSystem system) {
+        SystemData.system = system;
     }
 }

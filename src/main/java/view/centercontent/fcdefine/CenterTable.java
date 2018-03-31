@@ -1,6 +1,8 @@
 package view.centercontent.fcdefine;
 
 import bean.HsiRight;
+import bean.SystemData;
+import constant.ENSystem;
 import control.MyActionListener;
 import service.ServiceFactory;
 import service.UcDefineService;
@@ -191,7 +193,12 @@ public class CenterTable  extends BaseJPanel {
         table.scrollRectToVisible(rect);
         String functionno= "";
         if (index<tableModel.getRowCount()) {
-            functionno = (String)tableModel.getValueAt(index,6);
+            if(SystemData.getSystem()== ENSystem.ATS){
+                functionno = (String)tableModel.getValueAt(index,6);
+            }else{
+                functionno = (String)tableModel.getValueAt(index,1);
+            }
+
         }
         ucDefineMaintain.tableSelect(index,functionno);
     }
@@ -204,6 +211,18 @@ public class CenterTable  extends BaseJPanel {
         tcm.removeColumn(tc);
         tc = tcm.getColumn(6);
         tcm.removeColumn(tc);
+        if(SystemData.getSystem()== ENSystem.SAAS){
+            tc = tcm.getColumn(5);
+            tcm.removeColumn(tc);
+            tc = tcm.getColumn(4);
+            tcm.removeColumn(tc);
+            tc = tcm.getColumn(3);
+            tcm.removeColumn(tc);
+            tc = tcm.getColumn(2);
+            tcm.removeColumn(tc);
+            tc = tcm.getColumn(0);
+            tcm.removeColumn(tc);
+        }
         //endregion
     }
 

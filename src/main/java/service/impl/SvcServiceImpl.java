@@ -1,6 +1,7 @@
 package service.impl;
 
 import bean.*;
+import constant.ENSystem;
 import constant.ENWarningLevel;
 import constant.EnActionEvent;
 import control.MyActionListener;
@@ -117,13 +118,15 @@ public class SvcServiceImpl implements SvcService {
             sb.append(String.format(sqlHead, DateUtil.getCurrentDateTimeString()));
             sb.append("\r\n");
             sb.append("\r\n");
-            sb.append(HsiRight.generateHead());
-            sb.append(BaseBean.generateDelSql(HsiRight.tableName, uc));
-            sb.append("\r\n");
-            HsiRight hsiRight = hsiRightDao.getHsiRigh(uc);
-            sb.append(hsiRight.generateInsertSql());
-            sb.append("\r\n");
-            sb.append("\r\n");
+            if(SystemData.getSystem()== ENSystem.ATS){
+                sb.append(HsiRight.generateHead());
+                sb.append(BaseBean.generateDelSql(HsiRight.tableName, uc));
+                sb.append("\r\n");
+                HsiRight hsiRight = hsiRightDao.getHsiRigh(uc);
+                sb.append(hsiRight.generateInsertSql());
+                sb.append("\r\n");
+                sb.append("\r\n");
+            }
             sb.append(TsvcSql.generateHead());
             TsvcSql tsvcSql = tsvcSqlDao.getTsvcSql(uc);
             sb.append(BaseBean.generateDelSql(TsvcSql.tableName, uc));

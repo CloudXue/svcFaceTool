@@ -1,6 +1,8 @@
 package dao.impl;
 
 import bean.HsiRight;
+import bean.SystemData;
+import constant.ENSystem;
 import dao.BaseDao;
 import dao.HsiRightDao;
 import util.BeanUtils;
@@ -55,15 +57,21 @@ public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
     @Override
     public List<HsiRight> getHsiRighFuzzy(String condition) throws Exception {
         List<HsiRight> hsiRightList=new ArrayList<HsiRight>();
+        List<Map<String,Object>> maplist=new ArrayList<Map<String,Object>>();
+        if(SystemData.getSystem()== ENSystem.ATS){
+            String sqlWhere= " where 1=1 ";
+            if (StringUtils.isNotNullAndNotEmpty(condition)) {
+                sqlWhere += " and C_FUNCTIONNO like '%"+condition+"%' " +
+                        " or C_RIGHTCODE like '%"+condition+"%'" +
+                        " or C_RIGHTNAME like '%"+condition+"%' ";
+            }
+            sqlWhere +=" order by C_RIGHTCODE ";
+             maplist=getData(" t.*,t.C_FUNCTIONNO as c_functionno_hid,C_RIGHTCODE as c_rightcode_hid ",sqlWhere);
 
-        String sqlWhere= " where 1=1 ";
-        if (StringUtils.isNotNullAndNotEmpty(condition)) {
-            sqlWhere += " and C_FUNCTIONNO like '%"+condition+"%' " +
-                    " or C_RIGHTCODE like '%"+condition+"%'" +
-                    " or C_RIGHTNAME like '%"+condition+"%' ";
+        }else   if(SystemData.getSystem()== ENSystem.SAAS){
+            String sql="select distinct c_functionno from TSVCINTERFACE t where t.c_functionno like '%"+condition+"%' order by c_functionno";
+            maplist=queryForList(sql);
         }
-        sqlWhere +=" order by C_RIGHTCODE ";
-        List<Map<String,Object>> maplist=getData(" t.*,t.C_FUNCTIONNO as c_functionno_hid,C_RIGHTCODE as c_rightcode_hid ",sqlWhere);
         for (Map<String,Object> map : maplist){
             HsiRight hsiRight=new HsiRight();
             BeanUtils.covertMapToBean(hsiRight,map);

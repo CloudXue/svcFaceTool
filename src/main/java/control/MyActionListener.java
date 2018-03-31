@@ -1,6 +1,7 @@
 package control;
 
 import bean.SystemData;
+import constant.ENSystem;
 import constant.ENWarningLevel;
 import constant.EnActionEvent;
 import org.apache.log4j.Logger;
@@ -44,6 +45,18 @@ public class MyActionListener implements ActionListener {
             } catch (Exception e1) {
                 logger.error("刷新缓存失败",e1);
                 mainFrame.showMsg("警告","刷新缓存失败:"+e1.getMessage(), ENWarningLevel.WARNING);
+            }
+        }else if(e.getActionCommand().equals(EnActionEvent.SWITCHSYSTEM.getCmd())){
+            EnActionEvent enActionEvent=(EnActionEvent)e.getSource();
+            String systemStr=enActionEvent.getMsg();
+            //若更换系统，则全部关闭重新打开界面
+            if(systemStr.equals(ENSystem.ATS.getSystemName()) && !systemStr.equals(SystemData.getSystem().getSystemName())){
+                SystemData.setSystem(ENSystem.ATS);
+                mainFrame.closeAllTab();
+            }else if(systemStr.equals(ENSystem.SAAS.getSystemName()) && !systemStr.equals(SystemData.getSystem().getSystemName())){
+                SystemData.setSystem(ENSystem.SAAS);
+                mainFrame.closeAllTab();
+
             }
         }
 

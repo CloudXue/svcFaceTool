@@ -1,5 +1,7 @@
 package view.centercontent;
 
+import bean.SystemData;
+import constant.ENSystem;
 import constant.EnActionEvent;
 import control.MyActionListener;
 import service.ServiceFactory;
@@ -246,14 +248,23 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
      * @return
      */
     private String getFileName(){
-        return centerContentPanel.getUcCodeField()+"_"+ DateUtil.getCurrentDateString("yyyyMMdd")+".sql";
+        if (SystemData.getSystem()== ENSystem.ATS){
+            return centerContentPanel.getUcCodeField()+"_"+ DateUtil.getCurrentDateString("yyyyMMdd")+".sql";
+        }else{
+            return centerContentPanel.getUcNo()+"_"+ DateUtil.getCurrentDateString("yyyyMMdd")+".sql";
+        }
+
     }
     /**
      * 返回文件名称
      * @return
      */
     private String getFileNameNoDate(){
-        return centerContentPanel.getUcCodeField()+".sql";
+        if (SystemData.getSystem()== ENSystem.ATS) {
+            return centerContentPanel.getUcCodeField()+".sql";
+        }else{
+            return centerContentPanel.getUcNo()+".sql";
+        }
     }
     private void refreshSqlText(final String sql){
         new Thread(new Runnable() {
