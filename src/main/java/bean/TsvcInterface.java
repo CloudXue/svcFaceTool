@@ -125,7 +125,7 @@ public class TsvcInterface extends BaseBean {
     public String generateInsertSql() {
         return String.format(insertSql, StringUtils.valueOf(getC_functionno()),
                 StringUtils.valueOf(getC_flag()),StringUtils.valueOf(getC_packflag()),
-                StringUtils.valueOf(getC_fieldname()),StringUtils.valueOf(getC_explain()),
+                StringUtils.valueOf(getC_fieldname()).replaceAll("'","''"),StringUtils.valueOf(getC_explain()),
                 StringUtils.valueOf(getC_property()),StringUtils.valueOf(getL_len()),
                 StringUtils.valueOf(getL_declen()),StringUtils.valueOf(getC_fieldtype()),
                 StringUtils.valueOf(getC_fieldflag()),StringUtils.valueOf(getC_notnull()),
