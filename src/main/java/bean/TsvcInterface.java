@@ -130,7 +130,9 @@ public class TsvcInterface extends BaseBean {
                 StringUtils.valueOf(getL_declen()),StringUtils.valueOf(getC_fieldtype()),
                 StringUtils.valueOf(getC_fieldflag()),StringUtils.valueOf(getC_notnull()),
                 StringUtils.valueOf(getC_condition()),
-                StringUtils.valueOf(getC_existvalue()).replaceAll("'","''").replaceAll("\n","\r\n"),
+                StringUtils.valueOf(getC_existvalue()).replaceAll("'","''").
+                        replaceAll("\n\n","\n").replaceAll("\r\n\r\n","\n").replaceAll("\r\n","\n").
+                        replaceAll("\n","\r\n"),
                 StringUtils.valueOf(getC_viewlevel()),StringUtils.valueOf(getC_viewtype()),
                 StringUtils.valueOf(getC_dicname()),StringUtils.valueOf(getC_isdefault()),
                 StringUtils.valueOf(getC_value()),StringUtils.valueOf(getC_midsearchname()),

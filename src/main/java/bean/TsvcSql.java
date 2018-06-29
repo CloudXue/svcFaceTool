@@ -19,7 +19,9 @@ public class TsvcSql extends  BaseBean implements Serializable,Cloneable {
             " VALUES ('%s','%s','%s','%s',NULL);";
     @Override
     public String generateInsertSql() {
-        return String.format(tsvcsql,getC_functionno(),getC_sqlstatement().replaceAll("'","''"),
+        return String.format(tsvcsql,getC_functionno(),getC_sqlstatement().replaceAll("'","''").
+                        replaceAll("\n\n","\n").replaceAll("\r\n\r\n","\n").replaceAll("\r\n","\n").
+                        replaceAll("\n","\r\n"),
                 StringUtils.valueOf(getC_orderby()),getC_sqltype());
     }
     public static String generateHead() {
