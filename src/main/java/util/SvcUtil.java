@@ -77,6 +77,10 @@ public class SvcUtil {
         map.put("C:字符","C");
         map.put("I:整型","I");
         map.put("F:浮点数","F");
+        /**
+         * F4用于查询条件
+         */
+        map.put("F4:浮点数","F4");
         return map;
     }
     public static Map<String,String> getUcInNotNull(){
