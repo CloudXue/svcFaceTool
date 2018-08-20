@@ -37,15 +37,18 @@ public class SystemData {
         dataConnInfo.setJdbcurl(prop.getProperty("dburl").trim());
         dataConnInfo.setUsername(prop.getProperty("dbusername").trim());
         dataConnInfo.setPaswword(prop.getProperty("dbpassword").trim());
+        dataConnInfo.setDrivertype(prop.getProperty("drivertype").trim());
 
     }
 
 
    public static class DataConnInfo{
-
+        public final static String ORACLE="oracle";
+        public final static String MYSQL="mysql";
         private String jdbcurl;
         private String username;
         private String paswword;
+        private String drivertype;
 
         public String getJdbcurl() {
             return jdbcurl;
@@ -70,7 +73,15 @@ public class SystemData {
         public void setPaswword(String paswword) {
             this.paswword = paswword;
         }
-    }
+
+       public String getDrivertype() {
+           return drivertype;
+       }
+
+       public void setDrivertype(String drivertype) {
+           this.drivertype = drivertype;
+       }
+   }
 
     public static DataConnInfo getDataConnInfo() {
         return dataConnInfo;

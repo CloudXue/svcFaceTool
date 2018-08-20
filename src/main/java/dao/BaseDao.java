@@ -312,14 +312,18 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
         jdbcinfo.setUrl(SystemData.getDataConnInfo().getJdbcurl());
         jdbcinfo.setPaswword(SystemData.getDataConnInfo().getPaswword());
         jdbcinfo.setUsername(SystemData.getDataConnInfo().getUsername());
-        jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
 
+        if(SystemData.DataConnInfo.MYSQL.equalsIgnoreCase(SystemData.getDataConnInfo().getDrivertype())){
+            jdbcinfo.setDriver("com.mysql.jdbc.Driver");
+        }else{
+            jdbcinfo.setDriver("oracle.jdbc.driver.OracleDriver");
+        }
         /*jdbcinfo.setUrl( "jdbc:mysql://localhost:3306/crm?"+
                 "useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
 
         jdbcinfo.setPaswword("root");
         jdbcinfo.setUsername("root");
-        jdbcinfo.setDriver("com.mysql.cj.jdbc.Driver");*/
+        */
         return jdbcinfo;
     }
 
