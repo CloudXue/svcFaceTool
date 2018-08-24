@@ -1,6 +1,7 @@
 package bean;
 
 import constant.ENSystem;
+import util.StringUtils;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -17,6 +18,8 @@ public class SystemData {
 
     private static DataConnInfo dataConnInfo;
     private static ENSystem system=ENSystem.ATS;
+    private static String defaultdir="";
+    private static  boolean isusecode=false;
 
     public static void  init() throws Exception {
         String fileLogPath = SystemData.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -38,6 +41,15 @@ public class SystemData {
         dataConnInfo.setUsername(prop.getProperty("dbusername").trim());
         dataConnInfo.setPaswword(prop.getProperty("dbpassword").trim());
         dataConnInfo.setDrivertype(prop.getProperty("drivertype").trim());
+
+        String defaultdirstr=prop.getProperty("defaultdir");
+        if(StringUtils.isNotNullAndNotEmpty(defaultdirstr)){
+            defaultdir=defaultdirstr;
+        }
+        String isusecodestr=prop.getProperty("isusecode");
+        if("1".equals(isusecodestr)){
+            isusecode=true;
+        }
 
     }
 
@@ -97,5 +109,13 @@ public class SystemData {
 
     public static void setSystem(ENSystem system) {
         SystemData.system = system;
+    }
+
+    public static String getDefaultdir() {
+        return defaultdir;
+    }
+
+    public static boolean isIsusecode() {
+        return isusecode;
     }
 }

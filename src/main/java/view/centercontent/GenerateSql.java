@@ -117,7 +117,7 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
                 filePathNamestr=filePathNamestr.substring(0,filePathNamestr.lastIndexOf(separator));
                 filePathNamestr+=separator+getFileName();
             }else{
-                filePathNamestr=SystemUtil.getSvcDirectory()+getFileName();
+                filePathNamestr=SystemUtil.getSvcDirectory(getFileName())+getFileName();
             }
 
             if(File.separator.equals("/")){
