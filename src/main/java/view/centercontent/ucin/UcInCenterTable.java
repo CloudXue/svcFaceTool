@@ -1,6 +1,7 @@
 package view.centercontent.ucin;
 
 import bean.SqlFieldType;
+import bean.SystemData;
 import bean.TsvcInterface;
 import constant.EnActionEvent;
 import control.MyActionListener;
@@ -444,9 +445,11 @@ public class UcInCenterTable extends BaseJPanel implements ActionListener, ItemL
 
     private Map<Object, String> getOutField() {
         Map<Object, String> retMap = new LinkedHashMap<Object, String>();
-        List<SqlFieldType> sqlFieldTypeList = svcService.findSqlField(centerContentPanel.getUcNo());
-        for (SqlFieldType sqlFieldType : sqlFieldTypeList) {
-            retMap.put(sqlFieldType, sqlFieldType.getField());
+        if (SystemData.getDataConnInfo().getDrivertype().equalsIgnoreCase(SystemData.DataConnInfo.ORACLE)) {
+            List<SqlFieldType> sqlFieldTypeList = svcService.findSqlField(centerContentPanel.getUcNo());
+            for (SqlFieldType sqlFieldType : sqlFieldTypeList) {
+                retMap.put(sqlFieldType, sqlFieldType.getField());
+            }
         }
         return retMap;
     }
