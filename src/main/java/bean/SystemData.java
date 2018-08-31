@@ -40,7 +40,13 @@ public class SystemData {
         dataConnInfo.setJdbcurl(prop.getProperty("dburl").trim());
         dataConnInfo.setUsername(prop.getProperty("dbusername").trim());
         dataConnInfo.setPaswword(prop.getProperty("dbpassword").trim());
-        dataConnInfo.setDrivertype(prop.getProperty("drivertype").trim());
+        String drivertypestr=prop.getProperty("drivertype");
+        if(StringUtils.isNotNullAndNotEmpty(drivertypestr)){
+            dataConnInfo.setDrivertype(drivertypestr.trim());
+        }else{
+            dataConnInfo.setDrivertype("oracle");
+        }
+
 
         String defaultdirstr=prop.getProperty("defaultdir");
         if(StringUtils.isNotNullAndNotEmpty(defaultdirstr)){
