@@ -97,7 +97,7 @@ public class TsvcViewconfig  extends BaseBean {
     public String generateInsertSql() {
         return String.format(insertSql,
                 StringUtils.valueOf(getC_functionno()),StringUtils.valueOf(getC_businflag()),
-                StringUtils.valueOf(getC_property()),StringUtils.valueOf(getC_viewlevel()),
+                StringUtils.valueOf(getC_property().replaceAll("'","''")),StringUtils.valueOf(getC_viewlevel()),
                 StringUtils.valueOf(getC_viewtype()),StringUtils.valueOf(getC_dicname()),
                 StringUtils.valueOf(getC_viewname()),StringUtils.valueOf(getC_reserve()),
                 StringUtils.valueOf(getL_no()),StringUtils.valueOf(getC_hyperlink()),
