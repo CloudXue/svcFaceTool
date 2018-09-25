@@ -118,6 +118,7 @@ public class SvcUtil {
         map.put("<>","<>");
         map.put("rlike","rlike");
         map.put("lrlike","lrlike");
+        map.put("lrlikeor","lrlikeor");
         return map;
     }
     public static Map<String,String> getUcInViewLevel(){
