@@ -262,6 +262,24 @@ public class SvcServiceImpl implements SvcService {
     @Override
     public List<String> getDictionies() throws Exception {
         List<String> retList = new ArrayList<String>();
+        String sql = " select  t.c_caption caption from tdictionary t where t.c_keyvalue='#' " +
+                " order by caption";
+        try {
+            List<Map<String, Object>> retMapList = hsiRightDao.queryForList(sql);
+            for (Map<String, Object> map : retMapList) {
+                retList.add(valueOf(map.get("CAPTION")));
+            }
+        } catch (Exception e) {
+            retList.clear();
+            logger.error("获取字典数据异常",e);
+            throw e;
+        }
+        return retList;
+    }
+
+    @Override
+    public List<String> getDictionieAndCache() throws Exception {
+        List<String> retList = new ArrayList<String>();
         String sql = "select * from (select t.c_caption caption from tdictionarycache t where  t.c_keyvalue='#' " +
                 " union all " +
                 " select  t.c_caption caption from tdictionary t where t.c_keyvalue='#' )" +

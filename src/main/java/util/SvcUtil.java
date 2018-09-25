@@ -17,6 +17,10 @@ import java.util.Map;
  */
 public class SvcUtil {
     private static SvcService svcService= ServiceFactory.getSvcService();
+    private static List<String> DICTIONARIEANDCACHES;
+    /**
+     * 字典，不包含字典缓存
+     */
     private static List<String> DICTIONARIES;
     private static Map<String,String> MIDSEARCH;
 
@@ -27,6 +31,7 @@ public class SvcUtil {
     public  static void refreshCache() throws Exception {
         //初始化字字典
         DICTIONARIES=svcService.getDictionies();
+        DICTIONARIEANDCACHES=svcService.getDictionieAndCache();
         //辅助查询
         MIDSEARCH=svcService.getMidsearch();
     }
@@ -143,4 +148,8 @@ public class SvcUtil {
     public static List<String> getDiction(){
         return DICTIONARIES;
     }
+    public static List<String> getDictionAndCache(){
+        return DICTIONARIEANDCACHES;
+    }
+
 }

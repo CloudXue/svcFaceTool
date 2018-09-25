@@ -31,10 +31,15 @@ public interface SvcService {
     public Vector<Vector<String>> ucTsvcViewconfigToVector(List<TsvcViewconfig> list) ;
     public  List<TsvcViewconfig> getUcTsvcViewconfig(String uc);
     /**
-     * 获得字典和字典缓存
+     * 获得字典
      * @return
      */
     public List<String> getDictionies() throws Exception;
+    /**
+     * 获得字典和字典缓存
+     * @return
+     */
+    public List<String> getDictionieAndCache() throws Exception;
     /**
      * 获得辅助查询
      * @return

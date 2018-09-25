@@ -149,7 +149,7 @@ public class UcOutCenterTable extends BaseJPanel {
         SvcTableCellEditor cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(2).setCellEditor( cellEditor );
         //字典
-        mapModel=new ComboBoxMapModel(SvcUtil.getDiction());
+        mapModel=new ComboBoxMapModel(SvcUtil.getDictionAndCache());
         comboBox=new EditComBox(mapModel);
         cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(3).setCellEditor( cellEditor );
