@@ -385,8 +385,10 @@ public class SvcServiceImpl implements SvcService {
         String retSql=sql.replaceAll("@where_rep@"," ").replaceAll("@WHERE_REP@"," ");
         if(retSql.contains(":")){
             String[] sqlWords=retSql.split("=|\\s+");
+            //用于去除 to_date里 ：情况
+            boolean hasmark=false;
             for(String word : sqlWords){
-                if(word.contains(":")){
+                if(!hasmark && word.contains(":")){
                     if(word.contains("(")){
                         word=word.replaceAll("\\(","");
                     }
@@ -394,6 +396,14 @@ public class SvcServiceImpl implements SvcService {
                         word=word.replaceAll("\\)","");
                     }
                     retSql=retSql.replaceAll(word,"''");
+                }
+                int count=StringUtils.countString(word,"'");
+                if(count%2!=0){
+                    if(hasmark){
+                        hasmark=false;
+                    }else{
+                        hasmark=true;
+                    }
                 }
             }
         }

@@ -467,4 +467,26 @@ public class StringUtils {
         if (obj == null) return "";
         return obj.toString();
     }
+
+    /**
+     *计算出现次数
+     * @param str
+     * @param s
+     */
+    public static int countString(String str,String s) {
+        int count = 0;
+        for(int i= 0; ; ){
+            if(i>str.length()){
+                break;
+            }
+            if(str.indexOf(s) == i){
+                str = str.substring(i+1,str.length());
+                count++;
+                i=0;
+            }else{
+                i++;
+            }
+        }
+        return count;
+    }
 }
