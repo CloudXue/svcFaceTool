@@ -124,6 +124,10 @@ public enum EnActionEvent {
      *生成sql,保存
      */
     GENERATESQL_SAVE("GENERATESQL_SAVE"),
+    /**
+     *打开生成文件目录
+     */
+    GENERATESQL_OPEN("GENERATESQL_OPEN"),
     COMBOBOXDATACHANGE("COMBOBOXDATACHANGE"),
     /**
      * UC输入定义-初始化输入输出

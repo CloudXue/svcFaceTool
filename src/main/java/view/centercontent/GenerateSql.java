@@ -45,6 +45,7 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
      *保存
      */
     private SButton saveBtn=new SButton("保存");
+    private SButton openBtn=new SButton("打开目录");
     /**
      * 生成sql文本框
      */
@@ -62,7 +63,7 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
     }
     private void init(){
 
-        JLabel jLabel1=new JLabel("生成响应的配置SQL:");
+        JLabel jLabel1=new JLabel("生成配置SQL:");
         JLabel jLabel2=new JLabel("保存到:");
         jLabel1.setFont(FontFactory.getJTableFont());
         jLabel2.setFont(FontFactory.getJTableFont());
@@ -71,11 +72,13 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
         generateSqlNoDateBtn.setActionCommand(EnActionEvent.GENERATESQL_GEN_NODATE.getCmd());
         filechooserbtn.setActionCommand(EnActionEvent.GENERATESQL_OPENFILESEL.getCmd());
         saveBtn.setActionCommand(EnActionEvent.GENERATESQL_SAVE.getCmd());
+        openBtn.setActionCommand(EnActionEvent.GENERATESQL_OPEN.getCmd());
         generateSqlNoDateBtn.addActionListener(this);
         generateSqlBtn.addActionListener(this);
         generateSqlNoDateBtn.addActionListener(this);
         filechooserbtn.addActionListener(this);
         saveBtn.addActionListener(this);
+        openBtn.addActionListener(this);
 
         filepath.setFont(FontFactory.getTxtInputFootFont());
 
@@ -88,6 +91,7 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
         northPanel.add(filepath);
         northPanel.add(filechooserbtn);
         northPanel.add(saveBtn);
+        northPanel.add(openBtn);
 
         //设置边框
         sqlText.setFont(FontFactory.getSqlInputFootFont());
@@ -200,6 +204,43 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
                     writer.close();
                 }
             }
+        }else if(e.getActionCommand().equals(EnActionEvent.GENERATESQL_OPEN.getCmd())){
+            String filePathNamestr=filepath.getText();
+            String filePathstr="";
+            if (StringUtils.isNullOrEmpty(filePathNamestr)) {
+                showWarningMsg("保存目录必填！");
+                return;
+            }
+            String separator="/";
+            if(File.separator.equals("/")){
+                separator="/";
+            }else{
+                separator="\\";
+            }
+            if(StringUtils.isNotNullAndNotEmpty(filePathNamestr)){
+
+                filePathNamestr=filePathNamestr.substring(0,filePathNamestr.lastIndexOf(separator));
+            }else{
+                filePathNamestr=SystemUtil.getSvcDirectory();
+            }
+
+            if(File.separator.equals("/")){
+                filePathstr=filePathNamestr.replaceAll("\\\\",separator);
+            }else{
+                filePathstr=filePathNamestr.replaceAll("/","\\\\");
+            }
+            String[] cmd = new String[5];
+            cmd[0] = "cmd";
+            cmd[1] = "/c";
+            cmd[2] = "start";
+            cmd[3] = " ";
+            cmd[4] = filePathstr;
+            try {
+                Runtime.getRuntime().exec(cmd);
+            } catch (IOException e1) {
+                showWarningMsg("无法打开目录："+filePathstr+",异常信息："+e1.getMessage());
+            }
+
         }
     }
 
