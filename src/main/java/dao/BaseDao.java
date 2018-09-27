@@ -215,7 +215,7 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
         }
         return false;
     }
-    private int executeSQL(String sql, Object[] params) throws Exception {
+    protected int executeSQL(String sql, Object[] params) throws Exception {
         int result;
         PreparedStatement pstmt = getPreStmt(sql);
         try {

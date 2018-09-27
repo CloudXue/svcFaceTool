@@ -164,5 +164,16 @@ public class HsiRightDaoImpl extends BaseDao<HsiRight> implements HsiRightDao  {
         return HsiRight.tableName;
     }
 
-
+    @Override
+    public void update(HsiRight hsiRight) throws Exception {
+        String sql="UPDATE HSI_RIGHT SET  c_rightcode=?,c_rightname=?,c_class=?,c_sysname=?,c_functionno=?," +
+                "c_javaclass=?,c_javamethod=?,c_clientprogs=?,c_tablename=?,c_uctype=?,c_islimit=? WHERE " +
+                " c_functionno=?  ";
+        int tmpCount = executeSQL(sql, new Object[]{hsiRight.getC_rightcode(),hsiRight.getC_rightname(),hsiRight.getC_class(),
+                hsiRight.getC_sysname(),hsiRight.getC_functionno(),hsiRight.getC_javaclass(),hsiRight.getC_javamethod(),hsiRight.getC_clientprogs(),
+                hsiRight.getC_tablename(),hsiRight.getC_uctype(),hsiRight.getC_islimit(),hsiRight.getC_functionno_hid()});
+        if (1 != tmpCount) {
+            throw new Exception("更新行数为："+tmpCount);
+        }
+    }
 }
