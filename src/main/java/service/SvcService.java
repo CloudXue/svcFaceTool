@@ -70,4 +70,6 @@ public interface SvcService {
     public boolean exchange(TsvcInterface current,TsvcInterface opp);
     public boolean exchange(TsvcViewconfig current,TsvcViewconfig opp);
 
+    public void testingCondition(String uc);
+
 }

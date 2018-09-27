@@ -169,6 +169,10 @@ public enum EnActionEvent {
      * UC输入定义-下移
      */
     UCIN_DOWN("UCIN_DOWN"),
+    /**
+     * 检查条件
+     */
+    UCIN_TESTCONDTION("UCIN_TESTCONDTION"),
     UCIN_CONDITIONSELECT("UCIN_CONDITIONSELECT"),
     /**
      * UC输出定义-初始化输出输出

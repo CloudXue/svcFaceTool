@@ -46,6 +46,8 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
     private JButton upBtn=new JButton("上移");
     //下移
     private JButton downBtn=new JButton("下移");
+    //检查条件
+    private JButton testCondtionBtn=new JButton("检查条件");
     //输入条件sql
     private JTextArea existsArea=new JTextArea();
     JScrollPane sqlexistsAreaScrollPane = new JScrollPane(existsArea);
@@ -81,6 +83,7 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
         refreshBtn.setActionCommand(EnActionEvent.UCIN_REFRESH.getCmd());
         upBtn.setActionCommand(EnActionEvent.UCIN_UP.getCmd());
         downBtn.setActionCommand(EnActionEvent.UCIN_DOWN.getCmd());
+        testCondtionBtn.setActionCommand(EnActionEvent.UCIN_TESTCONDTION.getCmd());
         //</editor-fold>
 
         //<editor-fold desc="设置监听">
@@ -94,6 +97,7 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
         refreshBtn.addActionListener(this);
         upBtn.addActionListener(this);
         downBtn.addActionListener(this);
+        testCondtionBtn.addActionListener(this);
         //</editor-fold>
 
         //<editor-fold desc="设置字体">
@@ -107,6 +111,7 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
         refreshBtn.setFont(FontFactory.getBtnFont());
         upBtn.setFont(FontFactory.getBtnFont());
         downBtn.setFont(FontFactory.getBtnFont());
+        testCondtionBtn.setFont(FontFactory.getBtnFont());
         //</editor-fold>
 
         //<editor-fold desc="北部panel">
@@ -124,6 +129,7 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
         northJPanel.add(refreshBtn);
         northJPanel.add(upBtn);
         northJPanel.add(downBtn);
+        northJPanel.add(testCondtionBtn);
         //</editor-fold>
 
 
@@ -203,6 +209,8 @@ public class UcInMaintain extends BaseJPanel  implements ActionListener,Document
                     centerTable.cloumSelect(index+1);
                 }
             }
+        } if(e.getActionCommand().equals(EnActionEvent.UCIN_TESTCONDTION.getCmd())){
+            svcService.testingCondition(centerContentPanel.getUcNo());
         }
 
     }

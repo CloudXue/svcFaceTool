@@ -60,6 +60,19 @@ public class TsvcInterfaceDaoImpl extends BaseDao<TsvcInterface> implements Tsvc
     }
 
     @Override
+    public List<TsvcInterface> getConditionTsvcInterfaceList(String uc) throws Exception {
+        String sqlWhere=" where C_FUNCTIONNO ='"+uc+"' and c_flag=0 and c_fieldflag='2' order by t.c_flag,t.l_no,t.c_fieldname";
+        List<Map<String,Object>> maplist=getData(" t.*,t.rowid ",sqlWhere);
+        List<TsvcInterface> hsiRightList=new ArrayList<TsvcInterface>();
+        for (Map<String,Object> map : maplist){
+            TsvcInterface hsiRight=new TsvcInterface();
+            BeanUtils.covertMapToBean(hsiRight,map);
+            hsiRightList.add(hsiRight);
+        }
+        return hsiRightList;
+    }
+
+    @Override
     protected String getTableName() {
         return TsvcInterface.tableName;
     }

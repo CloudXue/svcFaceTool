@@ -15,4 +15,6 @@ public interface TsvcInterfaceDao extends IBaseDao<TsvcInterface> {
     public List<TsvcInterface> getOutTsvcInterface(String uc) throws Exception;
     public List<TsvcInterface> getTsvcInterfaceList(String uc) throws Exception;
     public List<TsvcInterface> getTsvcInterfaceListHasOrder(String uc) throws Exception;
+    public List<TsvcInterface> getConditionTsvcInterfaceList(String uc) throws Exception;
+
 }

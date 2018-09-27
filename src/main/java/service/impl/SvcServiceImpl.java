@@ -26,13 +26,13 @@ import java.util.*;
  * <br>
  */
 public class SvcServiceImpl implements SvcService {
-    private static Logger logger= LogUtil.getLogger(SvcServiceImpl.class);
+    private static Logger logger = LogUtil.getLogger(SvcServiceImpl.class);
 
     MyActionListener viewListener;
-    SvcDao svcDao=DaoFactory.getSvcDao();
+    SvcDao svcDao = DaoFactory.getSvcDao();
     HsiRightDao hsiRightDao = DaoFactory.getHsiRightDao();
     TsvcSqlDao tsvcSqlDao = DaoFactory.getTsvcSqlDao();
-    TsvcViewconfigDao tsvcViewconfigDao =DaoFactory.getTsvcViewconfigDao();
+    TsvcViewconfigDao tsvcViewconfigDao = DaoFactory.getTsvcViewconfigDao();
     TsvcInterfaceDao tsvcInterfaceDao = DaoFactory.getTsvcInterfaceDao();
     private final static String sqlHead = "--*********************************************************\r\n" +
             "--FUNDCRM系统初始化脚本\r\n" +
@@ -45,23 +45,23 @@ public class SvcServiceImpl implements SvcService {
             //基础数据需要同步加载
             SystemData.init();
         } catch (Exception e) {
-            logger.error("基础数据加载异常",e);
-            throwErrorMsg(EnActionEvent.SYSTEM_FAILSTART,"基础数据加载异常"+e.getMessage());
+            logger.error("基础数据加载异常", e);
+            throwErrorMsg(EnActionEvent.SYSTEM_FAILSTART, "基础数据加载异常" + e.getMessage());
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     SvcUtil.init();
-                    throwErrorMsg(EnActionEvent.SYSTEM_SUCSTART,"启动成功");
+                    throwErrorMsg(EnActionEvent.SYSTEM_SUCSTART, "启动成功");
                 } catch (Exception e) {
-                    throwErrorMsg(EnActionEvent.SYSTEM_FAILSTART,"启动成功");
+                    throwErrorMsg(EnActionEvent.SYSTEM_FAILSTART, "启动成功");
                 }
             }
         }).start();
     }
 
-    public List<SqlFieldType> findSqlField(String uc){
+    public List<SqlFieldType> findSqlField(String uc) {
         /**
          * 1、处理sql
          * 2、查询所有字段
@@ -70,42 +70,43 @@ public class SvcServiceImpl implements SvcService {
          * 5、字段匹配第一注释，
          * 6、todo，暂时不做。一个字段有多个时候，由列表下拉出
          */
-        List<SqlFieldType> field= new ArrayList<SqlFieldType>();
+        List<SqlFieldType> field = new ArrayList<SqlFieldType>();
         try {
-            TsvcSql tsvcSql= tsvcSqlDao.getTsvcSql(uc);
-            if(tsvcSql==null){
+            TsvcSql tsvcSql = tsvcSqlDao.getTsvcSql(uc);
+            if (tsvcSql == null) {
                 return field;
             }
-            if(StringUtils.isNullOrEmpty(tsvcSql.getC_sqlstatement())){
+            if (StringUtils.isNullOrEmpty(tsvcSql.getC_sqlstatement())) {
                 return field;
             }
+            String sqlstatement = tsvcSql.getC_sqlstatement().replaceAll("@where_rep@", " ").replaceAll("@WHERE_REP@", " ");
+            String sql = analysisUcSql(sqlstatement);
 
-            String sql=analysisUcSql(tsvcSql.getC_sqlstatement());
-            List<String > sourcetableName=getTableName(sql);
-            List<String> tableNameList=new ArrayList<>();
+            List<String> sourcetableName = getTableName(sql);
+            List<String> tableNameList = new ArrayList<>();
             //<editor-fold desc="处理R table">
-            for(String tableName : sourcetableName){
-                String table=tableName;
-                if(table.startsWith("R")){
-                    table=table.substring(1,table.length());
-                    sql=sql.replaceAll(tableName,table);
+            for (String tableName : sourcetableName) {
+                String table = tableName;
+                if (table.startsWith("R")) {
+                    table = table.substring(1, table.length());
+                    sql = sql.replaceAll(tableName, table);
                 }
                 tableNameList.add(table.toUpperCase());
             }
             //</editor-fold>
             field = svcDao.findField(sql);
 
-            Map<String,String> comm=svcDao.findFieldComments(tableNameList);
-            for(Map.Entry<String,String> entry : comm.entrySet()){
-                for(SqlFieldType sqlFieldType : field){
-                    if(entry.getKey().toUpperCase().contains("#"+sqlFieldType.getField().toUpperCase()+"#")){
-                        sqlFieldType.setFieldNameMap(entry.getKey(),entry.getValue());
+            Map<String, String> comm = svcDao.findFieldComments(tableNameList);
+            for (Map.Entry<String, String> entry : comm.entrySet()) {
+                for (SqlFieldType sqlFieldType : field) {
+                    if (entry.getKey().toUpperCase().contains("#" + sqlFieldType.getField().toUpperCase() + "#")) {
+                        sqlFieldType.setFieldNameMap(entry.getKey(), entry.getValue());
                     }
                 }
             }
         } catch (Exception e) {
-            logger.error("查询sql配置字段异常",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            logger.error("查询sql配置字段异常", e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
         return field;
     }
@@ -118,7 +119,7 @@ public class SvcServiceImpl implements SvcService {
             sb.append(String.format(sqlHead, DateUtil.getCurrentDateTimeString()));
             sb.append("\r\n");
             sb.append("\r\n");
-            if(SystemData.getSystem()== ENSystem.ATS){
+            if (SystemData.getSystem() == ENSystem.ATS) {
                 sb.append(HsiRight.generateHead());
                 sb.append(BaseBean.generateDelSql(HsiRight.tableName, uc));
                 sb.append("\r\n");
@@ -157,8 +158,8 @@ public class SvcServiceImpl implements SvcService {
 
 
         } catch (Exception e) {
-            logger.error("生成sql异常",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            logger.error("生成sql异常", e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
 
 
@@ -171,7 +172,7 @@ public class SvcServiceImpl implements SvcService {
     }
 
     @Override
-    public Vector<Vector<String>> ucTsvcInterfaceToVector(List<TsvcInterface> tsvcInterfaceList)  {
+    public Vector<Vector<String>> ucTsvcInterfaceToVector(List<TsvcInterface> tsvcInterfaceList) {
         Vector<Vector<String>> retVector = new Vector<Vector<String>>();
         if (tsvcInterfaceList != null) {
             for (TsvcInterface tsvcInterface : tsvcInterfaceList) {
@@ -202,15 +203,16 @@ public class SvcServiceImpl implements SvcService {
         }
         return retVector;
     }
+
     @Override
-    public List<TsvcInterface> getUcTsvcInterface(String uc)  {
+    public List<TsvcInterface> getUcTsvcInterface(String uc) {
 
         List<TsvcInterface> tsvcInterfaceList = null;
         try {
             tsvcInterfaceList = tsvcInterfaceDao.getTsvcInterfaceListHasOrder(uc);
         } catch (Exception e) {
-            logger.error("查询配置输入输出异常：",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            logger.error("查询配置输入输出异常：", e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
         return tsvcInterfaceList;
     }
@@ -246,19 +248,21 @@ public class SvcServiceImpl implements SvcService {
         }
         return retVector;
     }
+
     @Override
-    public  List<TsvcViewconfig> getUcTsvcViewconfig(String uc) {
+    public List<TsvcViewconfig> getUcTsvcViewconfig(String uc) {
         List<TsvcViewconfig> tsvcViewconfigList = null;
         try {
             tsvcViewconfigList = tsvcViewconfigDao.getTsvcViewconfigHasOrder(uc);
         } catch (Exception e) {
-            logger.error("查询配置显示异常：",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            logger.error("查询配置显示异常：", e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
 
         }
 
         return tsvcViewconfigList;
     }
+
     @Override
     public List<String> getDictionies() throws Exception {
         List<String> retList = new ArrayList<String>();
@@ -271,7 +275,7 @@ public class SvcServiceImpl implements SvcService {
             }
         } catch (Exception e) {
             retList.clear();
-            logger.error("获取字典数据异常",e);
+            logger.error("获取字典数据异常", e);
             throw e;
         }
         return retList;
@@ -291,7 +295,7 @@ public class SvcServiceImpl implements SvcService {
             }
         } catch (Exception e) {
             retList.clear();
-            logger.error("获取字典数据异常",e);
+            logger.error("获取字典数据异常", e);
             throw e;
         }
         return retList;
@@ -304,29 +308,29 @@ public class SvcServiceImpl implements SvcService {
         try {
             List<Map<String, Object>> retMapList = hsiRightDao.queryForList(sql);
             for (Map<String, Object> map : retMapList) {
-                retMap.put(valueOf(map.get("KEY")),valueOf(map.get("VALUE")));
+                retMap.put(valueOf(map.get("KEY")), valueOf(map.get("VALUE")));
             }
         } catch (Exception e) {
             retMap.clear();
-            logger.error("获取辅助查询数据异常",e);
+            logger.error("获取辅助查询数据异常", e);
             throw e;
         }
         return retMap;
     }
 
     @Override
-    public void saveTsvcInterface(List<TsvcInterface> tsvcInterfaceList,String uc) {
+    public void saveTsvcInterface(List<TsvcInterface> tsvcInterfaceList, String uc) {
 
         try {
             tsvcInterfaceDao.openTransaction();
             //先删除
-            String deleteSql="delete TSVCINTERFACE where C_FUNCTIONNO='"+uc+"'";
+            String deleteSql = "delete TSVCINTERFACE where C_FUNCTIONNO='" + uc + "'";
             tsvcInterfaceDao.executeSql(deleteSql);
-            if(tsvcInterfaceList!=null || tsvcInterfaceList.size()>0){
+            if (tsvcInterfaceList != null || tsvcInterfaceList.size() > 0) {
                 //添加
-                for(TsvcInterface tsvcInterface: tsvcInterfaceList){
-                    if(!tsvcInterfaceDao.insert(tsvcInterface)){
-                        throw new Exception("保存数据失败"+tsvcInterface.getC_fieldname());
+                for (TsvcInterface tsvcInterface : tsvcInterfaceList) {
+                    if (!tsvcInterfaceDao.insert(tsvcInterface)) {
+                        throw new Exception("保存数据失败" + tsvcInterface.getC_fieldname());
                     }
                 }
             }
@@ -334,24 +338,24 @@ public class SvcServiceImpl implements SvcService {
             tsvcInterfaceDao.commitTransaction();
         } catch (Exception e) {
             tsvcInterfaceDao.rollbackTransaction();
-            logger.error("保存功能输入输出异常",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            logger.error("保存功能输入输出异常", e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
     }
 
     @Override
-    public void saveTsvcViewconfig(List<TsvcViewconfig> tsvcViewconfigsList,String uc) {
+    public void saveTsvcViewconfig(List<TsvcViewconfig> tsvcViewconfigsList, String uc) {
 
         try {
             tsvcViewconfigDao.openTransaction();
             //先删除
-            String deleteSql="delete TSVCVIEWCONFIG where C_FUNCTIONNO='"+uc+"'";
+            String deleteSql = "delete TSVCVIEWCONFIG where C_FUNCTIONNO='" + uc + "'";
             tsvcViewconfigDao.executeSql(deleteSql);
             //添加
-            if(tsvcViewconfigsList!=null || tsvcViewconfigsList.size()>0){
-                for(TsvcViewconfig tsvcViewconfig: tsvcViewconfigsList){
-                    if(!tsvcViewconfigDao.insert(tsvcViewconfig)){
-                        throw new Exception("保存数据失败"+tsvcViewconfig.getC_property());
+            if (tsvcViewconfigsList != null || tsvcViewconfigsList.size() > 0) {
+                for (TsvcViewconfig tsvcViewconfig : tsvcViewconfigsList) {
+                    if (!tsvcViewconfigDao.insert(tsvcViewconfig)) {
+                        throw new Exception("保存数据失败" + tsvcViewconfig.getC_property());
                     }
                 }
             }
@@ -359,133 +363,244 @@ public class SvcServiceImpl implements SvcService {
             tsvcViewconfigDao.commitTransaction();
         } catch (Exception e) {
             tsvcViewconfigDao.rollbackTransaction();
-            logger.error("保存功能查询显示异常",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            logger.error("保存功能查询显示异常", e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
     }
 
     @Override
     public List<TsvcInterface> getOutTsvcInterface(String uc) {
-        List<TsvcInterface> tsvcInterfaceList=null;
+        List<TsvcInterface> tsvcInterfaceList = null;
         try {
-            tsvcInterfaceList=tsvcInterfaceDao.getOutTsvcInterface(uc);
+            tsvcInterfaceList = tsvcInterfaceDao.getOutTsvcInterface(uc);
         } catch (Exception e) {
-            tsvcInterfaceList=new ArrayList<>();
-            logger.error("获取查询显示数据异常：",e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            tsvcInterfaceList = new ArrayList<>();
+            logger.error("获取查询显示数据异常：", e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
         return tsvcInterfaceList;
+    }
+
+    public void testingCondition(String uc) {
+
+        List<SqlFieldType> field = new ArrayList<SqlFieldType>();
+        //最终拼接的结果sql
+        StringBuilder result = new StringBuilder();
+        try {
+            TsvcSql tsvcSql = tsvcSqlDao.getTsvcSql(uc);
+            if (tsvcSql == null) {
+                return;
+            }
+            if (StringUtils.isNullOrEmpty(tsvcSql.getC_sqlstatement())) {
+                return;
+            }
+            String sql = analysisUcSql(tsvcSql.getC_sqlstatement());
+            List<String> sourcetableName = getTableName(sql);
+            //<editor-fold desc="处理R table">
+            for (String tableName : sourcetableName) {
+                String table = tableName;
+                if (table.startsWith("R")) {
+                    table = table.substring(1, table.length());
+                    sql = sql.replaceAll(tableName, table);
+                }
+            }
+            //</editor-fold>
+            StringBuilder condtion = new StringBuilder();
+            List<TsvcInterface> tsvcInterfaceList = tsvcInterfaceDao.getConditionTsvcInterfaceList(uc);
+            if (tsvcInterfaceList != null && tsvcInterfaceList.size() > 0) {
+                for (TsvcInterface tsvcInterface : tsvcInterfaceList) {
+                    String str = convertTsvcInterfaceToCinditon(tsvcInterface);
+                    if (StringUtils.isNotNullAndNotEmpty(str)) {
+                        condtion.append(str).append("and");
+                    }
+                }
+            }
+            if (condtion.length() > 1) {
+                condtion.setLength(condtion.length() - 3);
+            }
+
+            //<editor-fold desc="拼接条件">
+            if (StringUtils.isNotNullAndNotEmpty(condtion.toString())) {
+                sql = sql.replaceAll("@where_rep@", "@WHERE_REP@")
+                        .replaceAll(" where ", " WHERE ")
+                        .replaceAll(" group by ", " GROUP BY ")
+                        .replaceAll(" order by ", " ORDER BY ")
+                        .replaceAll(" union ", " UNION ");
+                int index = StringUtils.indexOf(sql, "@WHERE_REP@");
+                if (StringUtils.indexOf(sql, "UNION") > 1 && index < 1) {
+                    throwErrorMsg(EnActionEvent.COMMOM_ERROR, "SQL语句配置不正确，语句中如果有UNION，查询条件替换必需使用@WHERE_REP@标签！");
+                }
+                if (index > 1) {
+                    result.append(StringUtils.replace(sql, "@WHERE_REP@", " " + condtion.toString() + " AND "));
+                } else {
+                    index = StringUtils.lastIndexOf(sql, "WHERE");
+                    if (index > 1) {
+                        result.append(sql.substring(0, index + 5)).append(" ").append(condtion.toString()).append(" AND ").append(sql.substring(index + 5));
+                    } else {
+                        index = StringUtils.indexOf(sql, "GROUP BY");
+                        if (index > 1) {
+                            result.append(sql.substring(0, index)).append(" WHERE ").append(condtion.toString()).append(" ").append(sql.substring(index));
+                        } else {
+                            index = StringUtils.indexOf(sql, "ORDER BY");
+                            if (index > 1) {
+                                result.append(sql.substring(0, index)).append(" WHERE ").append(condtion.toString()).append(" ").append(sql.substring(index));
+                            } else {
+                                result.append(sql).append(" WHERE ").append(condtion.toString());
+                            }
+                        }
+                    }
+                }
+            } else {
+                result.append(StringUtils.replace(sql, "@WHERE_REP@", " "));
+            }
+            //</editor-fold>
+
+            if (StringUtils.isNotNullAndNotEmpty(result.toString())) {
+                tsvcSqlDao.executeSql(result.toString());
+                logger.info("sql检查执行sql为：" + result.toString());
+                throwErrorMsg(EnActionEvent.COMMOM_INFO, "检查通过");
+            }
+        } catch (Exception e) {
+            logger.error("sql检查错误", e);
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, "检查不通过，执行sql为：" + result.toString() + " 。异常信息为：" + e.getMessage());
+        }
+
     }
 
     private String valueOf(Object str) {
         return StringUtils.valueOf(str);
     }
 
-    private String analysisUcSql(String sql){
-        String retSql=sql.replaceAll("@where_rep@"," ").replaceAll("@WHERE_REP@"," ");
-        if(retSql.contains(":")){
-            String[] sqlWords=retSql.split("=|\\s+");
+    private String analysisUcSql(String sql) {
+        StringBuilder retSql = new StringBuilder();
+        if (sql.contains(":") || sql.contains("#")) {
+            sql = sql.replaceAll("=", " = ");
+            String[] sqlWords = sql.split("\\s+");
             //用于去除 to_date里 ：情况
-            boolean hasmark=false;
-            for(String word : sqlWords){
-                if(!hasmark && word.contains(":")){
-                    if(word.contains("(")){
-                        word=word.replaceAll("\\(","");
-                    }
-                    if(word.contains(")")){
-                        word=word.replaceAll("\\)","");
-                    }
-                    retSql=retSql.replaceAll(word,"''");
-                }
-                int count=StringUtils.countString(word,"'");
-                if(count%2!=0){
-                    if(hasmark){
-                        hasmark=false;
-                    }else{
-                        hasmark=true;
-                    }
-                }
-            }
-        }
-        return retSql;
-    }
-    private List<String> getTableName(String sql){
-        List<String> tableName=new ArrayList<String>();
-        String[] sqlWords=sql.split("\\s+|\\(");
-        boolean hasFrom=false;
+            boolean hasmark = false;
+            for (String word : sqlWords) {
+                if (!hasmark && word.contains(":")) {
+                    if (word.contains("(") || word.contains(")")) {
+                        if (word.contains("(")) {
+                            if (word.indexOf("(") > 0) {
+                                word = word.substring(0, word.indexOf("("));
+                            } else {
+                                word = "(";
+                            }
+                            word=word+" '' ";
 
-        String currentTab="";
-        for(String word : sqlWords){
-            if(hasFrom){
-                if(word.equalsIgnoreCase("select")){
-                    hasFrom=false;
+                        }
+                        if (word.contains(")")) {
+                            if (word.indexOf(")") > 0) {
+                                word = word.substring(word.indexOf(")"), word.length());
+                            } else {
+                                word = ")";
+                            }
+                            word=" '' " +word;
+                        }
+                    }else{
+                        word = " '' ";
+                    }
+                }
+                int count = StringUtils.countString(word, "'");
+                if (count % 2 != 0) {
+                    if (hasmark) {
+                        hasmark = false;
+                    } else {
+                        hasmark = true;
+                    }
+                }
+                //条件中 #问题
+                if (count < 1 && word.contains("#")) {
+                    word = word.replaceAll("#", "");
+                    word = word + "='' ";
+                }
+                retSql.append(word).append(" ");
+            }
+        } else {
+            retSql.append(sql);
+        }
+        return retSql.toString();
+    }
+
+    private List<String> getTableName(String sql) {
+        List<String> tableName = new ArrayList<String>();
+        String[] sqlWords = sql.split("\\s+|\\(");
+        boolean hasFrom = false;
+
+        String currentTab = "";
+        for (String word : sqlWords) {
+            if (hasFrom) {
+                if (word.equalsIgnoreCase("select")) {
+                    hasFrom = false;
                     continue;
                 }
                 //todo 临时过滤 start with的词表，查询包含下级组织时会出现
-                if(word.equalsIgnoreCase("start")){
-                    hasFrom=false;
-                    currentTab=null;
+                if (word.equalsIgnoreCase("start")) {
+                    hasFrom = false;
+                    currentTab = null;
                     continue;
                 }
-                if(word.equalsIgnoreCase("where")||word.equalsIgnoreCase("(")){
-                    if(StringUtils.isNotNullAndNotEmpty(currentTab)){
-                        if(!tableName.contains(currentTab)){
+                if (word.equalsIgnoreCase("where") || word.equalsIgnoreCase("(")) {
+                    if (StringUtils.isNotNullAndNotEmpty(currentTab)) {
+                        if (!tableName.contains(currentTab)) {
                             tableName.add(currentTab);
                         }
 
-                        currentTab=null ;
+                        currentTab = null;
                     }
-                    hasFrom=false;
-                    currentTab=null;
+                    hasFrom = false;
+                    currentTab = null;
                     continue;
                 }
-                if(StringUtils.isNotNullAndNotEmpty(currentTab)){
-                    if(word.contains(",")||word.equalsIgnoreCase("join")){
-                        if(!tableName.contains(currentTab)){
+                if (StringUtils.isNotNullAndNotEmpty(currentTab)) {
+                    if (word.contains(",") || word.equalsIgnoreCase("join")) {
+                        if (!tableName.contains(currentTab)) {
                             tableName.add(currentTab);
                         }
-                        currentTab=null ;
-                        if(word.contains(",")){
-                            if(word.indexOf(",")<word.length()){
-                                currentTab=word.substring(word.indexOf(",")+1,word.length());
+                        currentTab = null;
+                        if (word.contains(",")) {
+                            if (word.indexOf(",") < word.length()) {
+                                currentTab = word.substring(word.indexOf(",") + 1, word.length());
                             }
                         }
 
                     }
-                }else{
-                    if(word.contains(",")){
-                        currentTab=word.replaceAll(",","") ;
-                        if(!tableName.contains(currentTab)){
+                } else {
+                    if (word.contains(",")) {
+                        currentTab = word.replaceAll(",", "");
+                        if (!tableName.contains(currentTab)) {
                             tableName.add(currentTab);
                         }
-                        currentTab=null;
-                        if(word.indexOf(",")<word.length()){
-                            currentTab=word.substring(word.indexOf(","),word.length());
+                        currentTab = null;
+                        if (word.indexOf(",") < word.length()) {
+                            currentTab = word.substring(word.indexOf(","), word.length());
                         }
-                    }else{
-                        currentTab=word;
+                    } else {
+                        currentTab = word;
                     }
                 }
-            }else{
-                if(word.equalsIgnoreCase("FROM")){
-                    hasFrom=true;
-                }else  if(word.equalsIgnoreCase("where")){
-                    hasFrom=false;
+            } else {
+                if (word.equalsIgnoreCase("FROM")) {
+                    hasFrom = true;
+                } else if (word.equalsIgnoreCase("where")) {
+                    hasFrom = false;
                 }
             }
         }
-        if(StringUtils.isNotNullAndNotEmpty(currentTab)){
-            if(!tableName.contains(currentTab)){
+        if (StringUtils.isNotNullAndNotEmpty(currentTab)) {
+            if (!tableName.contains(currentTab)) {
                 tableName.add(currentTab);
             }
-            currentTab=null ;
+            currentTab = null;
         }
         return tableName;
     }
-    public  void throwErrorMsg(EnActionEvent enActionEvent, String msg){
+
+    public void throwErrorMsg(EnActionEvent enActionEvent, String msg) {
         //logger.info("提交事件："+enActionEvent.getCmd()+",消息："+msg);
-        viewListener.actionPerformedFromService(enActionEvent.getWarningLevel(),MyActionListener.getActionEvent(enActionEvent,msg));
-        if(enActionEvent.getWarningLevel().equals(ENWarningLevel.ERROR)){
+        viewListener.actionPerformedFromService(enActionEvent.getWarningLevel(), MyActionListener.getActionEvent(enActionEvent, msg));
+        if (enActionEvent.getWarningLevel().equals(ENWarningLevel.ERROR)) {
             throw new ViewException(msg);
         }
     }
@@ -493,25 +608,26 @@ public class SvcServiceImpl implements SvcService {
     public void setViewListener(MyActionListener viewListener) {
         this.viewListener = viewListener;
     }
+
     @Override
     public boolean exchange(TsvcInterface current, TsvcInterface opp) {
-        if(!current.getC_flag().equals(opp.getC_flag())){
+        if (!current.getC_flag().equals(opp.getC_flag())) {
             return false;
         }
-        if(!canMove(current)){
+        if (!canMove(current)) {
             return false;
         }
-        if(!canMove(opp)){
+        if (!canMove(opp)) {
             return false;
         }
-        String currentno=current.getL_no();
+        String currentno = current.getL_no();
         current.setL_no(opp.getL_no());
         opp.setL_no(currentno);
         try {
-            tsvcInterfaceDao.update(current,new String[]{"l_no"});
-            tsvcInterfaceDao.update(opp,new String[]{"l_no"});
+            tsvcInterfaceDao.update(current, new String[]{"l_no"});
+            tsvcInterfaceDao.update(opp, new String[]{"l_no"});
         } catch (Exception e) {
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
         return true;
 
@@ -520,51 +636,63 @@ public class SvcServiceImpl implements SvcService {
 
     @Override
     public boolean exchange(TsvcViewconfig current, TsvcViewconfig opp) {
-        if(!canMove(current)){
+        if (!canMove(current)) {
             return false;
         }
-        if(!canMove(opp)){
+        if (!canMove(opp)) {
             return false;
         }
-        String currentno=current.getL_no();
+        String currentno = current.getL_no();
         current.setL_no(opp.getL_no());
         opp.setL_no(currentno);
         try {
-            tsvcViewconfigDao.update(current,new String[]{"l_no"});
-            tsvcViewconfigDao.update(opp,new String[]{"l_no"});
+            tsvcViewconfigDao.update(current, new String[]{"l_no"});
+            tsvcViewconfigDao.update(opp, new String[]{"l_no"});
         } catch (Exception e) {
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
         return true;
     }
 
-    private boolean canMove(TsvcInterface current){
-        if(current==null){
+    private boolean canMove(TsvcInterface current) {
+        if (current == null) {
             return false;
         }
-        if(StringUtils.isNullOrEmpty(current.getL_no())){
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,"序号为空");
+        if (StringUtils.isNullOrEmpty(current.getL_no())) {
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, "序号为空");
         }
         try {
             Integer.parseInt(current.getL_no());
         } catch (NumberFormatException e) {
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
         return true;
     }
 
-    private boolean canMove(TsvcViewconfig current){
-        if(current==null){
+    private boolean canMove(TsvcViewconfig current) {
+        if (current == null) {
             return false;
         }
-        if(StringUtils.isNullOrEmpty(current.getL_no())){
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,"序号为空");
+        if (StringUtils.isNullOrEmpty(current.getL_no())) {
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, "序号为空");
         }
         try {
             Integer.parseInt(current.getL_no());
         } catch (NumberFormatException e) {
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR,e.getMessage());
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, e.getMessage());
         }
         return true;
+    }
+
+    private String convertTsvcInterfaceToCinditon(TsvcInterface tsvcInterface) {
+        StringBuilder retSb = new StringBuilder();
+        if (StringUtils.isNotNullAndNotEmpty(tsvcInterface.getC_condition())) {
+            if ("exists".equals(tsvcInterface.getC_condition()) || "not exists".equals(tsvcInterface.getC_condition())) {
+
+            } else {
+                retSb.append(" ").append(tsvcInterface.getC_fieldname()).append(" is null ");
+            }
+        }
+        return retSb.toString();
     }
 }
