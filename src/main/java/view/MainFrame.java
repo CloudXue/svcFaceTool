@@ -22,7 +22,7 @@ public class MainFrame extends JFrame {
     private CenterPanel centerPanel;
     private MyActionListener myActionListener;
     JDialog msgDialog=new JDialog(this);
-    private JLabel msgLabel=new JLabel();
+    private JTextArea msgArea=new JTextArea();
 
     private static MainFrame mainFrame;
 
@@ -63,8 +63,8 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         //endregion
-
-        msgDialog.add(msgLabel);
+        JScrollPane msgPane=new JScrollPane(msgArea);
+        msgDialog.add(msgPane);
     }
     public void addTab(String titleName){
         centerPanel.addTab(titleName);
@@ -87,14 +87,43 @@ public class MainFrame extends JFrame {
     }
 
     public void showMsg(String tltle, String msg, ENWarningLevel warningLevel){
-        msgLabel.setText(msg);
+
+
+        //JlabelSetText(msgLabel,msg);
+
+        msgArea.setText(msg);
         msgDialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         msgDialog.setLocationRelativeTo(null);
         msgDialog.setTitle(tltle);
-        msgDialog.setSize(300,200);
+        msgDialog.setSize(400,200);
         msgDialog.setVisible(true);
 
     }
+    void JlabelSetText(JLabel jLabel, String longString) {
+        StringBuilder builder = new StringBuilder("<html>");
+        char[] chars = longString.toCharArray();
+        FontMetrics fontMetrics = jLabel.getFontMetrics(jLabel.getFont());
+        int start = 0;
+        int len = 0;
+        while (start + len < longString.length()) {
+            while (true) {
+                len++;
+                if (start + len > longString.length())break;
+                if (fontMetrics.charsWidth(chars, start, len)
+                        > jLabel.getWidth()) {
+                    break;
+                }
+            }
+            builder.append(chars, start, len-1).append("<br/>");
+            start = start + len - 1;
+            len = 0;
+        }
+        builder.append(chars, start, longString.length()-start);
+        builder.append("</html>");
+        jLabel.setText(builder.toString());
+    }
+
+
     public static String openFileSelect(){
         String  filePahtName=null;
 

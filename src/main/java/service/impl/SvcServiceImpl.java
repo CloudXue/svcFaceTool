@@ -462,7 +462,7 @@ public class SvcServiceImpl implements SvcService {
             }
         } catch (Exception e) {
             logger.error("sql检查错误", e);
-            throwErrorMsg(EnActionEvent.COMMOM_ERROR, "检查不通过，执行sql为：" + result.toString() + " 。异常信息为：" + e.getMessage());
+            throwErrorMsg(EnActionEvent.COMMOM_ERROR, "检查不通过，执行sql为：" + result.toString() + " 。\r\n 异常信息为：" + e.getMessage());
         }
 
     }
@@ -688,7 +688,13 @@ public class SvcServiceImpl implements SvcService {
         StringBuilder retSb = new StringBuilder();
         if (StringUtils.isNotNullAndNotEmpty(tsvcInterface.getC_condition())) {
             if ("exists".equals(tsvcInterface.getC_condition()) || "not exists".equals(tsvcInterface.getC_condition())) {
-
+                String existsSql=tsvcInterface.getC_existvalue();
+                if(StringUtils.isNotNullAndNotEmpty(existsSql)){
+                    //去除 ：变量
+                    existsSql=analysisUcSql(existsSql);
+                    retSb.append(" ").append(tsvcInterface.getC_condition()).append("(")
+                            .append(existsSql).append(") ");
+                }
             } else {
                 retSb.append(" ").append(tsvcInterface.getC_fieldname()).append(" is null ");
             }
