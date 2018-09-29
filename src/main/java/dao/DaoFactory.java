@@ -22,6 +22,7 @@ public class DaoFactory {
     private static TsvcInterfaceDao tsvcInterfaceDao;
     private static TsvcSqlDao tsvcSqlDao;
     private static TsvcViewconfigDao tsvcViewconfigDao;
+    private static GenCodeDao genCodeDao;
 
 
     public static HsiRightDao getHsiRightDao() {
@@ -73,6 +74,16 @@ public class DaoFactory {
             }
         }
         return tsvcViewconfigDao;
+    }
+    public static GenCodeDao getGenCodeDao() {
+        if(genCodeDao==null){
+            synchronized (DaoFactory.class) {
+                if(genCodeDao==null){
+                    genCodeDao=new GenCodeDaoImpl();
+                }
+            }
+        }
+        return genCodeDao;
     }
 
 
