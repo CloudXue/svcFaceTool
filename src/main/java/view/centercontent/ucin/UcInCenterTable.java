@@ -182,28 +182,28 @@ public class UcInCenterTable extends BaseJPanel implements ActionListener, ItemL
     private void initCombo(TableColumnModel tcm) {
         //输入输出
         ComboBoxMapModel mapModel = new ComboBoxMapModel(SvcUtil.getUcInFieldInOrOut());
-        JComboBox comboBox = new EditComBox(mapModel);
+        JComboBox comboBox = new EditComBox(mapModel,false);
         SvcTableCellEditor cellEditor = new SvcTableCellEditor(comboBox);
         tcm.getColumn(0).setCellEditor(cellEditor);
         //数据库字段类型
         mapModel = new ComboBoxMapModel(SvcUtil.getUcInDatabaseType());
-        comboBox = new EditComBox(mapModel);
+        comboBox = new EditComBox(mapModel,false);
         cellEditor = new SvcTableCellEditor(comboBox);
         tcm.getColumn(6).setCellEditor(cellEditor);
 
         //非空
         mapModel = new ComboBoxMapModel(SvcUtil.getUcInNotNull());
-        comboBox = new EditComBox(mapModel);
+        comboBox = new EditComBox(mapModel,false);
         cellEditor = new SvcTableCellEditor(comboBox);
         tcm.getColumn(7).setCellEditor(cellEditor);
         //字段类别
         mapModel = new ComboBoxMapModel(SvcUtil.getUcInFieldType());
-        comboBox = new EditComBox(mapModel);
+        comboBox = new EditComBox(mapModel,false);
         cellEditor = new SvcTableCellEditor(comboBox);
         tcm.getColumn(8).setCellEditor(cellEditor);
         //条件
         mapModel = new ComboBoxMapModel(SvcUtil.getUcInConditionType());
-        comboBox = new EditComBox(mapModel);
+        comboBox = new EditComBox(mapModel,false);
         comboBox.setActionCommand(EnActionEvent.UCIN_CONDITIONSELECT.getCmd());
         comboBox.addActionListener(this);
         comboBox.addItemListener(this);
@@ -211,12 +211,12 @@ public class UcInCenterTable extends BaseJPanel implements ActionListener, ItemL
         tcm.getColumn(9).setCellEditor(cellEditor);
         //输入显示级别
         mapModel = new ComboBoxMapModel(SvcUtil.getUcInViewLevel());
-        comboBox = new EditComBox(mapModel);
+        comboBox = new EditComBox(mapModel,false);
         cellEditor = new SvcTableCellEditor(comboBox);
         tcm.getColumn(11).setCellEditor(cellEditor);
         //输入类型
         mapModel = new ComboBoxMapModel(SvcUtil.getUcInViewType());
-        comboBox = new EditComBox(mapModel);
+        comboBox = new EditComBox(mapModel,false);
         cellEditor = new SvcTableCellEditor(comboBox);
         tcm.getColumn(12).setCellEditor(cellEditor);
         //字典名称

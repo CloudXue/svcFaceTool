@@ -29,6 +29,7 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
 
     private boolean firingActionEvent = false;
     private boolean focusGained = false;
+    private boolean isusematch = true;
     public EditComBox() {
         super();
         init();
@@ -36,6 +37,11 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
 
     public EditComBox(ComboBoxModel aModel) {
         super(aModel);
+        init();
+    }
+    public EditComBox(ComboBoxModel aModel,boolean isusematch) {
+        super(aModel);
+        this.isusematch=isusematch;
         init();
     }
 
@@ -48,8 +54,10 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
         setEditable(true);
         setUI(new MyComboBoxUI());
         ((MyComboBoxUI)getUI()).tips();
-        JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
-        editor.setDocument(new FixedAutoSelection((ComboBoxMapModel)getModel()));
+        if (isusematch) {
+            JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
+            editor.setDocument(new FixedAutoSelection((ComboBoxMapModel)getModel()));
+        }
         //addActionListener(this);
         addItemListener(this);
         //添加按键监听，当按键释放则对控件赋值，这个值也会赋值到table里
@@ -179,7 +187,7 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
         }
     }
     protected void fireActionEvent(){
-        fireActionEvent(false);
+        fireActionEvent(!isusematch);
     }
     protected void fireActionEvent(boolean stopCellEditing){
         if (!firingActionEvent) {
@@ -282,5 +290,13 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
                 return i;
         }
         return -1;
+    }
+
+    public boolean isIsusematch() {
+        return isusematch;
+    }
+
+    public void setIsusematch(boolean isusematch) {
+        this.isusematch = isusematch;
     }
 }

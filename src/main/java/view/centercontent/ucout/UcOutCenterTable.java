@@ -145,7 +145,7 @@ public class UcOutCenterTable extends BaseJPanel {
         cloumSelect(0);
         //显示类型
         ComboBoxMapModel mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewType());
-        JComboBox comboBox=new EditComBox(mapModel);
+        JComboBox comboBox=new EditComBox(mapModel,false);
         SvcTableCellEditor cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(2).setCellEditor( cellEditor );
         //字典
@@ -155,7 +155,7 @@ public class UcOutCenterTable extends BaseJPanel {
         tcm.getColumn(3).setCellEditor( cellEditor );
         //显示级别
         mapModel=new ComboBoxMapModel(SvcUtil.getUcOutViewLevel());
-        comboBox=new EditComBox(mapModel);
+        comboBox=new EditComBox(mapModel,false);
         cellEditor=new SvcTableCellEditor(comboBox);
         tcm.getColumn(1).setCellEditor( cellEditor );
 
