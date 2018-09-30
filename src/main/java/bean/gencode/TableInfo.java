@@ -1,5 +1,8 @@
 package bean.gencode;
 
+import bean.BaseBean;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,10 +12,14 @@ import java.util.List;
  * @author: lyd
  * 开发时间: 2018-09-29
  */
-public class TableInfo {
+public class TableInfo extends BaseBean {
     private String name;
     private String describe;
     private List<TableField> fields;
+
+    public TableInfo() {
+        fields=new ArrayList<>();
+    }
 
     public String getName() {
         return name;
@@ -36,5 +43,39 @@ public class TableInfo {
 
     public void setFields(List<TableField> fields) {
         this.fields = fields;
+    }
+
+    @Override
+    public String generateInsertSql() {
+        return null;
+    }
+
+    @Override
+    public List<String> getKeyStr() {
+        return null;
+    }
+
+    @Override
+    public String getKeyValue() {
+        return null;
+    }
+
+    @Override
+    public List<String> getKeyValueStr() {
+        return null;
+    }
+
+    @Override
+    public String getTableName() {
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "TableInfo{" +
+                "name='" + name + '\'' +
+                ", describe='" + describe + '\'' +
+                ", fields=" + fields +
+                '}';
     }
 }

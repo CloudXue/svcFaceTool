@@ -9,8 +9,17 @@ package bean.gencode;
  */
 public class TableField {
     private String name;
-    private Integer fieldType;
+    private String fieldType;
     private String describe;
+
+    public TableField() {
+    }
+
+    public TableField(String name, String fieldType, String describe) {
+        this.name = name;
+        this.fieldType = fieldType;
+        this.describe = describe;
+    }
 
     public String getName() {
         return name;
@@ -20,11 +29,11 @@ public class TableField {
         this.name = name;
     }
 
-    public Integer getFieldType() {
+    public String getFieldType() {
         return fieldType;
     }
 
-    public void setFieldType(Integer fieldType) {
+    public void setFieldType(String fieldType) {
         this.fieldType = fieldType;
     }
 
@@ -34,5 +43,14 @@ public class TableField {
 
     public void setDescribe(String describe) {
         this.describe = describe;
+    }
+
+    @Override
+    public String toString() {
+        return "TableField{" +
+                "name='" + name + '\'' +
+                ", fieldType='" + fieldType + '\'' +
+                ", describe='" + describe + '\'' +
+                '}';
     }
 }

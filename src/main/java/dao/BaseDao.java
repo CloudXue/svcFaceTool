@@ -1,9 +1,11 @@
 package dao;
 
 import bean.BaseBean;
+import bean.SqlFieldType;
 import bean.SystemData;
 import org.apache.log4j.Logger;
 import util.BeanUtils;
+import util.CommonUtil;
 import util.LogUtil;
 import util.StringUtils;
 
@@ -305,7 +307,67 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
             statement.close();
         }
     }
+    public Map<String,String> findFieldComments(List<String> tableName) throws Exception {
+        Map<String,String> commentsMap=new HashMap<String,String>();
+        if(tableName==null || tableName.size()<1){
+            return commentsMap;
+        }
+        String inString= CommonUtil.getInString(tableName,true,"table_name",999);
+        String sql="select * from user_col_comments where "+inString;
+        List<Map<String,Object>> mapList= queryForList(sql);
+        if(mapList!=null && mapList.size()>0){
+            for(Map<String,Object> map : mapList){
+                commentsMap.put(map.get("TABLE_NAME")+"#"+map.get("COLUMN_NAME")+"#", StringUtils.valueOf(map.get("COMMENTS")));
+            }
+        }
+        return commentsMap;
+    }
+    public Map<String,String> findFieldComments(String tableName) throws Exception {
+        List<String> tableNameList=new ArrayList<>();
+        tableNameList.add(tableName);
+       return findFieldComments(tableNameList);
+    }
+    public String getTableComments(String tableName) throws Exception {
+        String comments="";
+       String sql=" select comments from user_tab_comments where table_name='"+tableName+"'";
+        PreparedStatement pstmt=getPreStmt(sql);
+        try {
+            ResultSet rs=pstmt.executeQuery();
+            ResultSetMetaData rsm =rs.getMetaData(); //获得列集
+            int col = rsm.getColumnCount();
+            if (rs.next()){
+                comments=rs.getString(1);
+            }
+        } finally {
+            pstmt.close();
+        }
 
+        return comments;
+    }
+    public List<Map<String,Object>> getTableFields(String tableName) throws Exception {
+        String sql=" select * from user_tab_cols where table_name='"+tableName+"'";
+
+        return queryForList(sql);
+    }
+    public List<SqlFieldType> findField(String sql) throws Exception {
+        List<SqlFieldType> fieldList = new ArrayList<SqlFieldType>();
+        PreparedStatement pstmt = getPreStmt(sql);
+        try {
+            ResultSet rs = pstmt.executeQuery();
+            ResultSetMetaData rsm = rs.getMetaData(); //获得列集
+            int col = rsm.getColumnCount();
+            for (int i = 1; i <= col; i++) {
+                SqlFieldType sqlFieldType=new SqlFieldType();
+                sqlFieldType.setField(rsm.getColumnLabel(i)) ;
+                sqlFieldType.setFieldType(rsm.getColumnType(i)); ;
+                sqlFieldType.setFieldLength(rsm.getColumnDisplaySize(i));
+                fieldList.add(sqlFieldType);
+            }
+        } finally {
+            pstmt.close();
+        }
+        return fieldList;
+    }
     private Jdbcinfo getConninfo(){
         Jdbcinfo  jdbcinfo=new Jdbcinfo();
 
