@@ -1,6 +1,7 @@
 package bean.gencode;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,8 @@ import java.util.List;
  * 开发时间: 2018-09-29
  */
 public class ClassInfo {
+    public final static String TYPE_CLASS="class";
+    public final static String TYPE_INTERFACE="interface";
     /**
      * 包名
      */
@@ -43,6 +46,16 @@ public class ClassInfo {
      * 方法
      */
     private List<ClassMethod> methods;
+
+    private String describe;
+
+    private String tableName;
+
+    public ClassInfo() {
+        interfaceList=new ArrayList<>();
+        field=new ArrayList<>();
+        methods=new ArrayList<>();
+    }
 
     public String getPackageStr() {
         return packageStr;
@@ -106,5 +119,21 @@ public class ClassInfo {
 
     public void setMethods(List<ClassMethod> methods) {
         this.methods = methods;
+    }
+
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }

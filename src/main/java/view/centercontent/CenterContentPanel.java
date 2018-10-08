@@ -28,6 +28,7 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
     private BaseJPanel ucInMaintain;
     private BaseJPanel ucOutMaintain;
     private BaseJPanel generateSql;
+    private BaseJPanel genCode;
     private Map<Integer,String> title=new HashMap<>();
 
     public CenterContentPanel(MyActionListener myActionListener, CenterpanelTab centerpanelTab) {
@@ -42,6 +43,7 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
         ucInMaintain = new UcInMaintain(myActionListener, this);
         ucOutMaintain = new UcOutMaintain(myActionListener, this);
         generateSql = new GenerateSql(myActionListener, this);
+        genCode = new GenCode(myActionListener);
         init();
         currentSelectIndex=contentTab.getSelectedIndex();
     }
@@ -58,6 +60,7 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
         contentTab.addTab("功能输入输出定义", ucInMaintain);
         contentTab.addTab("数据源→查询显示配置", ucOutMaintain);
         contentTab.addTab("生成SQL语言", generateSql);
+        contentTab.addTab("DB代码生成", genCode);
         contentTab.addChangeListener(this);
         this.add(headPanel, BorderLayout.NORTH);
         this.add(contentTab, BorderLayout.CENTER);
@@ -136,11 +139,13 @@ public class CenterContentPanel extends BaseJPanel implements ChangeListener {
         ucInMaintain.close();
         ucOutMaintain.close();
         generateSql.close();
+        genCode.close();
 
         ucDefineMaintain = null;
         sqlMaintain = null;
         ucInMaintain = null;
         ucOutMaintain = null;
         generateSql = null;
+        genCode = null;
     }
 }

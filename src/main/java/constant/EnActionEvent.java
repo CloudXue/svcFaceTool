@@ -9,7 +9,7 @@ public enum EnActionEvent {
     COMMOM_WARNING("COMMOM_WARNING",ENWarningLevel.WARNING),
     COMMOM_ERROR("COMMOM_ERROR",ENWarningLevel.ERROR),
     COMMOM_INFO("COMMOM_INFO",ENWarningLevel.INFO),
-    //endregion
+
 
     /**
      * 登录点击
@@ -43,6 +43,26 @@ public enum EnActionEvent {
      *关闭所有点击
      */
     CLOSEALLTABCLICK("closealltabclick"),
+
+    /**
+     *异常
+     */
+    EXCEPTION("EXCEPTION"),
+    /**
+     *提示
+     */
+    INFO("INFO"),
+    /**
+     *警告
+     */
+    WARNING("WARNING"),
+
+    //endregion
+
+    //region  uc定义
+    /**
+     * uc定义中权限类别选中事件
+     */
     /**
      *uc定义插入按钮点击
      */
@@ -63,21 +83,6 @@ public enum EnActionEvent {
      *uc定义查询按钮点击
      */
     UCDEFINE_QUERYCLICK("queryclick"),
-    /**
-     *异常
-     */
-    EXCEPTION("EXCEPTION"),
-    /**
-     *提示
-     */
-    INFO("INFO"),
-    /**
-     *警告
-     */
-    WARNING("WARNING"),
-    /**
-     * uc定义中权限类别选中事件
-     */
     UCDEFINE_CLASSSELECT("UCDEFINECLASSSELECT"),
     /**
      *uc定义中功能类型选中事件
@@ -87,6 +92,9 @@ public enum EnActionEvent {
      *uc定义中日终处理时停用选中事件
      */
     UCDEFINE_ISLIMITSELECT("UCDEFINEISLIMITSELECT"),
+    //endregion
+
+    //region  SQL维护
     /**
      * SQL维护删除
      */
@@ -111,9 +119,10 @@ public enum EnActionEvent {
      *SQL维护分页组合sql测试
      */
     SQLMAINTAIN_SQLPAGING("SQLMAINTAIN_SQLPAGING"),
-    /**
-     *生成sql,生成
-     */
+
+    //endregion
+
+    //region  生成sql,生成
     GENERATESQL_GEN("GENERATESQL_GEN"),
     GENERATESQL_GEN_NODATE("GENERATESQL_GEN_NODATE"),
     /**
@@ -128,10 +137,9 @@ public enum EnActionEvent {
      *打开生成文件目录
      */
     GENERATESQL_OPEN("GENERATESQL_OPEN"),
-    COMBOBOXDATACHANGE("COMBOBOXDATACHANGE"),
-    /**
-     * UC输入定义-初始化输入输出
-     */
+    //endregion
+
+    //region  UC输入定义-初始化输入输出
     UCIN_INITIN("UCIN_INITIN"),
     /**
      * UC输入定义-初始化输入输出
@@ -174,9 +182,8 @@ public enum EnActionEvent {
      */
     UCIN_TESTCONDTION("UCIN_TESTCONDTION"),
     UCIN_CONDITIONSELECT("UCIN_CONDITIONSELECT"),
-    /**
-     * UC输出定义-初始化输出输出
-     */
+    //endregion
+    //region  UC输出定义-初始化输出输出
     UCOUT_INIT("UCOUT_INIT"),
     /**
      * UC输出定义-拷贝自
@@ -210,7 +217,7 @@ public enum EnActionEvent {
      * UC输出定义-下移
      */
     UCOUT_DOWN("UCOUT_DOWN"),
-
+//endregion
     //region 服务端事件
     /**
      * 后端初始化完成
@@ -221,6 +228,22 @@ public enum EnActionEvent {
      */
     SYSTEM_FAILSTART("SYSTEM_FAILSTART"),
     //endregion
+
+
+    //region 生成db代码
+    GENCODE_SAVE("GENCODE_SAVE"),
+
+    GENCODE_GEN("GENCODE_GEN"),
+
+    GENCODE_OPEN("GENCODE_OPEN"),
+
+    GENCODE_OPENFILESEL("GENCODE_OPENFILESEL"),
+
+    GENCODE_TABLECHOOSED("GENCODE_TABLECHOOSED"),
+    //endregion
+
+
+
 
     ;
     private String cmd;

@@ -1,5 +1,6 @@
 package service;
 
+import service.impl.GenerateCodeServiceImpl;
 import service.impl.SvcServiceImpl;
 import service.impl.TsvcSqlServiceImpl;
 import service.impl.UcDefineServiceImpl;
@@ -15,6 +16,7 @@ public class ServiceFactory {
     private static SvcService svcService;
     private static TsvcSqlService tsvcSqlService;
     private static UcDefineService ucDefineService;
+    private static GenerateCodeService generateCodeService;
 
     public static SvcService getSvcService() {
         if(svcService==null){
@@ -45,6 +47,16 @@ public class ServiceFactory {
             }
         }
         return ucDefineService;
+    }
+ public static GenerateCodeService getGenerateCodeService() {
+        if(generateCodeService==null){
+            synchronized (ServiceFactory.class) {
+                if(generateCodeService==null){
+                    generateCodeService=new GenerateCodeServiceImpl();
+                }
+            }
+        }
+        return generateCodeService;
     }
 
 

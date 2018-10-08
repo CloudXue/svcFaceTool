@@ -22,22 +22,26 @@ public class GenCodeDaoImpl  extends BaseDao<TableInfo> implements GenCodeDao {
 
     @Override
     public TableInfo getTableInfo(String tableName) throws Exception {
+        TableInfo tableInfo=null;
         tableName=tableName.toUpperCase();
         Map<String,String> tableFieldComments=findFieldComments(tableName);
         String comments=getTableComments(tableName);
         List<Map<String,Object>> tableFieldList=getTableFields(tableName);
 
-        TableInfo tableInfo=new TableInfo();
-        tableInfo.setDescribe(comments);
-        tableInfo.setName(tableName);
 
-        for(Map<String,Object> field : tableFieldList){
-            String name=StringUtils.valueOf(field.get("COLUMN_NAME"));
-            String type=StringUtils.valueOf(field.get("DATA_TYPE"));
-            String comment=StringUtils.valueOf(tableFieldComments.get(tableName+"#"+name.toUpperCase()+"#"));
-            TableField tableField=new TableField(name.toLowerCase(),type,comment);
-            tableInfo.getFields().add(tableField);
+        if (tableFieldList!=null && tableFieldList.size()>0) {
+            tableInfo=new TableInfo();
+            tableInfo.setDescribe(comments);
+            tableInfo.setName(tableName);
+            for(Map<String,Object> field : tableFieldList){
+                String name=StringUtils.valueOf(field.get("COLUMN_NAME"));
+                String type=StringUtils.valueOf(field.get("DATA_TYPE"));
+                String comment=StringUtils.valueOf(tableFieldComments.get(tableName+"#"+name.toUpperCase()+"#"));
+                TableField tableField=new TableField(name.toLowerCase(),type,comment);
+                tableInfo.getFields().add(tableField);
+            }
         }
+
         return tableInfo;
     }
 

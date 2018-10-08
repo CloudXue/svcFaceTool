@@ -48,6 +48,18 @@ public class SystemUtil {
         fileLogPath=fileLogPath+ "uc"+"/";
         return fileLogPath;
     }
+    public static String getDirectory(){
+        String fileLogPath=SystemUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        if(fileLogPath.indexOf("/")==0){
+            fileLogPath=fileLogPath.substring(1,fileLogPath.length());
+        }
+        fileLogPath=fileLogPath.substring(0,fileLogPath.length()-1);
+        fileLogPath=fileLogPath.substring(0,fileLogPath.lastIndexOf("/")+1);
+        return fileLogPath;
+    }
+    public static String getDbDirectory(){
+        return getDirectory()+"db"+"/";
+    }
     public static String getSvcDirectory(String fileName){
         String fileLogPath= SystemData.getDefaultdir();
         if(StringUtils.isNotNullAndNotEmpty(fileLogPath)){

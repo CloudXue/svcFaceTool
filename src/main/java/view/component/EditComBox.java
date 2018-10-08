@@ -35,6 +35,12 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
         init();
     }
 
+    public EditComBox(boolean isusematch) {
+        super(new ComboBoxMapModel(new ArrayList<String>()));
+        this.isusematch = isusematch;
+        init();
+    }
+
     public EditComBox(ComboBoxModel aModel) {
         super(aModel);
         init();
@@ -50,10 +56,12 @@ public class EditComBox extends JComboBox   implements KeyListener,ItemListener,
         init();
     }
     private void init(){
-        focusListenerList=new ArrayList<>();
+       focusListenerList=new ArrayList<>();
         setEditable(true);
         setUI(new MyComboBoxUI());
+
         ((MyComboBoxUI)getUI()).tips();
+
         if (isusematch) {
             JTextComponent editor = (JTextComponent) getEditor().getEditorComponent();
             editor.setDocument(new FixedAutoSelection((ComboBoxMapModel)getModel()));
