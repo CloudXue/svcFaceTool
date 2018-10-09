@@ -58,6 +58,8 @@ public class MyActionListener implements ActionListener {
                 mainFrame.closeAllTab();
 
             }
+        }else if(e.getActionCommand().equals(EnActionEvent.ABOUTCLICK.getCmd())){
+            mainFrame.showMsg("关于","版本号:"+SystemData.versionNumber, ENWarningLevel.INFO);
         }
 
     }

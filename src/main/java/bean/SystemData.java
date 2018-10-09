@@ -20,6 +20,7 @@ public class SystemData {
     private static ENSystem system=ENSystem.ATS;
     private static String defaultdir="";
     private static  boolean isusecode=false;
+    public static  String versionNumber="1.1.0";
 
     public static void  init() throws Exception {
         String fileLogPath = SystemData.class.getProtectionDomain().getCodeSource().getLocation().getPath();
