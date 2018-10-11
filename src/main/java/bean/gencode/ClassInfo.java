@@ -11,7 +11,7 @@ import java.util.List;
  * @author: lyd
  * 开发时间: 2018-09-29
  */
-public class ClassInfo {
+public class ClassInfo implements Cloneable{
     public final static String TYPE_CLASS="class";
     public final static String TYPE_INTERFACE="interface";
     /**
@@ -135,5 +135,39 @@ public class ClassInfo {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    @Override
+    public String toString() {
+        return "ClassInfo{" +
+                "packageStr='" + packageStr + '\'' +
+                ", className='" + className + '\'' +
+                ", type='" + type + '\'' +
+                ", generic=" + generic +
+                ", interfaceList=" + interfaceList +
+                ", parentClass=" + parentClass +
+                ", field=" + field +
+                ", methods=" + methods +
+                ", describe='" + describe + '\'' +
+                ", tableName='" + tableName + '\'' +
+                '}';
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        ClassInfo obj=(ClassInfo)super.clone();
+        List<String> interfaceList=new ArrayList<>(obj.getInterfaceList());
+        obj.setInterfaceList(interfaceList);
+
+        if (obj.getField()!=null) {
+            List<ClassField> field=new ArrayList<>(obj.getField());
+            obj.setField(field);
+        }
+
+        if (obj.getMethods()!=null) {
+            List<ClassMethod> field=new ArrayList<>(obj.getMethods());
+            obj.setMethods(field);
+        }
+        return obj;
     }
 }

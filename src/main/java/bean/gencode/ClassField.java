@@ -7,7 +7,7 @@ package bean.gencode;
  * @author: lyd
  * 开发时间: 2018-09-29
  */
-public class ClassField {
+public class ClassField  implements Cloneable {
     /**
      * 字段名称
      */
@@ -34,6 +34,9 @@ public class ClassField {
     private boolean isgenerateset;
     private boolean isfinal;
     private boolean isstatic;
+    /**
+     * 是否可用于dto更新
+     */
     private boolean iscanupdate;
     /**
      * public\protected \ private
@@ -118,5 +121,21 @@ public class ClassField {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    @Override
+    public String toString() {
+        return "ClassField{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", defaultValue='" + defaultValue + '\'' +
+                ", describe='" + describe + '\'' +
+                ", isgenerateget=" + isgenerateget +
+                ", isgenerateset=" + isgenerateset +
+                ", isfinal=" + isfinal +
+                ", isstatic=" + isstatic +
+                ", iscanupdate=" + iscanupdate +
+                ", permission='" + permission + '\'' +
+                '}';
     }
 }

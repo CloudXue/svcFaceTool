@@ -1,11 +1,15 @@
 package view.centercontent;
 
+import bean.FileInfo;
 import bean.SystemData;
+import bean.gencode.ClassInfo;
+import bean.gencode.GenCodeViewConfig;
 import constant.EnActionEvent;
 import control.MyActionListener;
 import service.GenerateCodeService;
 import service.ServiceFactory;
 import service.SvcService;
+import util.FileUtil;
 import util.LogUtil;
 import util.StringUtils;
 import util.SystemUtil;
@@ -13,9 +17,11 @@ import view.MainFrame;
 import view.component.ComboBoxMapModel;
 import view.component.EditComBox;
 import view.component.SButton;
+import view.factory.ColorFactory;
 import view.factory.FontFactory;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -23,6 +29,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 功能说明:
@@ -45,7 +53,8 @@ public class GenCode extends BaseJPanel  implements ActionListener {
     private JLabel packageStrlabel=new JLabel("包名：");
     JTextField packageStr =new JTextField(30);
 
-
+    private JLabel userNameStrlabel=new JLabel("用户：");
+    JTextField userNameStr =new JTextField(20);
 
     private SButton generateBtn=new SButton("生成");
     private JTextField filepath = new JTextField(60);
@@ -53,6 +62,17 @@ public class GenCode extends BaseJPanel  implements ActionListener {
     private SButton filechooserbtn=new SButton("选择目录");
     private SButton saveBtn=new SButton("保存");
     private SButton openBtn=new SButton("打开目录");
+
+    private JLabel dtoTextTitle=new JLabel("dto");
+    private JLabel daoTextTitle=new JLabel("dao");
+    private JLabel daoImplTextTitle=new JLabel("daoImpl");
+
+    private JTextArea dtoText=new JTextArea();
+    private JTextArea daoText=new JTextArea();
+    private JTextArea daoImplText=new JTextArea();
+
+
+    private JTabbedPane jTabbedPane=new JTabbedPane();
 
 
     public GenCode(MyActionListener myActionListener) {
@@ -83,6 +103,8 @@ public class GenCode extends BaseJPanel  implements ActionListener {
         packageStr.setFont(FontFactory.getTxtInputFootFont());
         filepath.setFont(FontFactory.getTxtInputFootFont());
 
+        userNameStrlabel.setFont(FontFactory.getJTableFont());
+        userNameStr.setFont(FontFactory.getTxtInputFootFont());
 
         generateBtn.setFont(FontFactory.getBtnFont());
         filechooserbtn.setFont(FontFactory.getBtnFont());
@@ -125,6 +147,9 @@ public class GenCode extends BaseJPanel  implements ActionListener {
         infoPanel2.add(packageStrlabel);
         infoPanel2.add(packageStr);
 
+        infoPanel2.add(userNameStrlabel);
+        infoPanel2.add(userNameStr);
+
         infoPanel.setLayout(new BorderLayout());
         infoPanel.add(infoPanel1,BorderLayout.NORTH);
         infoPanel.add(infoPanel2,BorderLayout.CENTER);
@@ -144,6 +169,34 @@ public class GenCode extends BaseJPanel  implements ActionListener {
 
         this.setLayout(new BorderLayout());
         this.add(headPanel,BorderLayout.NORTH);
+        //设置边框
+        dtoText.setFont(FontFactory.getSqlInputFootFont());
+        dtoText.setLineWrap(true);        //激活自动换行功能
+        dtoText.setWrapStyleWord(true);            // 激活断行不断字功能
+        JScrollPane dtoTextScrollPane = new JScrollPane(dtoText);
+        dtoTextScrollPane.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
+
+        daoText.setFont(FontFactory.getSqlInputFootFont());
+        daoText.setLineWrap(true);        //激活自动换行功能
+        daoText.setWrapStyleWord(true);            // 激活断行不断字功能
+        JScrollPane daoTextScrollPane = new JScrollPane(daoText);
+        daoTextScrollPane.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
+
+        daoImplText.setFont(FontFactory.getSqlInputFootFont());
+        daoImplText.setLineWrap(true);        //激活自动换行功能
+        daoImplText.setWrapStyleWord(true);            // 激活断行不断字功能
+        JScrollPane  daoImplTextScrollPane = new JScrollPane(daoImplText);
+        daoImplTextScrollPane.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
+
+        jTabbedPane.add("1",dtoTextScrollPane);
+        jTabbedPane.add("2",daoTextScrollPane);
+        jTabbedPane.add("3",daoImplTextScrollPane);
+
+        jTabbedPane.setTabComponentAt(jTabbedPane.indexOfComponent(dtoTextScrollPane),dtoTextTitle);
+        jTabbedPane.setTabComponentAt(jTabbedPane.indexOfComponent(daoTextScrollPane),daoTextTitle);
+        jTabbedPane.setTabComponentAt(jTabbedPane.indexOfComponent(daoImplTextScrollPane),daoImplTextTitle);
+
+        this.add(jTabbedPane,BorderLayout.CENTER);
 
 
     }
@@ -152,7 +205,7 @@ public class GenCode extends BaseJPanel  implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if(e.getActionCommand().equals(EnActionEvent.GENCODE_GEN.getCmd())){
-
+            gen();
         } else if(e.getActionCommand().equals(EnActionEvent.GENCODE_OPENFILESEL.getCmd())){
             String filePath= MainFrame.openFileSelect();
             if(StringUtils.isNotNullAndNotEmpty(filePath)){
@@ -165,6 +218,34 @@ public class GenCode extends BaseJPanel  implements ActionListener {
                 filepath.setText(fileName);
             }
         }else if(e.getActionCommand().equals(EnActionEvent.GENCODE_SAVE.getCmd())){
+            String filePathstr=filepath.getText();
+            if (StringUtils.isNullOrEmpty(filePathstr)) {
+                showWarningMsg("保存目录必填！");
+                return;
+            }
+            FileInfo dto=new FileInfo(dtoTextTitle.getText()+".java",filePathstr,dtoText.getText());
+            FileInfo dao=new FileInfo(daoTextTitle.getText()+".java",filePathstr,daoText.getText());
+            FileInfo daoImpl=new FileInfo(daoImplTextTitle.getText()+".java",filePathstr,daoImplText.getText());
+
+            try {
+                FileUtil.saveFile(this,dto);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                showWarningMsg("保存异常："+dto.getFileName()+",异常信息："+e1.getMessage());
+            }
+
+            try {
+                FileUtil.saveFile(this,dao);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                showWarningMsg("保存异常："+dao.getFileName()+",异常信息："+e1.getMessage());
+            }
+            try {
+                FileUtil.saveFile(this,daoImpl);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                showWarningMsg("保存异常："+daoImpl.getFileName()+",异常信息："+e1.getMessage());
+            }
 
         }else if(e.getActionCommand().equals(EnActionEvent.GENCODE_OPEN.getCmd())){
             String filePathNamestr=filepath.getText();
@@ -230,5 +311,40 @@ public class GenCode extends BaseJPanel  implements ActionListener {
     private void showWarningMsg(String msg){
         JOptionPane.showMessageDialog(this,msg,"提示",JOptionPane.WARNING_MESSAGE);
 
+    }
+
+    /**
+     * 调用生成，组合所有类
+     */
+    private void gen(){
+        GenCodeViewConfig config=new GenCodeViewConfig();
+        config.setTableName((String)tableName.getSelectedItem());
+        config.setClassName(dtoName.getText());
+        config.setDtoExtendClassName((String)dtoParent.getSelectedItem());
+        config.setPackageName(packageStr.getText());
+        config.setUserName(userNameStr.getText());
+        config.setFilePath(filepath.getText());
+        Map<String, String> classcode= null;
+        try {
+            classcode = generateCodeService.getTableCode(config);
+        } catch (Exception e) {
+            showWarningMsg(e.getMessage());
+            return;
+        }
+        System.out.println(classcode);
+        if(classcode!=null){
+            for(Map.Entry<String,String> entry : classcode.entrySet()){
+                if(entry.getKey().contains("DaoImpl")){
+                    daoImplTextTitle.setText(entry.getKey());
+                    daoImplText.setText(entry.getValue());
+                }else if(entry.getKey().contains("Dao")){
+                    daoTextTitle.setText(entry.getKey());
+                    daoText.setText(entry.getValue());
+                }else{
+                    dtoTextTitle.setText(entry.getKey());
+                    dtoText.setText(entry.getValue());
+                }
+            }
+        }
     }
 }

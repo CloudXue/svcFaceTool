@@ -14,4 +14,5 @@ public class DaoClassAdapter  extends ClassInfoAdapter implements IClassToFile {
     public DaoClassAdapter(ClassInfo classInfo) {
         super(classInfo);
     }
+
 }

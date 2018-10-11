@@ -276,8 +276,9 @@ public class GenerateSql  extends BaseJPanel implements ActionListener {
     private boolean validFile(File file){
         if(file.exists()){
             int i=JOptionPane.showConfirmDialog(this,"文件："+file.getName()+",已存在，是否覆盖","警告",JOptionPane.WARNING_MESSAGE);
-            if(i==2){
-                //取消
+            if(i==0){
+                return true;
+            }else{
                 return false;
             }
         }

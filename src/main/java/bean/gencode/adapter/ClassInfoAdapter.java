@@ -19,7 +19,7 @@ public class ClassInfoAdapter implements IClassToFile {
 
     @Override
     public String toFileString() {
-        return null;
+        return classInfo.toString();
     }
 
 

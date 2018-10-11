@@ -19,10 +19,9 @@ import java.util.Map;
 public interface GenerateCodeService {
     /**
      * 获取表的 dto、dao、daoimpl
-     * @param tableName
      * @return
      */
-    public ClassInfo getTableCodeClass(String tableName,GenCodeViewConfig codeViewConfig);
+    public ClassInfo getTableCodeClass(GenCodeViewConfig codeViewConfig) throws Exception;
 
     /**
      *生成bean xml配置
@@ -39,4 +38,12 @@ public interface GenerateCodeService {
      * @return
      */
     public Map<String, String> getTables() throws Exception;
+
+    /**
+     * key为，表名+注释
+     * value：表名
+     * 用于界面获取所有表
+     * @return
+     */
+    public Map<String, String> getTableCode(GenCodeViewConfig codeViewConfig) throws Exception;
 }
