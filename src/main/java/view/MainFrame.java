@@ -6,6 +6,9 @@ import service.ServiceFactory;
 import service.SvcService;
 import service.impl.SvcServiceImpl;
 import util.LogUtil;
+import util.StringUtils;
+import view.centercontent.BaseJPanel;
+import view.centercontent.GenCode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -147,4 +150,25 @@ public class MainFrame extends JFrame {
     public void changeFootMsg(String conninfoStr,String status,String msg){
         footBar.changeMsg(conninfoStr,status,msg);
     }
+
+    public void showNewWin(String title, BaseJPanel content){
+        if(StringUtils.isNullOrEmpty(title)){
+            title="新窗体";
+        }
+        JFrame newFrame=new JFrame(title);
+        newFrame.setSize(850,600);
+        newFrame.setLocationRelativeTo(null);
+        newFrame.setVisible(true);
+        newFrame.add(content);
+        newFrame.validate();
+        newFrame.repaint();
+
+    }
+
+    public void showGenCodeWin() {
+        GenCode genCode=new GenCode(myActionListener);
+        showNewWin("生成db代码",genCode);
+        genCode.onFocus(true);
+    }
+
 }

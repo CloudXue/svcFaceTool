@@ -60,6 +60,9 @@ public class MyActionListener implements ActionListener {
             }
         }else if(e.getActionCommand().equals(EnActionEvent.ABOUTCLICK.getCmd())){
             mainFrame.showMsg("关于","版本号:"+SystemData.versionNumber, ENWarningLevel.INFO);
+        } else if(e.getActionCommand().equals(EnActionEvent.OPENGENDBCODE.getCmd())){
+            //
+            mainFrame.showGenCodeWin();
         }
 
     }

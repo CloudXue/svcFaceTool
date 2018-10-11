@@ -17,6 +17,7 @@ public class ToolBar extends JToolBar implements ItemListener {
     private SButton newtab;
     private SButton closealltab;
     private SButton refresh;
+    private SButton genDbCode;
     private MyActionListener myActionListener;
     private JComboBox systemType;
 
@@ -41,6 +42,9 @@ public class ToolBar extends JToolBar implements ItemListener {
         systemType=new JComboBox(new String[]{"ATS","SAAS"});
         systemType.addItemListener(this);
 
+        genDbCode=new SButton("生成db代码");
+        genDbCode.setActionCommand(EnActionEvent.OPENGENDBCODE.getCmd());
+        genDbCode.addActionListener(myActionListener);
 
         this.add(newtab);
         this.addSeparator();
@@ -49,6 +53,8 @@ public class ToolBar extends JToolBar implements ItemListener {
         this.add(refresh);
         this.addSeparator();
         this.add(systemType);
+        this.addSeparator();
+        this.add(genDbCode);
         this.addSeparator();
     }
 

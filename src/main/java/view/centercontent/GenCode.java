@@ -57,12 +57,13 @@ public class GenCode extends BaseJPanel  implements ActionListener {
 
     public GenCode(MyActionListener myActionListener) {
         this.myActionListener= myActionListener;
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 init();
             }
-        }).start();
+        }).start();*/
+        init();
     }
     private void init(){
         try {
@@ -109,18 +110,25 @@ public class GenCode extends BaseJPanel  implements ActionListener {
         JPanel headPanel =new JPanel();
 
         JPanel infoPanel =new JPanel();
+        JPanel infoPanel1 =new JPanel();
 
-        infoPanel.add(tableNamelabel);
-        infoPanel.add(tableName);
+        infoPanel1.add(tableNamelabel);
+        infoPanel1.add(tableName);
 
-        infoPanel.add(dtoNamelabel);
-        infoPanel.add(dtoName);
+        infoPanel1.add(dtoNamelabel);
+        infoPanel1.add(dtoName);
 
-        infoPanel.add(dtoParentlabel);
-        infoPanel.add(dtoParent);
+        JPanel infoPanel2 =new JPanel();
+        infoPanel2.add(dtoParentlabel);
+        infoPanel2.add(dtoParent);
 
-        infoPanel.add(packageStrlabel);
-        infoPanel.add(packageStr);
+        infoPanel2.add(packageStrlabel);
+        infoPanel2.add(packageStr);
+
+        infoPanel.setLayout(new BorderLayout());
+        infoPanel.add(infoPanel1,BorderLayout.NORTH);
+        infoPanel.add(infoPanel2,BorderLayout.CENTER);
+
 
         JPanel filePanel=new JPanel();
         filePanel.add(generateBtn);

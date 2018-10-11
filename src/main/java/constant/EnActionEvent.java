@@ -56,6 +56,10 @@ public enum EnActionEvent {
      *警告
      */
     WARNING("WARNING"),
+    /**
+     *打开生成db代码窗口
+     */
+    OPENGENDBCODE("OPENGENDBCODE"),
 
     //endregion
 
