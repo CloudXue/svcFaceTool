@@ -489,4 +489,10 @@ public class StringUtils {
         }
         return count;
     }
+    public static String lowerFirstChar(String str){
+        if(isNotNullAndNotEmpty(str)){
+            str=str.substring(0,1).toLowerCase()+str.substring(1,str.length());
+        }
+        return str;
+    }
 }

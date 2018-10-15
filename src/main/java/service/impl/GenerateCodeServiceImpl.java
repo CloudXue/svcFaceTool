@@ -67,8 +67,14 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     }
 
     @Override
-    public String getBeanXml(String beanid, String beanFullName) {
-        return null;
+    public String getBeanXml(String beanid, String beanFullName,String describe) {
+        String retStr="";
+        if(StringUtils.isNotNullAndNotEmpty(beanid)){
+            String beanidStr=StringUtils.lowerFirstChar(beanid);
+            retStr="<!--"+describe+"-->\n" +
+                    "<bean id=\""+beanidStr+"\" class=\""+beanFullName+"\"/>\n";
+        }
+        return retStr;
     }
 
     @Override
@@ -104,6 +110,8 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         daoimplClassInfo.setClassName(daoimplClassInfo.getClassName()+"DaoImpl");
         ClassInfoAdapter daoimpl=new DtoClassAdapter(daoimplClassInfo);
         retMap.put(daoimplClassInfo.getClassName(),daoimpl.toFileString());
+
+        retMap.put("describe",classInfo.getDescribe());
 
         return retMap;
     }

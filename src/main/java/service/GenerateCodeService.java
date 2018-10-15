@@ -29,7 +29,7 @@ public interface GenerateCodeService {
      * @param beanFullName
      * @return
      */
-    public String getBeanXml(String beanid,String beanFullName);
+    public String getBeanXml(String beanid,String beanFullName,String describe);
 
     /**
      * key为，表名+注释

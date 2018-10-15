@@ -71,6 +71,7 @@ public class GenCode extends BaseJPanel  implements ActionListener {
     private JTextArea dtoText=new JTextArea();
     private JTextArea daoText=new JTextArea();
     private JTextArea daoImplText=new JTextArea();
+    private JTextArea beanText=new JTextArea();
 
 
     private JTabbedPane jTabbedPane=new JTabbedPane();
@@ -189,13 +190,22 @@ public class GenCode extends BaseJPanel  implements ActionListener {
         JScrollPane  daoImplTextScrollPane = new JScrollPane(daoImplText);
         daoImplTextScrollPane.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
 
+        beanText.setFont(FontFactory.getSqlInputFootFont());
+        beanText.setLineWrap(true);        //激活自动换行功能
+        beanText.setWrapStyleWord(true);            // 激活断行不断字功能
+        JScrollPane  beanTextScrollPane = new JScrollPane(beanText);
+        beanTextScrollPane.setBorder(new LineBorder(ColorFactory.getContentNorthBorerColor(),1));
+
         jTabbedPane.add("1",dtoTextScrollPane);
         jTabbedPane.add("2",daoTextScrollPane);
         jTabbedPane.add("3",daoImplTextScrollPane);
+        jTabbedPane.add("bean",beanTextScrollPane);
 
         jTabbedPane.setTabComponentAt(jTabbedPane.indexOfComponent(dtoTextScrollPane),dtoTextTitle);
         jTabbedPane.setTabComponentAt(jTabbedPane.indexOfComponent(daoTextScrollPane),daoTextTitle);
         jTabbedPane.setTabComponentAt(jTabbedPane.indexOfComponent(daoImplTextScrollPane),daoImplTextTitle);
+
+        jTabbedPane.setSelectedIndex(3);
 
         this.add(jTabbedPane,BorderLayout.CENTER);
 
@@ -322,6 +332,7 @@ public class GenCode extends BaseJPanel  implements ActionListener {
             return;
         }
         if(classcode!=null){
+            String  describe=classcode.get("describe");
             for(Map.Entry<String,String> entry : classcode.entrySet()){
                 if(entry.getKey().contains("DaoImpl")){
                     daoImplTextTitle.setText(entry.getKey());
@@ -329,11 +340,15 @@ public class GenCode extends BaseJPanel  implements ActionListener {
                 }else if(entry.getKey().contains("Dao")){
                     daoTextTitle.setText(entry.getKey());
                     daoText.setText(entry.getValue());
-                }else{
+                }else if(entry.getKey().contains(config.getClassName())){
                     dtoTextTitle.setText(entry.getKey());
                     dtoText.setText(entry.getValue());
                 }
             }
+            String beanCls=config.getPackageName()+"."+config.getClassName()+"DaoImpl";
+            String beanId=config.getClassName()+"Dao";
+            String beanXml=generateCodeService.getBeanXml(beanId,beanCls,describe);
+            beanText.setText(beanXml);
         }
     }
 }
