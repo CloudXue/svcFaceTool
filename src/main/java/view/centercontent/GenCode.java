@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -226,27 +227,16 @@ public class GenCode extends BaseJPanel  implements ActionListener {
             FileInfo dto=new FileInfo(dtoTextTitle.getText()+".java",filePathstr,dtoText.getText());
             FileInfo dao=new FileInfo(daoTextTitle.getText()+".java",filePathstr,daoText.getText());
             FileInfo daoImpl=new FileInfo(daoImplTextTitle.getText()+".java",filePathstr,daoImplText.getText());
-
+            List<FileInfo> fileInfoList=new ArrayList<>();
+            fileInfoList.add(dto);
+            fileInfoList.add(dao);
+            fileInfoList.add(daoImpl);
             try {
-                FileUtil.saveFile(this,dto);
+                FileUtil.saveFile(this,fileInfoList);
             } catch (Exception e1) {
                 e1.printStackTrace();
-                showWarningMsg("保存异常："+dto.getFileName()+",异常信息："+e1.getMessage());
+                showWarningMsg("保存异常,异常信息："+e1.getMessage());
             }
-
-            try {
-                FileUtil.saveFile(this,dao);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                showWarningMsg("保存异常："+dao.getFileName()+",异常信息："+e1.getMessage());
-            }
-            try {
-                FileUtil.saveFile(this,daoImpl);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                showWarningMsg("保存异常："+daoImpl.getFileName()+",异常信息："+e1.getMessage());
-            }
-
         }else if(e.getActionCommand().equals(EnActionEvent.GENCODE_OPEN.getCmd())){
             String filePathNamestr=filepath.getText();
             String filePathstr="";
@@ -331,7 +321,6 @@ public class GenCode extends BaseJPanel  implements ActionListener {
             showWarningMsg(e.getMessage());
             return;
         }
-        System.out.println(classcode);
         if(classcode!=null){
             for(Map.Entry<String,String> entry : classcode.entrySet()){
                 if(entry.getKey().contains("DaoImpl")){

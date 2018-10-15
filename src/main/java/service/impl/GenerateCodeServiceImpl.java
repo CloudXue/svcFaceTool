@@ -96,12 +96,14 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         retMap.put(dtoClassInfo.getClassName(),dto.toFileString());
 
         ClassInfo daoClassInfo= (ClassInfo) classInfo.clone();
+        daoClassInfo.setClassName(daoClassInfo.getClassName()+"Dao");
         ClassInfoAdapter dao=new DtoClassAdapter(daoClassInfo);
-        retMap.put(daoClassInfo.getClassName()+"Dao",dao.toFileString());
+        retMap.put(daoClassInfo.getClassName(),dao.toFileString());
 
         ClassInfo daoimplClassInfo= (ClassInfo) classInfo.clone();
+        daoimplClassInfo.setClassName(daoimplClassInfo.getClassName()+"DaoImpl");
         ClassInfoAdapter daoimpl=new DtoClassAdapter(daoimplClassInfo);
-        retMap.put(daoimplClassInfo.getClassName()+"DaoImpl",daoimpl.toFileString());
+        retMap.put(daoimplClassInfo.getClassName(),daoimpl.toFileString());
 
         return retMap;
     }
