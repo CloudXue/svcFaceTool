@@ -14,4 +14,9 @@ public class DaoImplClassAdapter  extends ClassInfoAdapter implements IClassToFi
     public DaoImplClassAdapter(ClassInfo classInfo) {
         super(classInfo);
     }
+
+    @Override
+    protected void initExtra() {
+
+    }
 }

@@ -2,6 +2,8 @@ package service.impl;
 
 import bean.gencode.*;
 import bean.gencode.adapter.ClassInfoAdapter;
+import bean.gencode.adapter.DaoClassAdapter;
+import bean.gencode.adapter.DaoImplClassAdapter;
 import bean.gencode.adapter.DtoClassAdapter;
 import constant.ENWarningLevel;
 import constant.EnActionEvent;
@@ -21,7 +23,7 @@ import java.util.*;
  * 功能说明:
  * 系统版本: 2.4.2.0
  *
- * @author: lyd
+
  * 开发时间: 2018-09-29
  */
 public class GenerateCodeServiceImpl implements GenerateCodeService {
@@ -103,12 +105,12 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
 
         ClassInfo daoClassInfo= (ClassInfo) classInfo.clone();
         daoClassInfo.setClassName(daoClassInfo.getClassName()+"Dao");
-        ClassInfoAdapter dao=new DtoClassAdapter(daoClassInfo);
+        ClassInfoAdapter dao=new DaoClassAdapter(daoClassInfo);
         retMap.put(daoClassInfo.getClassName(),dao.toFileString());
 
         ClassInfo daoimplClassInfo= (ClassInfo) classInfo.clone();
         daoimplClassInfo.setClassName(daoimplClassInfo.getClassName()+"DaoImpl");
-        ClassInfoAdapter daoimpl=new DtoClassAdapter(daoimplClassInfo);
+        ClassInfoAdapter daoimpl=new DaoImplClassAdapter(daoimplClassInfo);
         retMap.put(daoimplClassInfo.getClassName(),daoimpl.toFileString());
 
         retMap.put("describe",classInfo.getDescribe());
@@ -117,12 +119,14 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
     }
 
     private ClassInfo convert(TableInfo tableInfo, GenCodeViewConfig codeViewConfig){
-        ClassInfo dto=new ClassInfo();
+        ClassInfo classInfo=new ClassInfo();
 
-        dto.setClassName(codeViewConfig.getClassName());
-        dto.setPackageStr(codeViewConfig.getPackageName());
-        dto.setDescribe(tableInfo.getDescribe());
-        dto.setTableName(tableInfo.getName());
+        classInfo.setClassName(codeViewConfig.getClassName());
+        classInfo.setPackageStr(codeViewConfig.getPackageName());
+        classInfo.setCreateUser(codeViewConfig.getUserName());
+        classInfo.setParentClass(codeViewConfig.getDtoExtendClassName());
+        classInfo.setDescribe(tableInfo.getDescribe());
+        classInfo.setTableName(tableInfo.getName());
 
         if(tableInfo.getFields()!=null && tableInfo.getFields().size()>0){
             for(TableField tableField : tableInfo.getFields()){
@@ -145,11 +149,11 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                 }
                 field.setIsfinal(false);
                 field.setIsstatic(false);
-                dto.getField().add(field);
+                classInfo.getField().add(field);
             }
 
         }
-        return dto;
+        return classInfo;
     }
     private String convertDbType(String dbType){
         dbType=dbType.toUpperCase();

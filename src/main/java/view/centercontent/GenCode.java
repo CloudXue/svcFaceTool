@@ -1,11 +1,10 @@
 package view.centercontent;
 
 import bean.FileInfo;
-import bean.SystemData;
-import bean.gencode.ClassInfo;
 import bean.gencode.GenCodeViewConfig;
 import constant.EnActionEvent;
 import control.MyActionListener;
+import org.apache.log4j.Logger;
 import service.GenerateCodeService;
 import service.ServiceFactory;
 import service.SvcService;
@@ -22,8 +21,6 @@ import view.factory.FontFactory;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +36,7 @@ import java.util.Map;
  * 开发时间: 2018-09-30
  */
 public class GenCode extends BaseJPanel  implements ActionListener {
+    private static Logger logger = LogUtil.getLogger(GenCode.class);
     SvcService svcService= ServiceFactory.getSvcService();
     GenerateCodeService generateCodeService= ServiceFactory.getGenerateCodeService();
     private JLabel tableNamelabel=new JLabel("表名称：");
@@ -328,7 +326,8 @@ public class GenCode extends BaseJPanel  implements ActionListener {
         try {
             classcode = generateCodeService.getTableCode(config);
         } catch (Exception e) {
-            showWarningMsg(e.getMessage());
+            showWarningMsg("生成失败："+e.getMessage());
+            logger.error("生成失败",e);
             return;
         }
         if(classcode!=null){

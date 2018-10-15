@@ -15,4 +15,8 @@ public class DaoClassAdapter  extends ClassInfoAdapter implements IClassToFile {
         super(classInfo);
     }
 
+    @Override
+    protected void initExtra() {
+
+    }
 }

@@ -225,7 +225,7 @@ public class DateUtil {
     /**
      * 得到当前的日期 默认格式为 yyyy-MM-dd
      */
-    public static String getCurrentDateString() throws ParseException {
+    public static String getCurrentDateString() {
         return getCurrentDateString(DATE_PATTERN_YYYY_MM_DD);
     }
 

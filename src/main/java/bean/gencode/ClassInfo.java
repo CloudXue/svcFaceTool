@@ -37,7 +37,7 @@ public class ClassInfo implements Cloneable{
     /**
      * 父类
      */
-    private ClassInfo parentClass;
+    private String parentClass;
     /**
      * 成员
      */
@@ -50,6 +50,8 @@ public class ClassInfo implements Cloneable{
     private String describe;
 
     private String tableName;
+
+    private String createUser;
 
     public ClassInfo() {
         interfaceList=new ArrayList<>();
@@ -97,11 +99,11 @@ public class ClassInfo implements Cloneable{
         this.interfaceList = interfaceList;
     }
 
-    public ClassInfo getParentClass() {
+    public String getParentClass() {
         return parentClass;
     }
 
-    public void setParentClass(ClassInfo parentClass) {
+    public void setParentClass(String parentClass) {
         this.parentClass = parentClass;
     }
 
@@ -137,6 +139,14 @@ public class ClassInfo implements Cloneable{
         this.tableName = tableName;
     }
 
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
     @Override
     public String toString() {
         return "ClassInfo{" +
@@ -169,5 +179,8 @@ public class ClassInfo implements Cloneable{
             obj.setMethods(field);
         }
         return obj;
+    }
+    public String getFullName(){
+        return packageStr+"."+className;
     }
 }
