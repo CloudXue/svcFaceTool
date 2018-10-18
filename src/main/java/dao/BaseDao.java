@@ -68,15 +68,36 @@ public abstract  class BaseDao <TDtoModel extends BaseBean> implements IBaseDao<
     //所有界面共用一个连接，没啥问题
     private   static Connection connection;
     protected Connection getConn() throws Exception {
+        Jdbcinfo jdbcinfo=getConninfo();
         if(connection==null){
             synchronized (this){
                 if(connection==null){
-                    Jdbcinfo jdbcinfo=getConninfo();
                     Class.forName(jdbcinfo.getDriver());
                     connection= DriverManager.getConnection(jdbcinfo.getUrl(),jdbcinfo.getUsername(),jdbcinfo.getPaswword());
+                }else{
+                    logger.error("连接已关闭");
+                    try {
+                        connection= DriverManager.getConnection(jdbcinfo.getUrl(),jdbcinfo.getUsername(),jdbcinfo.getPaswword());
+                        logger.info("连接已关闭,尝试重连成功");
+                    } catch (SQLException e) {
+                        logger.error("连接已关闭,尝试重连失败",e);
+                        throw new Exception("连接已关闭,尝试重连失败",e);
+                    }
                 }
             }
 
+        }else{
+            if(connection.isClosed()){
+                logger.error("连接已关闭");
+                try {
+                    connection= DriverManager.getConnection(jdbcinfo.getUrl(),jdbcinfo.getUsername(),jdbcinfo.getPaswword());
+                    logger.info("连接已关闭,尝试重连成功");
+                } catch (SQLException e) {
+                    logger.error("连接已关闭,尝试重连失败",e);
+                   throw new Exception("连接已关闭,尝试重连失败",e);
+                }
+
+            }
         }
         return this.connection;
     }
