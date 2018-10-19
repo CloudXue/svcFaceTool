@@ -17,6 +17,21 @@ public class DaoClassAdapter  extends ClassInfoAdapter implements IClassToFile {
 
     @Override
     protected void initExtra() {
+        ClassInfo dto =new ClassInfo();
+        dto.setPackageStr(classInfo.getPackageStr()+".dto");
+        dto.setClassName(classInfo.getClassName());
+        referenceClsInfo.add(dto);
+        classInfo.setGeneric(dto);
 
+        ClassInfo ServiceBaseDao =new ClassInfo();
+        ServiceBaseDao.setPackageStr("com.fingard.ats.core.db.common.dao");
+        ServiceBaseDao.setClassName("ServiceBaseDao");
+        referenceClsInfo.add(ServiceBaseDao);
+
+        classInfo.setType(ClassInfo.TYPE_INTERFACE);
+        classInfo.setField(null);
+        classInfo.setParentClass("ServiceBaseDao");
+        classInfo.setPackageStr(classInfo.getPackageStr()+".dao");
+        classInfo.setClassName(classInfo.getClassName()+"Dao");
     }
 }

@@ -3,9 +3,7 @@ package bean.gencode.adapter;
 import bean.gencode.ClassInfo;
 
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 功能说明:
@@ -39,5 +37,17 @@ public class ClassInfoUtil {
 
     public Map<String,ClassInfo> getAllClassInfoMap(){
         return classInfoMap;
+    }
+
+    public static List<String> getDtoNotGenField(){
+        List<String> retList=new ArrayList<>();
+        retList.add("urid");
+        retList.add("tenantid");
+        retList.add("createdby");
+        retList.add("createdon");
+        retList.add("lastmodifiedby");
+        retList.add("lastmodifiedon");
+        retList.add("rowversion");
+        return  retList;
     }
 }

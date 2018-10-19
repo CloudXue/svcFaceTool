@@ -1,5 +1,6 @@
 package bean.gencode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class ClassMethod {
     /**
      * 返回类型，null为void
      */
-    private ClassInfo retType;
+    private String retType;
     /**
      * 泛型
      */
@@ -37,6 +38,19 @@ public class ClassMethod {
      */
     private String retValue;
 
+    /**
+     * 是否是重写的方法
+     */
+    private boolean isOverride=false;
+    /**
+     * 是否是静态的
+     */
+    private boolean isstatic=false;
+
+    public ClassMethod() {
+        params=new ArrayList<>();
+    }
+
     public String getDescribe() {
         return describe;
     }
@@ -53,11 +67,11 @@ public class ClassMethod {
         this.permission = permission;
     }
 
-    public ClassInfo getRetType() {
+    public String getRetType() {
         return retType;
     }
 
-    public void setRetType(ClassInfo retType) {
+    public void setRetType(String retType) {
         this.retType = retType;
     }
 
@@ -99,5 +113,21 @@ public class ClassMethod {
 
     public void setRetValue(String retValue) {
         this.retValue = retValue;
+    }
+
+    public boolean isOverride() {
+        return isOverride;
+    }
+
+    public void setOverride(boolean override) {
+        isOverride = override;
+    }
+
+    public boolean isIsstatic() {
+        return isstatic;
+    }
+
+    public void setIsstatic(boolean isstatic) {
+        this.isstatic = isstatic;
     }
 }

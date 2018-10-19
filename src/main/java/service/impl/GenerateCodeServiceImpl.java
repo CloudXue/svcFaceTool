@@ -104,12 +104,10 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
         retMap.put(dtoClassInfo.getClassName(),dto.toFileString());
 
         ClassInfo daoClassInfo= (ClassInfo) classInfo.clone();
-        daoClassInfo.setClassName(daoClassInfo.getClassName()+"Dao");
         ClassInfoAdapter dao=new DaoClassAdapter(daoClassInfo);
         retMap.put(daoClassInfo.getClassName(),dao.toFileString());
 
         ClassInfo daoimplClassInfo= (ClassInfo) classInfo.clone();
-        daoimplClassInfo.setClassName(daoimplClassInfo.getClassName()+"DaoImpl");
         ClassInfoAdapter daoimpl=new DaoImplClassAdapter(daoimplClassInfo);
         retMap.put(daoimplClassInfo.getClassName(),daoimpl.toFileString());
 
@@ -145,7 +143,7 @@ public class GenerateCodeServiceImpl implements GenerateCodeService {
                 if(notupdate.contains(tableField.getName().toLowerCase())){
                     field.setIscanupdate(false);
                 }else{
-                    field.setIscanupdate(false);
+                    field.setIscanupdate(true);
                 }
                 field.setIsfinal(false);
                 field.setIsstatic(false);

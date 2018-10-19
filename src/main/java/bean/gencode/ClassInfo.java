@@ -27,7 +27,7 @@ public class ClassInfo implements Cloneable{
      */
     private String type;
     /**
-     * 泛型
+     * 继承泛型
      */
     private ClassInfo generic;
     /**

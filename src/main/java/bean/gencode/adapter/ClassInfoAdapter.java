@@ -2,11 +2,11 @@ package bean.gencode.adapter;
 
 import bean.gencode.ClassField;
 import bean.gencode.ClassInfo;
+import bean.gencode.ClassMethod;
 import bean.gencode.IClassToFile;
 import util.DateUtil;
 import util.StringUtils;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +28,7 @@ public abstract class ClassInfoAdapter implements IClassToFile {
     protected Map<String, ClassInfo> newClsMap = new HashMap<>();
 
     protected List<String> referenceCls = new ArrayList<>();
+    protected List<ClassInfo> referenceClsInfo = new ArrayList<>();
 
     public ClassInfoAdapter(ClassInfo classInfo) {
         this.classInfo = classInfo;
@@ -56,7 +57,7 @@ public abstract class ClassInfoAdapter implements IClassToFile {
 
     }
 
-    private String generateHead() {
+    protected String generateHead() {
         StringBuilder head = new StringBuilder();
         head.append("package ").append(classInfo.getPackageStr()).append(";\r\n").append("\r\n");
 
@@ -66,6 +67,11 @@ public abstract class ClassInfoAdapter implements IClassToFile {
                     ClassInfo classInfo = ClassInfoUtil.getClassInfoMap().get(cls);
                     head.append("import ").append(classInfo.getFullName()).append(";\r\n");
                 }
+            }
+        }
+        if(referenceClsInfo!=null){
+            for (ClassInfo cls : referenceClsInfo) {
+                head.append("import ").append(cls.getFullName()).append(";\r\n");
             }
         }
 
@@ -79,7 +85,7 @@ public abstract class ClassInfoAdapter implements IClassToFile {
         return head.toString();
     }
 
-    private String generateClass() {
+    protected String generateClass() {
         StringBuilder cls = new StringBuilder();
         cls.append("public").append(" ");
         if(classInfo.getType().equalsIgnoreCase(ClassInfo.TYPE_INTERFACE)){
@@ -89,17 +95,11 @@ public abstract class ClassInfoAdapter implements IClassToFile {
         }
         cls.append(classInfo.getClassName()).append(" ");
         if(StringUtils.isNotNullAndNotEmpty(classInfo.getParentClass())){
-            if (ClassInfoUtil.getClassInfoMap().containsKey(classInfo.getParentClass())) {
-                ClassInfo parentcls = ClassInfoUtil.getClassInfoMap().get(classInfo.getParentClass());
-                if(parentcls.getGeneric()!=null){
-                    cls.append("extends").append(" ").append(parentcls.getClassName())
-                            .append("<").append(parentcls.getGeneric().getParentClass()).append(">").append(" ");
-                }else{
-                    cls.append("extends").append(" ").append(classInfo.getParentClass()).append(" ");
-                }
-            }else{
-                cls.append("extends").append(" ").append(classInfo.getParentClass()).append(" ");
+            cls.append("extends").append(" ").append(classInfo.getParentClass());
+            if(classInfo.getGeneric()!=null){
+                cls.append("<").append(classInfo.getGeneric().getClassName()).append(">").append(" ");
             }
+            cls.append(" ");
         }
         if(classInfo.getInterfaceList()!=null && classInfo.getInterfaceList().size()>0){
             cls.append("implements").append(" ");
@@ -116,13 +116,33 @@ public abstract class ClassInfoAdapter implements IClassToFile {
         return cls.toString();
     }
 
-    private String generateField() {
-        return "";
+    protected String generateField() {
+        List<ClassField> fieldList=classInfo.getField();
+        StringBuilder fieldStr = new StringBuilder();
+        if(fieldList!=null){
+            for(ClassField classField : fieldList){
+                if(ClassInfoUtil.getDtoNotGenField().contains(classField.getName())){
+                    continue;
+                }
+                IClassToFile adapter=new ClassFieldAdapter(classField);
+                fieldStr.append(adapter.toFileString());
+            }
+        }
+        return fieldStr.toString();
     }
 
-    private String generateMethod() {
-        return "";
+    protected String generateMethod() {
+        StringBuilder methodStr = new StringBuilder();
+        if(classInfo.getMethods()!=null){
+            for(ClassMethod classMethod : classInfo.getMethods()){
+                IClassToFile methodAdapter=new ClassMethodAdapter(classMethod);
+                methodStr.append(methodAdapter.toFileString());
+            }
+        }
+        return methodStr.toString();
     }
+
+
 
     protected  void initExtra() {
 

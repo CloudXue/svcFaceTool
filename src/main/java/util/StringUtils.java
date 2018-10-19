@@ -495,4 +495,10 @@ public class StringUtils {
         }
         return str;
     }
+    public static String upperFirstChar(String str){
+        if(isNotNullAndNotEmpty(str)){
+            str=str.substring(0,1).toUpperCase()+str.substring(1,str.length());
+        }
+        return str;
+    }
 }
