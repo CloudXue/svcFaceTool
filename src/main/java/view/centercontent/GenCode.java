@@ -1,6 +1,7 @@
 package view.centercontent;
 
 import bean.FileInfo;
+import bean.SystemData;
 import bean.gencode.ClassInfo;
 import bean.gencode.GenCodeViewConfig;
 import bean.gencode.adapter.ClassInfoUtil;
@@ -58,7 +59,7 @@ public class GenCode extends BaseJPanel  implements ActionListener,ItemListener 
     JTextField packageStr =new JTextField("com.fingard.ats.core.db",30);
 
     private JLabel userNameStrlabel=new JLabel("用户：");
-    JTextField userNameStr =new JTextField(20);
+    JTextField userNameStr =new JTextField(SystemData.createuser,20);
 
     private SButton generateBtn=new SButton("生成");
     private JTextField filepath = new JTextField(60);

@@ -21,6 +21,7 @@ public class SystemData {
     private static String defaultdir="";
     private static  boolean isusecode=false;
     public static  String versionNumber="1.1.0";
+    public static  String createuser="";
 
     public static void  init() throws Exception {
         String fileLogPath = SystemData.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -57,7 +58,7 @@ public class SystemData {
         if("1".equals(isusecodestr)){
             isusecode=true;
         }
-
+        createuser=prop.getProperty("createuser");
     }
 
 
