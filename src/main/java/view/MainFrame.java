@@ -30,8 +30,12 @@ public class MainFrame extends JFrame {
     private static MainFrame mainFrame;
 
     public MainFrame() throws HeadlessException {
-        super("Demo");
+        super("辅助开发工具");
         initFrame();
+        ImageIcon icon=new ImageIcon("img/log.png"); //
+        if(icon!=null){
+            this.setIconImage(icon.getImage());
+        }
     }
     private  void initFrame(){
 
