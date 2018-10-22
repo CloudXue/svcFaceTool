@@ -166,6 +166,10 @@ public class MainFrame extends JFrame {
         newFrame.add(content);
         newFrame.validate();
         newFrame.repaint();
+        ImageIcon icon=new ImageIcon("img/log.png"); //
+        if(icon!=null){
+            newFrame.setIconImage(icon.getImage());
+        }
 
     }
 
