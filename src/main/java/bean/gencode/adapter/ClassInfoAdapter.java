@@ -28,6 +28,7 @@ public abstract class ClassInfoAdapter implements IClassToFile {
     protected Map<String, ClassInfo> newClsMap = new HashMap<>();
 
     protected List<String> referenceCls = new ArrayList<>();
+    //子类添加
     protected List<ClassInfo> referenceClsInfo = new ArrayList<>();
 
     public ClassInfoAdapter(ClassInfo classInfo) {

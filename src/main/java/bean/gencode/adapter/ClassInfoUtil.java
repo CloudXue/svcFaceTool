@@ -32,9 +32,47 @@ public class ClassInfoUtil {
         date.setClassName("Date");
         map.put("Date",date);
 
+        ClassInfo BaseTenantBizDto=new ClassInfo();
+        BaseTenantBizDto.setPackageStr("com.fingard.ats.core.db.common.dto");
+        BaseTenantBizDto.setClassName("BaseTenantBizDto");
+        map.put("BaseTenantBizDto",BaseTenantBizDto);
+
+        ClassInfo BaseTenantDataBizDto=new ClassInfo();
+        BaseTenantDataBizDto.setPackageStr("com.fingard.ats.core.db.common.dto");
+        BaseTenantDataBizDto.setClassName("BaseTenantDataBizDto");
+        map.put("BaseTenantDataBizDto",BaseTenantDataBizDto);
+
+        ClassInfo AtsCommonObject=new ClassInfo();
+        AtsCommonObject.setPackageStr("com.fingard.ats.core.common.beans");
+        AtsCommonObject.setClassName("AtsCommonObject");
+        map.put("AtsCommonObject",AtsCommonObject);
+
         return map;
     }
+    /**
+     * 获取内置的类信息
+     * @return
+     */
+    public static  Map<String,ClassInfo> getDtoParentClassInfoMap(){
+        Map<String,ClassInfo> map=new LinkedHashMap<>();
 
+        ClassInfo BaseTenantBizDto=new ClassInfo();
+        BaseTenantBizDto.setPackageStr("com.fingard.ats.core.db.common.dto");
+        BaseTenantBizDto.setClassName("BaseTenantBizDto");
+        map.put("BaseTenantBizDto",BaseTenantBizDto);
+
+        ClassInfo BaseTenantDataBizDto=new ClassInfo();
+        BaseTenantDataBizDto.setPackageStr("com.fingard.ats.core.db.common.dto");
+        BaseTenantDataBizDto.setClassName("BaseTenantDataBizDto");
+        map.put("BaseTenantDataBizDto",BaseTenantDataBizDto);
+
+        ClassInfo AtsCommonObject=new ClassInfo();
+        AtsCommonObject.setPackageStr("com.fingard.ats.core.common.beans");
+        AtsCommonObject.setClassName("AtsCommonObject");
+        map.put("AtsCommonObject",AtsCommonObject);
+
+        return map;
+    }
     public Map<String,ClassInfo> getAllClassInfoMap(){
         return classInfoMap;
     }

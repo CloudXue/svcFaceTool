@@ -20,7 +20,7 @@ public class DtoClassAdapter extends ClassInfoAdapter implements IClassToFile {
 
     @Override
     protected void initExtra() {
-        classInfo.setPackageStr(classInfo.getParentClass()+".dto");
+        classInfo.setPackageStr(classInfo.getPackageStr()+".dto");
         if (StringUtils.isNotNullAndNotEmpty(classInfo.getParentClass())) {
             referenceCls.add(classInfo.getParentClass());
         }
@@ -75,7 +75,7 @@ public class DtoClassAdapter extends ClassInfoAdapter implements IClassToFile {
 
         ClassMethod getTableName=new ClassMethod();
         getTableName.setOverride(true);
-        getTableName.setPermission("protected");
+        getTableName.setPermission("public");
         getTableName.setRetType("String");
         getTableName.setName("getTableName");
         getTableName.setRetValue(classInfo.getClassName()+".TABLE_NAME");

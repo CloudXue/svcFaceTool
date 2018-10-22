@@ -1,7 +1,9 @@
 package view.centercontent;
 
 import bean.FileInfo;
+import bean.gencode.ClassInfo;
 import bean.gencode.GenCodeViewConfig;
+import bean.gencode.adapter.ClassInfoUtil;
 import constant.EnActionEvent;
 import control.MyActionListener;
 import org.apache.log4j.Logger;
@@ -24,9 +26,12 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +40,7 @@ import java.util.Map;
  * @author: lyd
  * 开发时间: 2018-09-30
  */
-public class GenCode extends BaseJPanel  implements ActionListener {
+public class GenCode extends BaseJPanel  implements ActionListener,ItemListener {
     private static Logger logger = LogUtil.getLogger(GenCode.class);
     SvcService svcService= ServiceFactory.getSvcService();
     GenerateCodeService generateCodeService= ServiceFactory.getGenerateCodeService();
@@ -47,10 +52,10 @@ public class GenCode extends BaseJPanel  implements ActionListener {
     JTextField dtoName =new JTextField(30);
 
     private JLabel dtoParentlabel=new JLabel("dto父类名：");
-    JComboBox dtoParent = new EditComBox(true);
+    JComboBox dtoParent ;
 
     private JLabel packageStrlabel=new JLabel("包名：");
-    JTextField packageStr =new JTextField(30);
+    JTextField packageStr =new JTextField("com.fingard.ats.core.db",30);
 
     private JLabel userNameStrlabel=new JLabel("用户：");
     JTextField userNameStr =new JTextField(20);
@@ -93,6 +98,15 @@ public class GenCode extends BaseJPanel  implements ActionListener {
             showWarningMsg(e.getMessage());
             return;
         }
+        tableName.setActionCommand(EnActionEvent.GENCODE_TABLECHOOSED.getCmd());
+        tableName.addItemListener(this);
+
+        Map<String,ClassInfo> parentcls=ClassInfoUtil.getDtoParentClassInfoMap();
+
+        ComboBoxMapModel mapModel = new ComboBoxMapModel( Arrays.asList(parentcls.keySet().toArray()));
+        dtoParent=new EditComBox(mapModel);
+        dtoParent.setSelectedIndex(0);
+
 
         tableNamelabel.setFont(FontFactory.getJTableFont());
         dtoNamelabel.setFont(FontFactory.getJTableFont());
@@ -126,7 +140,7 @@ public class GenCode extends BaseJPanel  implements ActionListener {
         //tableName.setSize(new Dimension(180, 40));
         // 这里就是设置JComboBox宽度的代码
         tableName.setPreferredSize(new Dimension(200, 20));
-        dtoParent.setPreferredSize(new Dimension(120, 20));
+        dtoParent.setPreferredSize(new Dimension(150, 20));
         //dtoParent.setSize(new Dimension(180, 40));
 
         JPanel headPanel =new JPanel();
@@ -227,6 +241,7 @@ public class GenCode extends BaseJPanel  implements ActionListener {
                 filepath.setText(fileName);
             }
         }else if(e.getActionCommand().equals(EnActionEvent.GENCODE_SAVE.getCmd())){
+            //<editor-fold desc="保存文件">
             String filePathstr=filepath.getText();
             if (StringUtils.isNullOrEmpty(filePathstr)) {
                 showWarningMsg("保存目录必填！");
@@ -245,7 +260,9 @@ public class GenCode extends BaseJPanel  implements ActionListener {
                 e1.printStackTrace();
                 showWarningMsg("保存异常,异常信息："+e1.getMessage());
             }
+            //</editor-fold>
         }else if(e.getActionCommand().equals(EnActionEvent.GENCODE_OPEN.getCmd())){
+            //<editor-fold desc="打开文件夹">
             String filePathNamestr=filepath.getText();
             String filePathstr="";
             if (StringUtils.isNullOrEmpty(filePathNamestr)) {
@@ -281,6 +298,16 @@ public class GenCode extends BaseJPanel  implements ActionListener {
             } catch (IOException e1) {
                 showWarningMsg("无法打开目录："+filePathstr+",异常信息："+e1.getMessage());
             }
+            //</editor-fold>
+        } else if(e.getActionCommand().equals(EnActionEvent.GENCODE_TABLECHOOSED.getCmd())){
+           String[] table=((String)tableName.getSelectedItem()).split("_");
+            String clsName=(String)tableName.getSelectedItem();
+           if(table.length>=3){
+               clsName=table[2];
+           }
+            clsName=StringUtils.upperFirstChar(clsName.toLowerCase());
+           dtoName.setText(clsName);
+           packageStr.setText("com.fingard.ats.core.db."+clsName.toLowerCase());
         }
 
     }
@@ -336,12 +363,15 @@ public class GenCode extends BaseJPanel  implements ActionListener {
                 if(entry.getKey().contains("DaoImpl")){
                     daoImplTextTitle.setText(entry.getKey());
                     daoImplText.setText(entry.getValue());
+                    daoImplText.setCaretPosition(0);
                 }else if(entry.getKey().contains("Dao")){
                     daoTextTitle.setText(entry.getKey());
                     daoText.setText(entry.getValue());
+                    daoText.setCaretPosition(0);
                 }else if(entry.getKey().contains(config.getClassName())){
                     dtoTextTitle.setText(entry.getKey());
                     dtoText.setText(entry.getValue());
+                    dtoText.setCaretPosition(0);
                 }
             }
             String beanCls=config.getPackageName()+"."+config.getClassName()+"DaoImpl";
@@ -349,5 +379,11 @@ public class GenCode extends BaseJPanel  implements ActionListener {
             String beanXml=generateCodeService.getBeanXml(beanId,beanCls,describe);
             beanText.setText(beanXml);
         }
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        ActionEvent ae=new ActionEvent(e.getSource(),ActionEvent.ACTION_PERFORMED,EnActionEvent.GENCODE_TABLECHOOSED.getCmd());
+        this.actionPerformed(ae);
     }
 }

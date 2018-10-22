@@ -46,12 +46,13 @@ public class ComboBoxMapModel  extends AbstractListModel<String> implements Comb
         }
     }
 
-    public ComboBoxMapModel(List<String> list) {
+    public ComboBoxMapModel(List list) {
         objects = new LinkedHashMap<Object,String>();
         key=new Vector<Object>();
-        for(String str :list){
-            objects.put(str,str);
-            key.add(str);
+        for(Object str :list){
+            String strrr=StringUtils.valueOf(str);
+            objects.put(strrr,strrr);
+            key.add(strrr);
         }
     }
 

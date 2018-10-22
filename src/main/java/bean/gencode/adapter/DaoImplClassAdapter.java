@@ -57,7 +57,7 @@ public class DaoImplClassAdapter  extends ClassInfoAdapter implements IClassToFi
         insert.setIsstatic(true);
         insert.setIsfinal(true);
         insert.setType("String[]");
-        insert.setName("insertFieldNames");
+        insert.setName("INSERTFIELDNAMES");
         insert.setDescribe("插入列");
 
         ClassField update=new ClassField();
@@ -65,7 +65,7 @@ public class DaoImplClassAdapter  extends ClassInfoAdapter implements IClassToFi
         update.setIsstatic(true);
         update.setIsfinal(true);
         update.setType("String[]");
-        update.setName("updateFieldNames");
+        update.setName("UPDATEFIELDNAMES");
         update.setDescribe("更新列");
 
         StringBuilder insertValue=new StringBuilder();
@@ -112,7 +112,7 @@ public class DaoImplClassAdapter  extends ClassInfoAdapter implements IClassToFi
         createUpdateFieldNames.setPermission("protected");
         createUpdateFieldNames.setRetType("String[]");
         createUpdateFieldNames.setName("createUpdateFieldNames");
-        createUpdateFieldNames.setRetValue("updateFieldNames");
+        createUpdateFieldNames.setRetValue("UPDATEFIELDNAMES");
         classInfo.getMethods().add(createUpdateFieldNames);
 
         ClassMethod createInsertFieldNames=new ClassMethod();
@@ -120,7 +120,7 @@ public class DaoImplClassAdapter  extends ClassInfoAdapter implements IClassToFi
         createInsertFieldNames.setPermission("protected");
         createInsertFieldNames.setRetType("String[]");
         createInsertFieldNames.setName("createInsertFieldNames");
-        createInsertFieldNames.setRetValue("insertFieldNames");
+        createInsertFieldNames.setRetValue("INSERTFIELDNAMES");
         classInfo.getMethods().add(createInsertFieldNames);
 
     }
