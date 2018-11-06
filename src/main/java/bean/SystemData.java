@@ -20,7 +20,7 @@ public class SystemData {
     private static ENSystem system=ENSystem.ATS;
     private static String defaultdir="";
     private static  boolean isusecode=false;
-    public static  String versionNumber="1.1.0";
+    public static  String versionNumber="1.1.1";
     public static  String createuser="";
 
     public static void  init() throws Exception {

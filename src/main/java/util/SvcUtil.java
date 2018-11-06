@@ -52,6 +52,7 @@ public class SvcUtil {
         map.put("HC:隐藏电话","HC");
         map.put("HM:隐藏邮箱","HM");
         map.put("N:字典显示","N");
+        map.put("SN:选择字典显示","SN");
         map.put("D:日期","D");
         map.put("T:时间","T");
         map.put("DT:日期时间","DT");
