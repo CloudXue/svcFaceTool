@@ -41,7 +41,7 @@ public class DtoClassAdapter extends ClassInfoAdapter implements IClassToFile {
         classInfo.getInterfaceList().add("java.io.Serializable");
         classInfo.setType(ClassInfo.TYPE_CLASS);
         //生成set、get方法
-        initMethod();
+        //initMethod();
 
         ClassField TABLE_NAME=new ClassField();
         TABLE_NAME.setPermission("public");
