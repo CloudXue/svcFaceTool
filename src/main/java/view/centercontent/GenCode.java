@@ -375,7 +375,7 @@ public class GenCode extends BaseJPanel  implements ActionListener,ItemListener 
                     dtoText.setCaretPosition(0);
                 }
             }
-            String beanCls=config.getPackageName()+"."+config.getClassName()+"DaoImpl";
+            String beanCls=config.getPackageName()+".dao.impl."+config.getClassName()+"DaoImpl";
             String beanId=config.getClassName()+"Dao";
             String beanXml=generateCodeService.getBeanXml(beanId,beanCls,describe);
             beanText.setText(beanXml);
