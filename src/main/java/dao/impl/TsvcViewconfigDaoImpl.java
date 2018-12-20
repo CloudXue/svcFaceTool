@@ -21,7 +21,7 @@ import java.util.Map;
 public class TsvcViewconfigDaoImpl extends BaseDao<TsvcViewconfig> implements TsvcViewconfigDao {
     @Override
     public List<TsvcViewconfig> getTsvcViewconfig(String uc) throws Exception {
-        String sqlWhere=" where C_FUNCTIONNO ='"+uc+"'";
+        String sqlWhere=" where c_businflag='DEFAULT' and C_FUNCTIONNO ='"+uc+"'";
         List<Map<String,Object>> maplist=getData(" t.* ",sqlWhere);
         List<TsvcViewconfig> list=new ArrayList<TsvcViewconfig>();
         for (Map<String,Object> map : maplist){
@@ -33,7 +33,7 @@ public class TsvcViewconfigDaoImpl extends BaseDao<TsvcViewconfig> implements Ts
     }
     @Override
     public List<TsvcViewconfig> getTsvcViewconfigHasOrder(String uc) throws Exception {
-        String sqlWhere=" where C_FUNCTIONNO ='"+uc+"' order by t.l_no,t.c_property";
+        String sqlWhere=" where c_businflag='DEFAULT' and C_FUNCTIONNO ='"+uc+"' order by t.l_no,t.c_property";
         List<Map<String,Object>> maplist=getData(" t.*,t.rowid ",sqlWhere);
         List<TsvcViewconfig> list=new ArrayList<TsvcViewconfig>();
         for (Map<String,Object> map : maplist){
